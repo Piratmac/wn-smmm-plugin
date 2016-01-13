@@ -2,8 +2,16 @@
 
     <div class="panel-heading">
       <h3 class="panel-title">{{ stock.title }}
-        <a href="{{ ''| page({action: 'delete' }) }}" class="btn btn-xs btn-danger pull-right col-sm-offset-1">Delete</a>
-        <a href="{{ ''| page({action: 'manage' }) }}" class="btn btn-xs btn-primary pull-right col-sm-offset-1">Manage</a>
+        <button
+            type="button"
+            class="btn btn-xs btn-danger pull-right col-sm-offset-1"
+            data-request="onDeleteStock"
+            data-request-confirm="{{ 'piratmac.smmm::lang.messages.confirm_deletion'|trans }}">
+            {{ 'Delete'|trans_label }}
+        </button>
+
+
+        <a href="{{ ''| page({action: 'update' }) }}" class="btn btn-xs btn-primary pull-right col-sm-offset-1">Manage</a>
       </h3>
     </div>
     <div class="row">

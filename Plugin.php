@@ -59,8 +59,8 @@ class Plugin extends PluginBase
           'number_format_amount' => [$this, 'number_format_amount'],
 
 
-          'trans'        => function ($string) { return Lang::get($string); },
-          'trans_label'  => function ($string) { return Lang::get('piratmac.smmm::lang.labels.'.$string); },
+          'trans'        => function ($string) { return Lang::get(strtolower($string)); },
+          'trans_label'  => function ($string) { return Lang::get(strtolower('piratmac.smmm::lang.labels.'.$string)); },
           'hide_if_zero' => function ($number) { return $number == 0?'':$number; },
       ],
       'functions' => [

@@ -7,6 +7,8 @@ use Lang;
 use Cms\Classes\Page;
 use RainLab\User\Components\Account;
 use Piratmac\Smmm\Models\Portfolio as PortfolioModel;
+use Piratmac\Smmm\Controllers\Portfolio as PortfolioController;
+
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
 use October\Rain\Exception\ValidationException;
@@ -20,7 +22,7 @@ class Portfolio extends ComponentBase
    */
   public $portfolio;
   /*
-   * Action: create, view or manage
+   * Action: create, view or update
    */
   public $action = 'view';
 
@@ -118,16 +120,30 @@ class Portfolio extends ComponentBase
 **********************************************************************/
   public function onRun()
   {
-    $this->addJs('/plugins/piratmac/smmm/assets/js/bootstrap-datepicker.js');
-    $this->addCss('/plugins/piratmac/smmm/assets/css/datepicker.css');
+    $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js?v313');
+    $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css?v313');
     $this->addJs('/plugins/piratmac/smmm/assets/js/smmm.js');
     $this->action = $this->param('action');
     $this->portfolioListPage = $this->property('portfolioList');
     $this->stockDetailsPage = $this->property('stockDetails');
 
-    if ($this->action != 'create') {
-      $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
-      $this->portfolio = $this->getPortfolioDetails($this->portfolio);
+    switch ($this->action) {
+      case 'create':
+        $formController = new PortfolioController();
+        $formController->create($this->action);
+        $this->page['form'] = $formController;
+        break;
+
+      case 'update':
+        $formController = new PortfolioController();
+        $formController->update($this->property('portfolio_id'), $this->action);
+        $this->page['form'] = $formController;
+        break;
+
+      case 'view':
+        $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
+        $this->portfolio = $this->getPortfolioDetails($this->portfolio);
+        break;
     }
   }
 
@@ -135,17 +151,17 @@ class Portfolio extends ComponentBase
     $this->portfolioListPage = $this->property('portfolioList');
   }
 
-  public function onModifyPortfolio() {
-    $this->portfolio = $this->loadPortfolio(post('id'));
+  public function onUpdatePortfolio() {
+    $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
 
-    $result = $this->portfolio->onModify(post());
+    $result = $this->portfolio->onUpdate(post('Portfolio'));
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_modification'));
     return Redirect::to($url);
   }
 
   public function onCreatePortfolio() {
-    $this->portfolio = new PortfolioModel(post());
+    $this->portfolio = new PortfolioModel(post('Portfolio'));
 
     $result = $this->portfolio->onCreate();
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
@@ -155,7 +171,7 @@ class Portfolio extends ComponentBase
 
 
   public function onDeletePortfolio() {
-    $this->portfolio = $this->loadPortfolio(post('id'));
+    $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
 
     $result = $this->portfolio->onDelete();
     $url = $this->pageUrl($this->portfolioListPage);

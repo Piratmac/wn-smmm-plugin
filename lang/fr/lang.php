@@ -53,14 +53,25 @@ return [
     'success_creation'        => 'Création réussie',
     'success_deletion'        => 'Suppression réussie',
 
+    'confirm_deletion'        => 'Êtes-vous sûr de vouloir supprimer?',
+
   ],
   'labels' => [
-    'confirm_deletion'              => 'Confirmer la suppression.',
     'title'       => 'Titre',
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
+
+    'description'      => 'Description',
+    'opened_on'        => 'Ouvert le',
+    'closed_on'        => 'Clos le',
+    'number'      => 'Numéro',
+    'broker'      => 'Banque',
+
     'manage'      => 'Gérer',
+    'save'        => 'Sauvegarder',
+    'cancel'      => 'Annuler',
+    'delete'      => 'Supprimer',
 
 
   ],

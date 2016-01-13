@@ -5,6 +5,8 @@ use Flash;
 use Lang;
 use Cms\Classes\Page;
 use Piratmac\Smmm\Models\Stock as StockModel;
+use Piratmac\Smmm\Controllers\Stock as StockController;
+
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
 use October\Rain\Exception\ValidationException;
@@ -17,7 +19,7 @@ class Stock extends ComponentBase
    */
   public $stock;
   /*
-   * Action: create, view or manage
+   * Action: create, view or update
    */
   public $action = 'view';
 
@@ -86,12 +88,23 @@ class Stock extends ComponentBase
     $this->action = $this->param('action');
     $this->stockListPage = $this->property('stockList');
 
-    if ($this->action != 'create') {
-      $this->stock = $this->loadStock($this->property('stock_id'));
-    }
+    switch ($this->action) {
+      case 'create':
+        $formController = new StockController();
+        $formController->create($this->action);
+        $this->page['form'] = $formController;
+        break;
 
-    if ($this->action == 'view') {
-      $this->stock->getValues(NULL, NULL);
+      case 'update':
+        $formController = new StockController();
+        $formController->update($this->property('stock_id'), $this->action);
+        $this->page['form'] = $formController;
+        break;
+
+      case 'view':
+        $this->stock = $this->loadStock($this->property('stock_id'));
+        $this->stock->getValues(NULL, NULL);
+        break;
     }
   }
 
@@ -99,17 +112,17 @@ class Stock extends ComponentBase
     $this->stockListPage = $this->property('stockList');
   }
 
-  public function onModifyStock() {
-    $this->stock = $this->loadStock(post('id'));
+public function onUpdateStock() {
+    $this->stock = $this->loadStock($this->property('stock_id'));
 
-    $result = $this->stock->onModify(post());
+    $result = $this->stock->onUpdate(post('Stock'));
     $url = $this->pageUrl($this->page->baseFileName, ['stock_id' => $this->stock->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_modification'));
     return Redirect::to($url);
   }
 
   public function onCreateStock() {
-    $this->stock = new StockModel(post());
+    $this->stock = new StockModel(post(('Stock')));
 
     $result = $this->stock->onCreate();
     $url = $this->pageUrl($this->page->baseFileName, ['stock_id' => $this->stock->id, 'action' => 'view']);
@@ -119,7 +132,7 @@ class Stock extends ComponentBase
 
 
   public function onDeleteStock() {
-    $this->stock = $this->loadStock(post('id'));
+    $this->stock = $this->loadStock($this->property('stock_id'));
 
     $result = $this->stock->onDelete();
     $url = $this->pageUrl($this->stockListPage);

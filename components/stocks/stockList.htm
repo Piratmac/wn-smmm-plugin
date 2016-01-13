@@ -1,10 +1,9 @@
         <tbody>
           <tr>
-            <th>{{ ('title') |trans_label }}</th>
-            <th>{{ ('code') |trans_label }}</th>
-            <th>{{ ('type') |trans_label }}</th>
-            <th>{{ ('source') |trans_label }}</th>
-
+            <th>{{ 'title'|trans_label }}</th>
+            <th>{{ 'code'|trans_label }}</th>
+            <th>{{ 'type'|trans_label }}</th>
+            <th>{{ 'source'|trans_label }}</th>
             <th></th>
           </tr>
           {% for stock in __SELF__.stockList %}
@@ -17,7 +16,7 @@
               {{ ('piratmac.smmm::lang.dropdowns.stock.source.' ~ stock.source) |trans  }}
               {% endif %}
             </td>
-            <td><a href="{{ stock.url_manage }}">{{ ('manage') |trans_label }}</a></td>
+            <td><a href="{{ stock.url_update }}">{{ ('manage') |trans_label }}</a></td>
           </tr>
           {% endfor %}
         </tbody>

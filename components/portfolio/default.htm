@@ -5,6 +5,25 @@
     {% partial __SELF__ ~ '::flash' %}
   </div>
   <div class="panel panel-default" id="portfolioDetails">
-    {% partial __SELF__ ~ '::' ~ __SELF__.action portfolio=__SELF.portfolio %}
+    {% if __SELF__.action in ['create', 'update'] %}
+      {{ form_open() }}
+      {{ form.formRender()|raw }}
+
+      <div class="form-buttons">
+        <div class="loading-indicator-container">
+            <button
+                type="submit"
+                data-request="on{{ __SELF__.action|capitalize }}Portfolio"
+                class="btn btn-primary">
+                {{ 'Save'|trans_label }}
+            </button>
+            <a href="{{ __SELF__.portfolioListPage |page }}" class="text-danger">
+              {{'Cancel'|trans_label}}
+            </a>
+        </div>
+      </div>      {{ form_close() }}
+    {% elseif __SELF__.action in ['view'] %}
+      {% partial __SELF__ ~ '::' ~ __SELF__.action portfolio=__SELF.portfolio %}
+    {% endif %}
   </div>
 </div>

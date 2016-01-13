@@ -1,6 +1,7 @@
 <?php namespace Piratmac\Smmm\Models;
 
 use Model;
+use Lang;
 use \October\Rain\Database\Traits\SoftDeleting;
 use October\Rain\Exception\ApplicationException;
 
@@ -64,6 +65,15 @@ class Stock extends Model
    */
   public $valueHistory = [];
 
+  public function getDropdownOptions($fieldName = null, $keyValue = null)
+  {
+    if (in_array($fieldName, ['type', 'source']))
+      return [NULL => ''] + Lang::get('piratmac.smmm::lang.dropdowns.stock.'.$fieldName);
+    else
+      return ['' => '-- none --'];
+  }
+
+
 /**********************************************************************
                        Various
 **********************************************************************/
@@ -79,13 +89,13 @@ class Stock extends Model
           'stock_id' => $this->id,
           'action'       => 'view',
       ];
-      $params_manage = [
+      $params_update = [
           'stock_id' => $this->id,
-          'action'       => 'manage',
+          'action'       => 'update',
       ];
 
       $this->url_view   = $controller->pageUrl($page, $params_view);
-      $this->url_manage = $controller->pageUrl($page, $params_manage);
+      $this->url_update = $controller->pageUrl($page, $params_update);
   }
 
   /**
@@ -118,7 +128,7 @@ class Stock extends Model
   * Modifies a stock
   * @return 0 if no error occurred
   */
-  public function onModify ($userData) {
+  public function onUpdate ($userData) {
     $this->update($userData);
     return 0;
   }

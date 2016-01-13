@@ -75,7 +75,6 @@ class Portfolio extends Model
   public $balance = ['stock' => 0, 'cash' => 0, 'bond' => 0, 'total' => 0, 'mixed' => 0];
 
 
-
 /**********************************************************************
                        Authorization checks
 **********************************************************************/
@@ -119,13 +118,13 @@ class Portfolio extends Model
           'portfolio_id' => $this->id,
           'action'       => 'view',
       ];
-      $params_manage = [
+      $params_update = [
           'portfolio_id' => $this->id,
-          'action'       => 'manage',
+          'action'       => 'update',
       ];
 
       $this->url_view   = $controller->pageUrl($page, $params_view);
-      $this->url_manage = $controller->pageUrl($page, $params_manage);
+      $this->url_update = $controller->pageUrl($page, $params_update);
   }
 
 
@@ -217,7 +216,7 @@ class Portfolio extends Model
   * Modifies a portfolio
   * @return 0 if no error occurred
   */
-  public function onModify ($userData) {
+  public function onUpdate ($userData) {
     // Check user
     if (!$this->checkUser())
       throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));

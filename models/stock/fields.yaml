@@ -3,6 +3,25 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
+    title:
+        label: piratmac.smmm::lang.labels.title
+        required: true
+
+    id@create:
+        label: piratmac.smmm::lang.labels.code
+        disabled: false
+        type: text
+
+    id@update:
+        label: piratmac.smmm::lang.labels.code
         disabled: true
+        type: text
+
+    type:
+        label: piratmac.smmm::lang.labels.type
+        type: dropdown
+
+    source:
+        label: piratmac.smmm::lang.labels.source
+        type: dropdown
+

@@ -26,7 +26,7 @@ return [
     'stocklist_description'    => 'Name of the page to list stocks',
 
     'action'                => 'Action',
-    'action_description'    => 'Action performed, such as Create, Manage, View',
+    'action_description'    => 'Action performed, such as Create, Update, View',
 
 
     'portfolio_id'                => 'Portfolio ID',
@@ -53,14 +53,24 @@ return [
     'success_creation'        => 'Creation successful',
     'success_deletion'        => 'Deletion successful',
 
+    'confirm_deletion'        => 'This will be deleted. Please confirm.',
   ],
   'labels' => [
-    'confirm_deletion'              => 'Confirm deletion.',
     'title'       => 'Title',
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
+
+    'description'      => 'Description',
+    'opened_on'        => 'Opened on',
+    'closed_on'        => 'Closed on',
+    'number'      => 'Number',
+    'broker'      => 'Broker',
+
     'manage'      => 'Manage',
+    'save'        => 'Save',
+    'cancel'      => 'Cancel',
+    'delete'      => 'Delete',
 
 
   ],
