@@ -8,8 +8,8 @@ Affichage des erreurs de validation plus sympa
 
 
 DONE Seeding: Ajouter des stocks
-Seeding: Ajouter des valeurs
-Seeding: Ajouter des mouvements
+DONE: Seeding: Ajouter des valeurs
+DONE: Seeding: Ajouter des mouvements
 
 DONE Stocks: Ajouter la page de listing
 Stocks: Afficher les comptes possédant ces titres

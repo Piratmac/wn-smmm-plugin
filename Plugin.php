@@ -43,7 +43,7 @@ class Plugin extends PluginBase
 
   public function boot(){
     User::extend(function($model){
-      $model->hasMany['portfolios'] = ['Piratmac\Smmm\Models\Portfolio'];
+      $model->hasMany['piratmac_smmm_portfolios'] = ['Piratmac\Smmm\Models\Portfolio'];
     });
 
 
