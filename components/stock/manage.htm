@@ -1,0 +1,31 @@
+{% set stock = __SELF__.stock %}
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ stock.title }}
+      </h3>
+    </div>
+    {{ form_model(stock, {'data-request': 'onModifyStock'}) }}
+      {{ form_hidden('id') }}
+
+      <div class="form-group">
+        {{ form_label('title', 'Title', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_text('title', NULL, {'class': 'form-control'}) }}
+        </div>
+
+        {{ form_label('source', 'Source', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_select('source', form_select_options('stock.source'), NULL, {'class': 'form-control'}) }}
+        </div>
+
+        {{ form_label('type', 'Type', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_select('type', form_select_options('stock.type'), NULL, {'class': 'form-control'}) }}
+        </div>
+
+        {{ form_submit('Save', {'class': 'btn btn-primary'}) }}
+
+        <a href="{{ '' | page ({action: 'view'}) }}">
+          Cancel
+        </a>
+      </div>
+    {{ form_close() }}

@@ -1,0 +1,39 @@
+    <div class="panel-heading">
+      <h3 class="panel-title">Create a portfolio
+      </h3>
+    </div>
+    {{ form_model(portfolio, {'data-request': 'onCreatePortfolio'}) }}
+
+      <div class="form-group">
+        {{ form_label('description', 'Description', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_text('description', NULL, {'class': 'form-control'}) }}
+        </div>
+
+        {{ form_label('open_date', 'Opened on', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_text('open_date', NULL, {'class': 'form-control datepicker', 'data-provide': 'datepicker', 'data-date-format': 'yyyy-mm-dd'}) }}
+        </div>
+
+        {{ form_label('close_date', 'Closed on', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_text('close_date', NULL, {'class': 'form-control datepicker', 'data-date-format': 'yyyy-mm-dd'}) }}
+        </div>
+
+        {{ form_label('broker', 'Broker', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_text('broker', NULL, {'class': 'form-control'}) }}
+        </div>
+
+        {{ form_label('number', 'Number', {'class': 'col-sm-2 control-label'}) }}
+        <div class="col-sm-10">
+          {{ form_text('number', NULL, {'class': 'form-control'}) }}
+        </div>
+
+        {{ form_submit('Save', {'class': 'btn btn-primary'}) }}
+
+        <a href="{{ __SELF__.portfolioListPage |page }}">
+          Cancel
+        </a>
+      </div>
+    {{ form_close() }}

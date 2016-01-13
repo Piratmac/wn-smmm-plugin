@@ -1,0 +1,52 @@
+{% set stock = __SELF__.stock %}
+
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ stock.title }}
+        <a href="{{ ''| page({action: 'delete' }) }}" class="btn btn-xs btn-danger pull-right col-sm-offset-1">Delete</a>
+        <a href="{{ ''| page({action: 'manage' }) }}" class="btn btn-xs btn-primary pull-right col-sm-offset-1">Manage</a>
+      </h3>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-md-offset-1">
+        Code:
+        {{ stock.id }}
+      </div>
+      <div class="col-md-2 col-md-offset-1">
+        Source:
+        {{ stock.source }}
+      </div>
+      <div class="col-md-2 col-md-offset-1">
+        Type:
+        {{ stock.type }}
+      </div>
+
+    </div>
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Value history
+      </h3>
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <table class="table table-striped">
+          <tr>
+            <th>
+              Date
+            </th>
+            <th>
+              Value
+            </th>
+          </tr>
+          {% for value in stock.valueHistory %}
+          <tr>
+            <td>
+              {{ value.date }}
+            </td>
+            <td class="text-right">
+              {{ value.value|number_format_price }}
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>

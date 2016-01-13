@@ -1,0 +1,10 @@
+{% set portfolio = __SELF__.portfolio %}
+
+<div class="container">
+  <div id="flashMessage">
+    {% partial __SELF__ ~ '::flash' %}
+  </div>
+  <div class="panel panel-default" id="portfolioDetails">
+    {% partial __SELF__ ~ '::' ~ __SELF__.action portfolio=__SELF.portfolio %}
+  </div>
+</div>

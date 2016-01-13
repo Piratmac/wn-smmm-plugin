@@ -1,0 +1,23 @@
+        <tbody>
+          <tr>
+            <th>Description</th>
+            <th>Opened on</th>
+            <th>Closed on</th>
+{#
+            <th>{{ lang_get('piratmac.smmm::lang.properties.description') }}</th>
+            <th><?= e(trans('piratmac.smmm::lang.properties.opened_on')) ?></th>
+            <th><?= e(trans('piratmac.smmm::lang.properties.closed_on')) ?></th>
+#}
+
+
+            <th></th>
+          </tr>
+          {% for portfolio in __SELF__.portfolioList %}
+          <tr>
+            <td><a href="{{ portfolio.url_view }}">{{ portfolio.description }}</a></td>
+            <td>{{ portfolio.open_date }}</td>
+            <td>{{ portfolio.close_date }}</td>
+            <td><a href="{{ portfolio.url_manage }}">Manage</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>

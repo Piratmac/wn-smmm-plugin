@@ -1,0 +1,36 @@
+{% set stock = __SELF__.stock %}
+
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ stock.title }}
+      </h3>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-md-offset-1">
+        Code:
+        {{ stock.id }}
+      </div>
+      <div class="col-md-2 col-md-offset-1">
+        Source:
+        {{ stock.source }}
+      </div>
+      <div class="col-md-2 col-md-offset-1">
+        Type:
+        {{ stock.type }}
+      </div>
+
+
+    </div>
+
+
+    <div class="panel-heading">
+      You are about to delete this stock.<br />Are you sure ?
+      {{ form_model(stock, {'data-request': 'onDeleteStock'}) }}
+      {{ form_hidden('id') }}
+
+          {{ form_submit('Confirm deletion', {'class': 'btn btn-danger'}) }}
+          <a href="{{ '' | page ({action: 'view'}) }}">
+            Cancel
+          </a>
+      {{ form_close() }}
+    </div>
+

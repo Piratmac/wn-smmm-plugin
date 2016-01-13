@@ -1,0 +1,46 @@
+<div class="container">
+  <div id="flashMessage">
+    {% partial __SELF__ ~ '::flash' %}
+  </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Available stocks
+
+
+
+
+          <button id="oldStockDisplay" class="btn btn-xs pull-right col-md-offset-1" type="button"
+            data-request="{{ __SELF__}}::onRefresh"
+            data-request-data="include_old: true"
+            data-request-update="'{{ __SELF__ }}::stockList': '#stockList'"
+            data-request-success="$('#oldStockHide').removeClass('hidden');
+                                  $('#oldStockDisplay').addClass('hidden');
+                                  smmmDisplayMessage('Old stocks are now displayed', 'info');"
+          >
+            Display old stocks
+          </button>
+          <button id="oldStockHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
+            data-request="{{ __SELF__}}::onRefresh"
+            data-request-data="include_old: false"
+            data-request-update="'{{ __SELF__ }}::stockList': '#stockList'"
+            data-request-success="$('#oldStockDisplay').removeClass('hidden');
+                                  $('#oldStockHide').addClass('hidden');
+                                  smmmDisplayMessage('Old stocks have been hidden', 'info');"
+          >
+            Hide old stocks
+          </button>
+
+          <a href="{{ __SELF__.stockDetails|page({stock_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
+            New
+          </a>
+        </h3>
+      </div>
+
+
+<!-- Stocks list -->
+      <table class="table table-striped" id="stockList">
+        {% partial __SELF__ ~ '::stockList' %}
+      </table>
+    </div>
+  </form>
+</div>

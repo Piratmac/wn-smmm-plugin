@@ -1,0 +1,23 @@
+        <tbody>
+          <tr>
+            <th>{{ ('title') |trans_label }}</th>
+            <th>{{ ('code') |trans_label }}</th>
+            <th>{{ ('type') |trans_label }}</th>
+            <th>{{ ('source') |trans_label }}</th>
+
+            <th></th>
+          </tr>
+          {% for stock in __SELF__.stockList %}
+          <tr>
+            <td><a href="{{ stock.url_view }}">{{ stock.title }}</a></td>
+            <td>{{ stock.id }}</td>
+            <td>{{ ('piratmac.smmm::lang.dropdowns.stock.type.' ~ stock.type) |trans  }}</td>
+            <td>
+              {% if stock.source != '' %}
+              {{ ('piratmac.smmm::lang.dropdowns.stock.source.' ~ stock.source) |trans  }}
+              {% endif %}
+            </td>
+            <td><a href="{{ stock.url_manage }}">{{ ('manage') |trans_label }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>

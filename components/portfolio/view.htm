@@ -1,0 +1,161 @@
+{% set portfolio = __SELF__.portfolio %}
+
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ portfolio.description }}
+        <a href="{{ ''| page({action: 'delete' }) }}" class="btn btn-xs btn-danger pull-right col-sm-offset-1">Delete</a>
+        <a href="{{ ''| page({action: 'manage' }) }}" class="btn btn-xs btn-primary pull-right col-sm-offset-1">Manage</a>
+      </h3>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-2">
+        Opened on:
+        {{ portfolio.open_date }}
+      </div>
+
+      <div class="col-md-2">
+        Closed on:
+        {{ portfolio.close_date }}
+      </div>
+
+      <div class="col-md-2">
+        Broker:
+        {{ portfolio.broker }}
+      </div>
+
+      <div class="col-md-2">
+        Number:
+        {{ portfolio.number }}
+      </div>
+    </div>
+
+
+
+
+    <table class="table-striped table">
+      <tr>
+        <th colspan="4">
+          Contents
+        </th>
+      </tr>
+      <tr>
+        <th>
+          Stock
+        </th>
+        <th class="text-right">
+          Count
+        </th>
+        <th class="text-right">
+          Average buy price
+        </th>
+        <th class="text-right">
+          Total buy price
+        </th>
+      </tr>
+
+      {% for heldStock in portfolio.contents if heldStock.type != 'cash' %}
+      <tr>
+        <td>
+          <a href="{{ heldStock.url_view }}">
+            {{ heldStock.title }} ({{ heldStock.id }})
+          </a>
+        </td>
+        <td class="text-right">
+          {{ heldStock.pivot.stock_count|number_format_count }}
+        </td>
+        <td class="text-right">
+          {{ heldStock.pivot.average_price_tag|number_format_price }}
+        </td>
+        <td class="text-right">
+          {{ heldStock.pivot.totalBuyPrice|number_format_amount }}
+        </td>
+      </tr>
+      {% endfor %}
+
+      <tr>
+        <th colspan="3" class="text-right">
+          Stocks
+        </th>
+        <th class="text-right">
+          {{ portfolio.balance.stock|number_format_amount }}
+        </th>
+      </tr>
+      <tr>
+        <th colspan="3" class="text-right">
+          Bonds
+        </th>
+        <th class="text-right">
+          {{ portfolio.balance.bond|number_format_amount }}
+        </th>
+      </tr>
+      <tr>
+        <th colspan="3" class="text-right">
+          Cash
+        </th>
+        <th class="text-right">
+          {{ portfolio.balance.cash|number_format_amount }}
+        </th>
+      </tr>
+      <tr>
+        <th colspan="3" class="text-right">
+          Total
+        </th>
+        <th class="text-right">
+          {{ portfolio.balance.total|number_format_amount }}
+        </th>
+      </tr>
+    </table>
+
+
+
+
+
+    <table class="table-striped table">
+      <tr>
+        <th colspan="5">
+          Movements
+        </th>
+      </tr>
+      <tr>
+        <th>
+          Stock
+        </th>
+        <th>
+          Type
+        </th>
+        <th>
+          Date
+        </th>
+        <th class="text-right">
+          Unit value
+        </th>
+        <th class="text-right">
+          Fee
+        </th>
+      </tr>
+
+      {% for movement in portfolio.movements %}
+      <tr>
+        <td>
+          {% if movement.stock.title == '' %}
+          {{ 'piratmac.smmm::lang.dropdowns.stock.type.cash'|trans }}
+          {% else %}
+          <a href="{{ movement.stock.url_view }}">
+            {{ movement.stock.title }}
+          </a>
+          {% endif %}
+        </td>
+        <td>
+          {{ ('piratmac.smmm::lang.dropdowns.movement.type.' ~ movement.type) |trans  }}
+        </td>
+        <td>
+          {{ movement.date }}
+        </td>
+        <td class="text-right">
+          {{ movement.unit_value|hide_if_zero }}
+        </td>
+        <td class="text-right">
+          {{ movement.fee|hide_if_zero }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
