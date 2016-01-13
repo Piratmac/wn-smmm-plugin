@@ -36,4 +36,6 @@ function smmmHideMessage (element) {
   $(element).parent().addClass('hidden');
 }
 
-$('.datepicker').datepicker();
+if ($('.datepicker').length) {
+  $('.datepicker').datepicker();
+}
