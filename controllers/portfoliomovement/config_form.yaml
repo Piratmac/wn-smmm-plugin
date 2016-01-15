@@ -2,8 +2,11 @@
 #  Form Behavior Config
 # ===================================
 
+# Record name
+name: Portfolio Movement
+
 # Model Form Field configuration
-form: $/piratmac/smmm/models/stock/fields.yaml
+form: $/piratmac/smmm/models/portfoliomovement/fields.yaml
 
 # Model Class name
-modelClass: Piratmac\Smmm\Models\Stock
+modelClass: Piratmac\Smmm\Models\PortfolioMovement

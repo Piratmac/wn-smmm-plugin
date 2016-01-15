@@ -1,16 +1,17 @@
 <?php namespace Piratmac\Smmm\Controllers;
 
-use BackendMenu;
 use Backend\Classes\Controller;
 
 /**
- * Stock Back-end Controller
+ * Asset Back-end Controller
  */
-class Stock extends Controller
+class Asset extends Controller
 {
   public $implement = [
     'Backend.Behaviors.FormController',
+    'Backend.Behaviors.ListController',
   ];
 
   public $formConfig = 'config_form.yaml';
+  public $listConfig = 'config_list.yaml';
 }

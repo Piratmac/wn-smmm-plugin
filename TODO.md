@@ -1,44 +1,28 @@
+# The todo list
+* Assets pages
+    * Display portfolios containing those assets
+    * Add the ability to sync / not sync the assets
+    * If disabling sync, add message if held on any account
+    * Paginate the values
 
+* Movements
+    * Allow modification of movements
+    * Allow deletion of movements
+    * Update the portfolio's balance upon any change
+    * Additional fields: count in entry / exit of the portfolio, count in the initial value (will be useful for graphs)
 
-DONE Portfolio: page de création
-DONE Portfolio: Ajouter conditions sur les champs (format dates, ...)
-DONE Portfolio: Finir les pages de modif (ajouter redirection + message confirmation)
+* Portfolios
+    * Add the valuation of currently held stocks (beware of dates)
+    * Display the expected capital gain / loss (based on the current valuation)
+    * Display the realized capital gain / loss (based on the valuation at time of buy & sell)
+    * Display the sum of deposits + the gain / loss
+    * Identify account as "Regular deposits" (will be displayed differently)
 
-Affichage des erreurs de validation plus sympa
+* Graphs
+    * This is the thing I'll work on last (too many variables now...)
+    * Display portfolio's value over time
+    * Include ability to compare portfolios (with common reference point)
+    * Display graphs for "regular deposit" accounts
 
-
-DONE Seeding: Ajouter des stocks
-DONE: Seeding: Ajouter des valeurs
-DONE: Seeding: Ajouter des mouvements
-
-DONE Stocks: Ajouter la page de listing
-Stocks: Afficher les comptes possédant ces titres
-Stocks: Ajouter la possibilité d'activer / désactiver la synchro (avec message si toujours possédé)
-Stocks: Ajouter différents codes (bourso / yahoo)
-DONE Stock: Ajouter page de modification
-DONE Stock: Ajouter page d'ajout
-Stocks: Paginer les valeurs
-
-Mouvements: Créer type de mouvement
-Mouvements: Modifier type de mouvement
-Mouvements: Supprimer type de mouvement
-Mouvements: Attributs à définir (compter dans entrées / sorties d'argent, compter dans valeur initiale)
-Mouvements: Créer un mouvement
-Mouvements: Modifier un mouvement
-Mouvements: Supprimer un mouvement
-
-Attention à la mise à jour de la balance du compte...
-
-Portfolios: Afficher la balance en titres (avec valorisation)
-DONE Portfolios: Afficher la balance en espèces
-Portfolios: Afficher les +/- values latentes
-Portfolios: Afficher les +/- values réalisées
-Portfolios: Afficher la somme des versements
-Portfolios: tagguer "arrivées régulières"
-
-Graph: Portfolio over time
-Graph: Base 100
-Graph: Arrivées régulières (PEE, ...)
-
-
-Traduire les morceaux dans les partials
+* Misc
+    * Translate all texts in partials

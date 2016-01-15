@@ -3,15 +3,15 @@
 use Model;
 
 /**
- * StockValue Model
+ * AssetValue Model
  */
-class StockValue extends Model
+class AssetValue extends Model
 {
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'piratmac_smmm_stock_values';
+    public $table = 'piratmac_smmm_asset_values';
 
     /**
      * @var array Guarded fields
@@ -21,14 +21,14 @@ class StockValue extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['stock_id', 'date', 'value'];
+    protected $fillable = ['asset_id', 'date', 'value'];
 
     /**
      * @var array Relations
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = ['stock' => 'Piratmac\Smmm\Models\Stock'];
+    public $belongsTo = ['asset' => 'Piratmac\Smmm\Models\Asset'];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];

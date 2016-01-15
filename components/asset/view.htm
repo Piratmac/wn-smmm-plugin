@@ -1,11 +1,11 @@
-{% set stock = __SELF__.stock %}
+{% set asset = __SELF__.asset %}
 
     <div class="panel-heading">
-      <h3 class="panel-title">{{ stock.title }}
+      <h3 class="panel-title">{{ asset.title }}
         <button
             type="button"
             class="btn btn-xs btn-danger pull-right col-sm-offset-1"
-            data-request="onDeleteStock"
+            data-request="onDeleteAsset"
             data-request-confirm="{{ 'piratmac.smmm::lang.messages.confirm_deletion'|trans }}">
             {{ 'Delete'|trans_label }}
         </button>
@@ -17,15 +17,15 @@
     <div class="row">
       <div class="col-md-3 col-md-offset-1">
         Code:
-        {{ stock.id }}
+        {{ asset.id }}
       </div>
       <div class="col-md-2 col-md-offset-1">
         Source:
-        {{ stock.source }}
+        {{ asset.source }}
       </div>
       <div class="col-md-2 col-md-offset-1">
         Type:
-        {{ stock.type }}
+        {{ asset.type }}
       </div>
 
     </div>
@@ -45,7 +45,7 @@
               Value
             </th>
           </tr>
-          {% for value in stock.valueHistory %}
+          {% for value in asset.valueHistory %}
           <tr>
             <td>
               {{ value.date }}

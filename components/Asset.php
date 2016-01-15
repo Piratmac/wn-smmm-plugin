@@ -4,47 +4,47 @@ use Cms\Classes\ComponentBase;
 use Flash;
 use Lang;
 use Cms\Classes\Page;
-use Piratmac\Smmm\Models\Stock as StockModel;
-use Piratmac\Smmm\Controllers\Stock as StockController;
+use Piratmac\Smmm\Models\Asset as AssetModel;
+use Piratmac\Smmm\Controllers\Asset as AssetController;
 
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\SystemException;
 use October\Rain\Exception\ValidationException;
 use Illuminate\Support\Facades\Redirect;
 
-class Stock extends ComponentBase
+class Asset extends ComponentBase
 {
   /*
-   * The stock being viewed / edited
+   * The asset being viewed / edited
    */
-  public $stock;
+  public $asset;
   /*
    * Action: create, view or update
    */
   public $action = 'view';
 
   /*
-   * Page listing the stocks
+   * Page listing the assets
    */
-  public $stockListPage = [];
+  public $assetListPage = [];
 
 
 
   public function componentDetails()
   {
     return [
-      'name'        => 'piratmac.smmm::lang.components.stock_name',
-      'description' => 'piratmac.smmm::lang.components.stock_description'
+      'name'        => 'piratmac.smmm::lang.components.asset_name',
+      'description' => 'piratmac.smmm::lang.components.asset_description'
     ];
   }
 
   public function defineProperties()
   {
     return [
-      'stock_id' => [
-        'title'       => 'piratmac.smmm::lang.settings.stock_id',
-        'description' => 'piratmac.smmm::lang.settings.stock_id_description',
-        'default'     => '{{ :stock_id }}',
+      'asset_id' => [
+        'title'       => 'piratmac.smmm::lang.settings.asset_id',
+        'description' => 'piratmac.smmm::lang.settings.asset_id_description',
+        'default'     => '{{ :asset_id }}',
         'type'        => 'string'
       ],
       'action' => [
@@ -53,15 +53,15 @@ class Stock extends ComponentBase
         'default'     => '{{ :action }}',
         'type'        => 'string'
       ],
-      'stockList' => [
-        'title'       => 'piratmac.smmm::lang.settings.stocklist_page',
-        'description' => 'piratmac.smmm::lang.settings.stocklist_description',
+      'assetList' => [
+        'title'       => 'piratmac.smmm::lang.settings.assetlist_page',
+        'description' => 'piratmac.smmm::lang.settings.assetlist_description',
         'default'     => '',
         'type'        => 'dropdown'
       ],
     ];
   }
-  public function getstockListOptions()
+  public function getassetListOptions()
   {
     return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
   }
@@ -69,15 +69,15 @@ class Stock extends ComponentBase
                      Helper functions
 **********************************************************************/
 
-  protected function loadStock($stock_id)
+  protected function loadAsset($asset_id)
   {
-    if ($stock_id == '')
+    if ($asset_id == '')
       //@TODO: Ajouter redirection vers page d'erreur
       throw new ApplicationException ('piratmac.smmm::lang.messages.error_no_id');
 
 
-    $stock = StockModel::find($stock_id);
-    return $stock;
+    $asset = AssetModel::find($asset_id);
+    return $asset;
   }
 /**********************************************************************
                      User actions
@@ -86,56 +86,56 @@ class Stock extends ComponentBase
   {
     $this->addJs('/plugins/piratmac/smmm/assets/js/smmm.js');
     $this->action = $this->param('action');
-    $this->stockListPage = $this->property('stockList');
+    $this->assetListPage = $this->property('assetList');
 
     switch ($this->action) {
       case 'create':
-        $formController = new StockController();
+        $formController = new AssetController();
         $formController->create($this->action);
         $this->page['form'] = $formController;
         break;
 
       case 'update':
-        $formController = new StockController();
-        $formController->update($this->property('stock_id'), $this->action);
+        $formController = new AssetController();
+        $formController->update($this->property('asset_id'), $this->action);
         $this->page['form'] = $formController;
         break;
 
       case 'view':
-        $this->stock = $this->loadStock($this->property('stock_id'));
-        $this->stock->getValues(NULL, NULL);
+        $this->asset = $this->loadAsset($this->property('asset_id'));
+        $this->asset->getValues(NULL, NULL);
         break;
     }
   }
 
   public function init () {
-    $this->stockListPage = $this->property('stockList');
+    $this->assetListPage = $this->property('assetList');
   }
 
-public function onUpdateStock() {
-    $this->stock = $this->loadStock($this->property('stock_id'));
+public function onUpdateAsset() {
+    $this->asset = $this->loadAsset($this->property('asset_id'));
 
-    $result = $this->stock->onUpdate(post('Stock'));
-    $url = $this->pageUrl($this->page->baseFileName, ['stock_id' => $this->stock->id, 'action' => 'view']);
+    $result = $this->asset->onUpdate(post('Asset'));
+    $url = $this->pageUrl($this->page->baseFileName, ['asset_id' => $this->asset->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_modification'));
     return Redirect::to($url);
   }
 
-  public function onCreateStock() {
-    $this->stock = new StockModel(post(('Stock')));
+  public function onCreateAsset() {
+    $this->asset = new AssetModel(post(('Asset')));
 
-    $result = $this->stock->onCreate();
-    $url = $this->pageUrl($this->page->baseFileName, ['stock_id' => $this->stock->id, 'action' => 'view']);
+    $result = $this->asset->onCreate();
+    $url = $this->pageUrl($this->page->baseFileName, ['asset_id' => $this->asset->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_creation'));
     return Redirect::to($url);
   }
 
 
-  public function onDeleteStock() {
-    $this->stock = $this->loadStock($this->property('stock_id'));
+  public function onDeleteAsset() {
+    $this->asset = $this->loadAsset($this->property('asset_id'));
 
-    $result = $this->stock->onDelete();
-    $url = $this->pageUrl($this->stockListPage);
+    $result = $this->asset->onDelete();
+    $url = $this->pageUrl($this->assetListPage);
     Flash::success(trans('piratmac.smmm::lang.messages.success_deletion'));
     return Redirect::to($url);
   }

@@ -1,0 +1,22 @@
+        <tbody>
+          <tr>
+            <th>{{ 'title'|trans_label }}</th>
+            <th>{{ 'code'|trans_label }}</th>
+            <th>{{ 'type'|trans_label }}</th>
+            <th>{{ 'source'|trans_label }}</th>
+            <th></th>
+          </tr>
+          {% for asset in __SELF__.assetList %}
+          <tr>
+            <td><a href="{{ asset.url_view }}">{{ asset.title }}</a></td>
+            <td>{{ asset.id }}</td>
+            <td>{{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans  }}</td>
+            <td>
+              {% if asset.source != '' %}
+              {{ ('piratmac.smmm::lang.dropdowns.asset.source.' ~ asset.source) |trans  }}
+              {% endif %}
+            </td>
+            <td><a href="{{ asset.url_update }}">{{ ('manage') |trans_label }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>

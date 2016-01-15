@@ -10,20 +10,20 @@ return [
     'portfolios_description'    => 'Displays a list of all portfolios',
     'portfolio_name'           => 'Portfolio details',
     'portfolio_description'    => 'Details about a portfolio',
-    'stocks_name'           => 'Stocks list',
-    'stocks_description'    => 'Displays a list of all stocks',
-    'stock_name'           => 'Stock details',
-    'stock_description'    => 'Details about a stock',
+    'assets_name'           => 'Assets list',
+    'assets_description'    => 'Displays a list of all assets',
+    'asset_name'           => 'Asset details',
+    'asset_description'    => 'Details about a asset',
   ],
   'settings' => [
     'portfolio_page'           => 'Portfolio details',
     'portfolio_description'    => 'Name of the page to view details on a portfolio',
     'portfoliolist_page'           => 'List of portfolios',
     'portfoliolist_description'    => 'Name of the page to list portfolios',
-    'stock_page'           => 'Stock details',
-    'stock_description'    => 'Name of the page to view details on a stock',
-    'stocklist_page'           => 'List of stocks',
-    'stocklist_description'    => 'Name of the page to list stocks',
+    'asset_page'           => 'Asset details',
+    'asset_description'    => 'Name of the page to view details on a asset',
+    'assetlist_page'           => 'List of assets',
+    'assetlist_description'    => 'Name of the page to list assets',
 
     'action'                => 'Action',
     'action_description'    => 'Action performed, such as Create, Update, View',
@@ -31,8 +31,8 @@ return [
 
     'portfolio_id'                => 'Portfolio ID',
     'portfolio_id_description'    => 'Portfolio\'s unique identifier',
-    'stock_id'                => 'Stock ID',
-    'stock_id_description'    => 'Stock\'s unique identifier',
+    'asset_id'                => 'Asset ID',
+    'asset_id_description'    => 'Asset\'s unique identifier',
 
   ],
   'properties' => [
@@ -47,7 +47,7 @@ return [
     'error_no_id'              => 'There is no portfolio here.',
     'fatal_error'              => 'Fatal error. Please try again',
     'error_wrong_user'         => 'Wrong user. Try again.',
-    'stock_in_use'             => 'This stock is used in a portfolio or movement. It can\'t be deleted.',
+    'asset_in_use'             => 'This asset is used in a portfolio or movement. It can\'t be deleted.',
 
     'success_modification'    => 'Modification successful',
     'success_creation'        => 'Creation successful',
@@ -56,16 +56,23 @@ return [
     'confirm_deletion'        => 'This will be deleted. Please confirm.',
   ],
   'labels' => [
+    'asset'       => 'Asset',
     'title'       => 'Title',
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
 
-    'description'      => 'Description',
-    'opened_on'        => 'Opened on',
-    'closed_on'        => 'Closed on',
+    'portfolio'      => 'Portfolio',
+    'description'    => 'Description',
+    'opened_on'      => 'Opened on',
+    'closed_on'      => 'Closed on',
     'number'      => 'Number',
     'broker'      => 'Broker',
+
+    'date'        => 'Date',
+    'asset_count' => 'Asset count',
+    'unit_value'  => 'Unit value / Amount',
+    'fee'         => 'Fee',
 
     'manage'      => 'Manage',
     'save'        => 'Save',
@@ -75,7 +82,7 @@ return [
 
   ],
   'dropdowns' => [
-    'stock' => [
+    'asset' => [
       'type' => [
         'stock' => 'Stock',
         'bond' => 'Bond',
@@ -90,13 +97,21 @@ return [
     'movement' => [
       'type' => [
         'cash_entry' => 'Cash deposit',
-        'stock_buy' => 'Stock buy / subscription',
-        'stock_sell' => 'Stock sell',
+        'asset_buy' => 'Asset buy / subscription',
+        'asset_sell' => 'Asset sell',
         'fee' => 'Fee',
         'cash_exit' => 'Cash withdrawal',
       ],
     ],
   ],
+
+  // Custom error messages
+  'custom' => [
+    'asset_id' => [
+      'required_if' => 'For this type of operation, please choose an asset',
+    ],
+  ],
+
 ];
 
 

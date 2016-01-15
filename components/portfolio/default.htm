@@ -21,7 +21,8 @@
               {{'Cancel'|trans_label}}
             </a>
         </div>
-      </div>      {{ form_close() }}
+      </div>
+      {{ form_close() }}
     {% elseif __SELF__.action in ['view'] %}
       {% partial __SELF__ ~ '::' ~ __SELF__.action portfolio=__SELF.portfolio %}
     {% endif %}

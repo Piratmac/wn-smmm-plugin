@@ -1,0 +1,9 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Model Form Field configuration
+form: $/piratmac/smmm/models/asset/fields.yaml
+
+# Model Class name
+modelClass: Piratmac\Smmm\Models\Asset

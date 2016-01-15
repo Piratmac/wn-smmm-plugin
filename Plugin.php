@@ -2,7 +2,9 @@
 
 use System\Classes\PluginBase;
 use Backend\Models\User;
+use Backend;
 use Lang;
+use Route;
 
 /**
  * Smmm Plugin Information File
@@ -35,8 +37,8 @@ class Plugin extends PluginBase
     return [
       'Piratmac\Smmm\Components\Portfolio'  => 'portfolio',
       'Piratmac\Smmm\Components\Portfolios' => 'portfolios',
-      'Piratmac\Smmm\Components\Stock' => 'stock',
-      'Piratmac\Smmm\Components\Stocks' => 'stocks',
+      'Piratmac\Smmm\Components\Asset' => 'asset',
+      'Piratmac\Smmm\Components\Assets' => 'assets',
     ];
   }
 
@@ -95,8 +97,4 @@ class Plugin extends PluginBase
   public function form_select_options ($dropdown) {
     return Lang::get('piratmac.smmm::lang.dropdowns.'.$dropdown);
   }
-
-
-
-
 }

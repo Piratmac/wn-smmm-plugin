@@ -1,0 +1,18 @@
+# ===================================
+#  List Field Definitions
+# ===================================
+
+columns:
+
+  title:
+    label: piratmac.smmm::lang.labels.title
+    searchable: true
+    type: text
+
+  id:
+    label: piratmac.smmm::lang.labels.code
+    type: text
+
+  type:
+    label: piratmac.smmm::lang.labels.type
+    type: text

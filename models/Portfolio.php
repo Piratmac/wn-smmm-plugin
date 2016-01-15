@@ -4,8 +4,6 @@ use Model;
 use \October\Rain\Database\Traits\SoftDeleting;
 use RainLab\User\Components\Account;
 use Auth;
-use October\Rain\Exception\ApplicationException;
-use October\Rain\Exception\SystemException;
 use October\Rain\Exception\ValidationException;
 
 /**
@@ -47,10 +45,10 @@ class Portfolio extends Model
   public $hasMany = ['movements' => 'Piratmac\Smmm\Models\PortfolioMovement'];
   public $belongsTo = ['User', 'foreignKey' => 'user_id'];
   public $belongsToMany = [
-      'heldStocks' => [
-        'Piratmac\Smmm\Models\Stock',
+      'heldAssets' => [
+        'Piratmac\Smmm\Models\Asset',
         'table'    => 'piratmac_smmm_portfolio_contents',
-        'pivot' => ['date_from', 'date_to', 'stock_count', 'average_price_tag']
+        'pivot' => ['date_from', 'date_to', 'asset_count', 'average_price_tag']
     ]];
   public $morphTo = [];
   public $morphOne = [];
@@ -72,7 +70,7 @@ class Portfolio extends Model
   /**
    * @var array Total value of the portfolio
    */
-  public $balance = ['stock' => 0, 'cash' => 0, 'bond' => 0, 'total' => 0, 'mixed' => 0];
+  public $balance = [];
 
 
 /**********************************************************************
@@ -135,10 +133,10 @@ class Portfolio extends Model
   * Determines the contents of the portfolio
   * @param date The date at which to determine the contents
   */
-  public function getHeldStocks ($date = 0) {
+  public function getHeldAssets ($date = 0) {
     if ($date = 0 || !strtotime($date) || !isset($date))
       $date = date('Y-m-d');
-    $this->contents = $this->heldStocks()
+    $this->contents = $this->heldAssets()
                            ->where('date_from', '<=', $date)
                            ->where(function ($query) use($date) {
                               $query->where('date_to', '>=', $date)
@@ -152,10 +150,14 @@ class Portfolio extends Model
   public function calculateValuation () {
     if ($this->contents->count() == 0) return;
 
-    $this->contents->each(function ($heldStock) {
-      $heldStock->pivot->totalBuyPrice = $heldStock->pivot->average_price_tag * $heldStock->pivot->stock_count;
-      $this->balance[$heldStock->type] += $heldStock->pivot->totalBuyPrice;
-      $this->balance['total'] += $heldStock->pivot->totalBuyPrice;
+    $this->contents->each(function ($heldAsset) {
+      $heldAsset->pivot->totalBuyPrice = $heldAsset->pivot->average_price_tag * $heldAsset->pivot->asset_count;
+
+      if (!isset($this->balance[$heldAsset->type])) $this->balance[$heldAsset->type] = 0;
+      $this->balance[$heldAsset->type] += $heldAsset->pivot->totalBuyPrice;
+
+      if (!isset($this->balance['total'])) $this->balance['total'] = 0;
+      $this->balance['total'] += $heldAsset->pivot->totalBuyPrice;
     });
 
     return $this->contents;
@@ -163,27 +165,27 @@ class Portfolio extends Model
 
 
   /**
-  * Sets all URLs for the stocks
+  * Sets all URLs for the assets
   * @return 0 if no error occurred
   */
-  public function setHeldStocksLinks ($controller, $page) {
+  public function setHeldAssetsLinks ($controller, $page) {
     if ($this->contents->count() > 0) {
-      $this->contents->each(function($heldStock) use($controller, $page) {
-        $heldStock->setUrl($controller, $page);
+      $this->contents->each(function($heldAsset) use($controller, $page) {
+        $heldAsset->setUrl($controller, $page);
       });
     }
     return 0;
   }
 
   /**
-  * Sets all URLs for the stocks
+  * Sets all URLs for the assets
   * @return 0 if no error occurred
   */
   public function setMovementsLinks ($controller, $page) {
     if ($this->movements->count() > 0) {
       $this->movements->each(function($movement) use($controller, $page) {
-        if ($movement->stock != NULL)
-          $movement->stock->setUrl($controller, $page);
+        if ($movement->asset != NULL)
+          $movement->asset->setUrl($controller, $page);
       });
     }
     return 0;
@@ -197,7 +199,7 @@ class Portfolio extends Model
   * @param dateTo The last date - defaults to maximum date
   */
   public function getMovements ($dateFrom = 0, $dateTo = 0) {
-    $query = $this->movements();
+    $query = $this->movements()->with('asset');
 
     if ($dateFrom != 0 && strtotime($dateFrom) && isset($dateFrom))
       $query->where('date_from', '>=', $dateFrom);

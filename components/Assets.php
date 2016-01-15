@@ -5,21 +5,21 @@ use Flash;
 use Lang;
 use Cms\Classes\Page;
 use RainLab\User\Components\Account;
-use Piratmac\Smmm\Models\Stock as StockModel;
+use Piratmac\Smmm\Models\Asset as AssetModel;
 
-class Stocks extends ComponentBase
+class Assets extends ComponentBase
 {
   /**
-   * List of stocks
+   * List of assets
    * @var array
   */
-  public $stockList = array();
+  public $assetList = array();
 
   /**
-   * Page for stock details page
+   * Page for asset details page
    * @var array
   */
-  public $stockDetails = '';
+  public $assetDetails = '';
 
 
   /**
@@ -36,24 +36,24 @@ class Stocks extends ComponentBase
   public function componentDetails()
   {
     return [
-      'name'    => 'piratmac.smmm::lang.components.stocks_name',
-      'description' => 'piratmac.smmm::lang.components.stocks_description'
+      'name'    => 'piratmac.smmm::lang.components.assets_name',
+      'description' => 'piratmac.smmm::lang.components.assets_description'
     ];
   }
 
   public function defineProperties()
   {
     return [
-      'stockDetails' => [
-        'title'     => 'piratmac.smmm::lang.settings.stock_page',
-        'description' => 'piratmac.smmm::lang.settings.stock_description',
+      'assetDetails' => [
+        'title'     => 'piratmac.smmm::lang.settings.asset_page',
+        'description' => 'piratmac.smmm::lang.settings.asset_description',
         'type'    => 'dropdown',
         'default'   => '',
       ],
     ];
   }
 
-  public function getstockDetailsOptions()
+  public function getassetDetailsOptions()
   {
     return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
   }
@@ -66,34 +66,34 @@ class Stocks extends ComponentBase
    * Updates the list from database, in the right format for rendering the partial
    * @param options An array of options
    */
-  private function updateStockList ($options = array())
+  private function updateAssetList ($options = array())
   {
     // Defaulting options
     $options = array_merge ($this->listOptionsDefault, $options);
 
     //// Filter list according to connected user
     //if (Auth::check()) {
-      //$this->stockList = PortfolioModel::where('user_id', '=', Auth::getUser()->id);
+      //$this->assetList = PortfolioModel::where('user_id', '=', Auth::getUser()->id);
     //}
     //else {
-      //$this->stockList = PortfolioModel::where('user_id', '=', NULL);
+      //$this->assetList = PortfolioModel::where('user_id', '=', NULL);
     //}
 
-    $this->stockList = StockModel::where('title', '<>', '');
+    $this->assetList = AssetModel::where('title', '<>', '');
 
     // Applying options
     if ($options['include_old'] == false) {
-      $this->stockList = $this->stockList->where(function ($query) { $query->where('display_to', '>=', date('Y-m-d'))->orWherenull('display_to');});
+      $this->assetList = $this->assetList->where(function ($query) { $query->where('display_to', '>=', date('Y-m-d'))->orWherenull('display_to');});
     }
 
     // Getting filtered list
-    $this->stockList = $this->stockList->orderBy('title', 'ASC');
-    $this->stockList = $this->stockList->get();
+    $this->assetList = $this->assetList->orderBy('title', 'ASC');
+    $this->assetList = $this->assetList->get();
 
 
-    if ($this->stockList && $this->stockList->count()) {
-      $this->stockList->each(function($stock) {
-        $stock->setUrl($this->controller, $this->stockDetails);
+    if ($this->assetList && $this->assetList->count()) {
+      $this->assetList->each(function($asset) {
+        $asset->setUrl($this->controller, $this->assetDetails);
       });
     }
   }
@@ -109,8 +109,8 @@ class Stocks extends ComponentBase
   {
     // Not executed for AJAX events
     $this->addJs('/plugins/piratmac/smmm/assets/js/smmm.js');
-    $this->stockDetails = $this->property('stockDetails');
-    $this->updateStockList();
+    $this->assetDetails = $this->property('assetDetails');
+    $this->updateAssetList();
   }
 
 
@@ -118,13 +118,13 @@ class Stocks extends ComponentBase
    * Updates the portfolio list from AJAX calls with specific options
    *
    * Possible options include:
-   - - include_old: if set to 'true', old stocks will be displayed
+   - - include_old: if set to 'true', old assets will be displayed
    * @param options An array of options
    */
   public function onRefresh () {
-    $this->stockDetails = $this->property('stockDetails');
+    $this->assetDetails = $this->property('assetDetails');
     $options['include_old'] = (post('include_old') == 'true');
-    $this->updateStockList($options);
+    $this->updateAssetList($options);
   }
 
 }

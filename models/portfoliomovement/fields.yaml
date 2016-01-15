@@ -3,6 +3,63 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
-        disabled: true
+  asset:
+    label: piratmac.smmm::lang.labels.asset
+    type: Backend\FormWidgets\Relation
+    nameFrom: title
+    keyFrom: id
+    context: [portfolio]
+#Should use Backend\FormWidgets\RecordFinder instead. This would need the following elements:
+    #list: ~/plugins/piratmac/smmm/models/asset/columns.yaml
+    #title: Find assets
+    #prompt: Click the %s button to find a asset
+    #descriptionFrom: code
+    trigger:
+      action: disable
+      field: type
+      condition: value[fee], value[cash_entry], value[cash_exit]
+
+  portfolio:
+    label: piratmac.smmm::lang.labels.portfolio
+    type: Backend\FormWidgets\Relation
+    nameFrom: description
+    keyFrom: id
+    context: [asset]
+#Should use Backend\FormWidgets\RecordFinder instead. This would need the following elements:
+    #list: ~/plugins/piratmac/smmm/models/portfolio/columns.yaml
+    #title: Find portfolios
+    #prompt: Click the %s button to find a portfolio
+    #descriptionFrom: description
+    trigger:
+      action: disable
+      field: type
+      condition: value[fee], value[cash_entry], value[cash_exit]
+
+  type:
+    label: piratmac.smmm::lang.labels.type
+    type: dropdown
+
+  date:
+    label: piratmac.smmm::lang.labels.date
+    type: Backend\FormWidgets\DatePicker
+    mode: date
+
+  asset_count:
+    label: piratmac.smmm::lang.labels.asset_count
+    type: number
+    trigger:
+      action: disable
+      field: type
+      condition: value[fee], value[cash_entry], value[cash_exit]
+
+  unit_value:
+    label: piratmac.smmm::lang.labels.unit_value
+    type: number
+    trigger:
+      action: disable
+      field: type
+      condition: value[fee]
+
+  fee:
+    label: piratmac.smmm::lang.labels.fee
+    type: number

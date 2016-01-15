@@ -1,0 +1,9 @@
+# ===================================
+#  List Field Definitions
+# ===================================
+
+columns:
+
+  description:
+    label: piratmac.smmm::lang.labels.description
+    searchable: true

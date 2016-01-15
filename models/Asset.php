@@ -8,9 +8,9 @@ use October\Rain\Exception\ApplicationException;
 
 
 /**
- * Stock Model
+ * Asset Model
  */
-class Stock extends Model
+class Asset extends Model
 {
   use \October\Rain\Database\Traits\Validation;
   use SoftDeleting;
@@ -18,7 +18,7 @@ class Stock extends Model
   /**
    * @var string The database table used by the model.
    */
-  public $table = 'piratmac_smmm_stocks';
+  public $table = 'piratmac_smmm_assets';
 
   /**
    * @var array Guarded fields
@@ -32,7 +32,7 @@ class Stock extends Model
 
 
   protected $rules = [
-    'id' => 'required|unique:piratmac_smmm_stocks|regex:#^[0-9A-Za-z.]*$#',
+    'id' => 'required|unique:piratmac_smmm_assets|regex:#^[0-9A-Za-z.]*$#',
     'type' => 'required',
   ];
   /**
@@ -45,13 +45,13 @@ class Stock extends Model
    * @var array Relations
    */
   public $hasOne = [];
-  public $hasMany = ['value' => 'Piratmac\Smmm\Models\StockValue'];
+  public $hasMany = ['value' => 'Piratmac\Smmm\Models\AssetValue'];
   public $belongsTo = [];
   public $belongsToMany = [
       'portfolios' => [
         'Piratmac\Smmm\Models\Portfolio',
         'table'    => 'piratmac_smmm_portfolio_contents',
-        'pivot' => ['date_from', 'date_to', 'stock_count', 'average_price_tag']
+        'pivot' => ['date_from', 'date_to', 'asset_count', 'average_price_tag']
     ]];
   public $morphTo = [];
   public $morphOne = [];
@@ -61,14 +61,14 @@ class Stock extends Model
 
 
   /**
-   * @var array Value history of this stock
+   * @var array Value history of this asset
    */
   public $valueHistory = [];
 
   public function getDropdownOptions($fieldName = null, $keyValue = null)
   {
     if (in_array($fieldName, ['type', 'source']))
-      return [NULL => ''] + Lang::get('piratmac.smmm::lang.dropdowns.stock.'.$fieldName);
+      return [NULL => ''] + Lang::get('piratmac.smmm::lang.dropdowns.asset.'.$fieldName);
     else
       return ['' => '-- none --'];
   }
@@ -86,11 +86,11 @@ class Stock extends Model
   public function setUrl($controller, $page)
   {
       $params_view = [
-          'stock_id' => $this->id,
+          'asset_id' => $this->id,
           'action'       => 'view',
       ];
       $params_update = [
-          'stock_id' => $this->id,
+          'asset_id' => $this->id,
           'action'       => 'update',
       ];
 
@@ -99,7 +99,7 @@ class Stock extends Model
   }
 
   /**
-   * Fetches the values of the stock during a given timeframe
+   * Fetches the values of the asset during a given timeframe
    * @param string $dateFrom the earliest date (NULL for all values)
    * @param string $dateTo the last date (NULL for all values)
    * @param string $dateRouding How is the date interpreted if the value is missing: 'exact' will return NULL, 'rounded' will seek the closest existing value (only possible when both dates are equal)
@@ -125,7 +125,7 @@ class Stock extends Model
 
 
   /**
-  * Modifies a stock
+  * Modifies a asset
   * @return 0 if no error occurred
   */
   public function onUpdate ($userData) {
@@ -135,7 +135,7 @@ class Stock extends Model
 
 
   /**
-  * Creates a stock
+  * Creates a asset
   * @return 0 if no error occurred
   */
   public function onCreate () {
@@ -144,12 +144,12 @@ class Stock extends Model
   }
 
   /**
-  * Deletes a stock
+  * Deletes a asset
   * @return 0 if no error occurred
   */
   public function onDelete () {
     if ($this->portfolios()->count()>0)
-      throw new ApplicationException(trans('piratmac.smmm::lang.messages.stock_in_use'));
+      throw new ApplicationException(trans('piratmac.smmm::lang.messages.asset_in_use'));
     $this->delete();
     return 0;
   }

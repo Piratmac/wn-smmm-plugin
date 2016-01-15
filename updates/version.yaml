@@ -1,4 +1,8 @@
 1.0.1:
- - First version of Show Me My Money
+ - First public version of Show Me My Money
  - v1.0.1_tables.php
- - seed_tables.php
+
+1.0.2:
+ - Movements can now be created
+ - Now using Form behavior for front-end
+ - Several improvements in display, bug fixes, ...

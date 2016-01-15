@@ -29,9 +29,9 @@ class CreatePortfolioTables extends Migration
       $table->softDeletes();
     });
 
-    // Table containing all existing stocks (at least the ones the user wants)
-    Schema::dropIfExists('piratmac_smmm_stocks');
-    Schema::create('piratmac_smmm_stocks', function($table)
+    // Table containing all existing assets (at least the ones the user wants)
+    Schema::dropIfExists('piratmac_smmm_assets');
+    Schema::create('piratmac_smmm_assets', function($table)
     {
       $table->engine = 'InnoDB';
       $table->string('id')->primary();
@@ -51,42 +51,43 @@ class CreatePortfolioTables extends Migration
     });
 
 
-    // Table containing the market values of the stocks
-    Schema::dropIfExists('piratmac_smmm_stock_values');
-    Schema::create('piratmac_smmm_stock_values', function($table)
+    // Table containing the market values of the assets
+    Schema::dropIfExists('piratmac_smmm_asset_values');
+    Schema::create('piratmac_smmm_asset_values', function($table)
     {
       $table->engine = 'InnoDB';
-      $table->string('stock_id');
+      $table->string('asset_id');
       $table->date('date');
       $table->decimal('value', 15, 5);
 
       // Foreign key
-      $table->foreign('stock_id', 'piratmac_smmm_stock_values_stock_foreign')->references('id')->on('piratmac_smmm_stocks');
+      $table->foreign('asset_id', 'piratmac_smmm_asset_values_asset_foreign')->references('id')->on('piratmac_smmm_assets');
     });
 
 
 
 
 
-    // Table containing the events on a portfolio (cash increases / decreases, stock buys/sells, ...)
+    // Table containing the events on a portfolio (cash increases / decreases, asset buys/sells, ...)
     Schema::dropIfExists('piratmac_smmm_portfolio_movements');
     Schema::create('piratmac_smmm_portfolio_movements', function($table)
     {
       $table->engine = 'InnoDB';
       $table->increments('id');
-      $table->date('date');
-      $table->enum('type', ['cash_entry', 'cash_exit', 'stock_buy', 'stock_sell', 'fee']);
-      $table->decimal('stock_count', 10, 5);
-      $table->decimal('unit_value', 12, 5);
-      $table->decimal('fee', 10, 5);
 
       // Link to portfolio
       $table->integer('portfolio_id')->unsigned();
       $table->foreign('portfolio_id', 'piratmac_smmm_portfolio_movements_portfolio_foreign')->references('id')->on('piratmac_smmm_portfolios');
+      $table->date('date');
+      $table->enum('type', ['cash_entry', 'cash_exit', 'asset_buy', 'asset_sell', 'fee']);
 
-      // Link to stocks
-      $table->string('stock_id')->nullable();
-      $table->foreign('stock_id', 'piratmac_smmm_portfolio_movements_stock_foreign')->references('id')->on('piratmac_smmm_stocks');
+      // Link to assets
+      $table->string('asset_id')->nullable();
+      $table->foreign('asset_id', 'piratmac_smmm_portfolio_movements_asset_foreign')->references('id')->on('piratmac_smmm_assets');
+      $table->decimal('asset_count', 10, 5);
+      $table->decimal('unit_value', 12, 5);
+      $table->decimal('fee', 10, 5);
+
     });
 
 
@@ -99,14 +100,14 @@ class CreatePortfolioTables extends Migration
       $table->integer('portfolio_id')->unsigned();
       $table->foreign('portfolio_id', 'piratmac_smmm_portfolio_contents_portfolio_foreign')->references('id')->on('piratmac_smmm_portfolios');
 
-      // Link to stocks
-      $table->string('stock_id')->nullable();
-      $table->foreign('stock_id', 'piratmac_smmm_portfolio_contents_stock_foreign')->references('id')->on('piratmac_smmm_stocks');
+      // Link to assets
+      $table->string('asset_id')->nullable();
+      $table->foreign('asset_id', 'piratmac_smmm_portfolio_contents_asset_foreign')->references('id')->on('piratmac_smmm_assets');
 
 
       $table->date('date_from');
       $table->date('date_to')->default(NULL)->nullable();
-      $table->decimal('stock_count', 10, 5);
+      $table->decimal('asset_count', 10, 5);
       $table->decimal('average_price_tag', 12, 2);
 
     });
@@ -121,7 +122,7 @@ class CreatePortfolioTables extends Migration
     if (Schema::hasTable('piratmac_smmm_portfolio_movements')) {
       Schema::table('piratmac_smmm_portfolio_movements', function ($table) {
         $table->dropForeign('piratmac_smmm_portfolio_movements_portfolio_foreign');
-        $table->dropForeign('piratmac_smmm_portfolio_movements_stock_foreign');
+        $table->dropForeign('piratmac_smmm_portfolio_movements_asset_foreign');
       });
     }
 
@@ -129,14 +130,14 @@ class CreatePortfolioTables extends Migration
     if (Schema::hasTable('piratmac_smmm_portfolio_contents')) {
       Schema::table('piratmac_smmm_portfolio_contents', function ($table) {
         $table->dropForeign('piratmac_smmm_portfolio_contents_portfolio_foreign');
-        $table->dropForeign('piratmac_smmm_portfolio_contents_stock_foreign');
+        $table->dropForeign('piratmac_smmm_portfolio_contents_asset_foreign');
       });
     }
 
 
-    if (Schema::hasTable('piratmac_smmm_stock_values')) {
-      Schema::table('piratmac_smmm_stock_values', function ($table) {
-        $table->dropForeign('piratmac_smmm_stock_values_stock_foreign');
+    if (Schema::hasTable('piratmac_smmm_asset_values')) {
+      Schema::table('piratmac_smmm_asset_values', function ($table) {
+        $table->dropForeign('piratmac_smmm_asset_values_asset_foreign');
       });
     }
 
@@ -144,9 +145,9 @@ class CreatePortfolioTables extends Migration
 
     Schema::dropIfExists('piratmac_smmm_portfolio_movements');
     Schema::dropIfExists('piratmac_smmm_portfolio_contents');
-    Schema::dropIfExists('piratmac_smmm_stock_values');
+    Schema::dropIfExists('piratmac_smmm_asset_values');
     Schema::dropIfExists('piratmac_smmm_portfolios');
-    Schema::dropIfExists('piratmac_smmm_stocks');
+    Schema::dropIfExists('piratmac_smmm_assets');
   }
 
 }

@@ -1,0 +1,9 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model Form Field configuration
+list: $/piratmac/smmm/models/portfolio/columns.yaml
+
+# Model Class name
+modelClass: Piratmac\Smmm\Models\Portfolio

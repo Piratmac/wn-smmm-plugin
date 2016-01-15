@@ -1,0 +1,10 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model Form Field configuration
+list: ~/plugins/piratmac/smmm/models/asset/columns.yaml
+
+title: Assets
+modelClass: Piratmac\Smmm\Models\Asset
+recordUrl: piratmac/smmm/asset/update/:id

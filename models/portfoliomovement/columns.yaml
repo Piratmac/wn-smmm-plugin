@@ -1,0 +1,14 @@
+# ===================================
+#  List Field Definitions
+# ===================================
+
+columns:
+
+  assetId:
+    label: piratmac.smmm::lang.labels.title
+    searchable: true
+    type: text
+
+  portfolioId:
+    label: label: piratmac.smmm::lang.labels.code
+    type: text

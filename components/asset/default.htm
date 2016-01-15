@@ -1,10 +1,10 @@
-{% set stock = __SELF__.stock %}
+{% set asset = __SELF__.asset %}
 
 <div class="container">
   <div id="flashMessage">
     {% partial __SELF__ ~ '::flash' %}
   </div>
-  <div class="panel panel-default" id="stockDetails">
+  <div class="panel panel-default" id="assetDetails">
     {% if __SELF__.action in ['create', 'update'] %}
       {{ form_open() }}
       {{ form.formRender()|raw }}
@@ -13,7 +13,7 @@
         <div class="loading-indicator-container">
             <button
                 type="submit"
-                data-request="on{{ __SELF__.action|capitalize }}Stock"
+                data-request="on{{ __SELF__.action|capitalize }}Asset"
                 class="btn btn-primary">
                 {{ 'Save'|trans_label }}
             </button>
@@ -23,7 +23,7 @@
         </div>
       </div>      {{ form_close() }}
     {% elseif __SELF__.action in ['view'] %}
-      {% partial __SELF__ ~ '::' ~ __SELF__.action stock=__SELF.stock %}
+      {% partial __SELF__ ~ '::' ~ __SELF__.action asset=__SELF.asset %}
     {% endif %}
   </div>
 </div>
