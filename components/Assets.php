@@ -76,14 +76,6 @@ class Assets extends ComponentBase
     // Defaulting options
     $options = array_merge ($this->listOptionsDefault, $options);
 
-    //// Filter list according to connected user
-    //if (Auth::check()) {
-      //$this->assetList = PortfolioModel::where('user_id', '=', Auth::getUser()->id);
-    //}
-    //else {
-      //$this->assetList = PortfolioModel::where('user_id', '=', NULL);
-    //}
-
     $this->assetList = AssetModel::where('title', '<>', '');
 
     // Applying options
@@ -108,7 +100,6 @@ class Assets extends ComponentBase
 **********************************************************************/
   /**
    * Initial display of the page
-   * @param None
    */
   public function onRun ()
   {

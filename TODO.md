@@ -27,4 +27,5 @@
     * Display graphs for "regular deposit" accounts
 
 * Misc
-    * Translate all texts in partials
+    * [DONE] Translate all texts in partials
+    * Display nice messages when there are no results

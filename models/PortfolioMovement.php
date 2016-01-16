@@ -4,14 +4,13 @@ use Model;
 use Lang;
 use Validator;
 use October\Rain\Exception\ValidationException;
+use \October\Rain\Database\Traits\SoftDeleting;
 
 /**
  * PortfolioMovement Model
  */
 class PortfolioMovement extends Model
 {
-  use \October\Rain\Database\Traits\Validation;
-
   /**
    * @var string The database table used by the model.
    */
@@ -70,9 +69,5 @@ class PortfolioMovement extends Model
       return array(NULL => '') + Lang::get('piratmac.smmm::lang.dropdowns.movement.'.$fieldName);
     else
       return ['' => '-- none --'];
-  }
-
-  public function onCreate () {
-    $this->save();
   }
 }

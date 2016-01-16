@@ -177,19 +177,6 @@ class Portfolio extends Model
     return 0;
   }
 
-  /**
-  * Sets all URLs for the assets
-  * @return 0 if no error occurred
-  */
-  public function setMovementsLinks ($controller, $page) {
-    if ($this->movements->count() > 0) {
-      $this->movements->each(function($movement) use($controller, $page) {
-        if ($movement->asset != NULL)
-          $movement->asset->setUrl($controller, $page);
-      });
-    }
-    return 0;
-  }
 /**********************************************************************
                        Portfolio movements
 **********************************************************************/
@@ -199,7 +186,11 @@ class Portfolio extends Model
   * @param dateTo The last date - defaults to maximum date
   */
   public function getMovements ($dateFrom = 0, $dateTo = 0) {
-    $query = $this->movements()->with('asset');
+    $query = $this->movements()->with(array('asset' => function($query) {
+      $query->withTrashed();
+    }));
+
+
 
     if ($dateFrom != 0 && strtotime($dateFrom) && isset($dateFrom))
       $query->where('date_from', '>=', $dateFrom);
@@ -209,6 +200,19 @@ class Portfolio extends Model
     $this->movements = $query->get();
   }
 
+  /**
+  * Sets all URLs for the assets linked to movements
+  * @return 0 if no error occurred
+  */
+  public function setMovementsLinks ($controller, $page) {
+    if ($this->movements->count() > 0) {
+      $this->movements->each(function($movement) use($controller, $page) {
+        if (!is_null($movement->asset) && !$movement->asset->trashed())
+          $movement->asset->setUrl($controller, $page);
+      });
+    }
+    return 0;
+  }
 
 /**********************************************************************
                        User actions
@@ -216,47 +220,36 @@ class Portfolio extends Model
 
   /**
   * Modifies a portfolio
-  * @return 0 if no error occurred
   */
-  public function onUpdate ($userData) {
+  public function beforeValidate () {
+    if ($this->close_date == '0000-00-00' || $this->close_date == '')
+      $this->close_date = null;
+  }
+
+  /**
+  * Checks the user in case of update
+  */
+  public function beforeUpdate () {
     // Check user
     if (!$this->checkUser())
       throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));
+  }
 
-    if ($userData['close_date'] == '0000-00-00' || $userData['close_date'] == '')
-      $userData['close_date'] = null;
-
-    $this->update($userData);
-    return 0;
+  /**
+  * Checks the user in case of deletion
+  */
+  public function beforeDelete () {
+    // Check user
+    if (!$this->checkUser())
+      throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));
   }
 
 
   /**
-  * Creates a portfolio
-  * @return 0 if no error occurred
+  * Adds the user ID before creation
   */
-  public function onCreate () {
-    // Check user
-    if (!$this->user_id = $this->getUser())
-      throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));
-
-    if ($this->close_date == '0000-00-00' || $this->close_date == '')
-      $this->close_date = null;
-
-    $this->save();
-    return 0;
+  public function beforeCreate () {
+    $this->user_id = $this->user_id?$this->user_id:$this->getUser();
   }
 
-  /**
-  * Deletes a portfolio
-  * @return 0 if no error occurred
-  */
-  public function onDelete () {
-    // Check user
-    if (!$this->user_id = $this->getUser())
-      throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));
-
-    $this->delete();
-    return 0;
-  }
 }

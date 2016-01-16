@@ -33,12 +33,12 @@ class Portfolio extends ComponentBase
   /*
    * Page listing the portfolios
    */
-  public $portfolioListPage = [];
+  public $portfolioListPage;
 
   /*
    * Page for asset details
    */
-  public $assetDetailsPage = [];
+  public $assetDetailsPage;
 
 
   public function componentDetails()
@@ -170,17 +170,16 @@ class Portfolio extends ComponentBase
 
   public function onUpdatePortfolio() {
     $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
+    $this->portfolio->update(post('Portfolio'));
 
-    $result = $this->portfolio->onUpdate(post('Portfolio'));
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_modification'));
     return Redirect::to($url);
   }
 
   public function onCreatePortfolio() {
-    $this->portfolio = new PortfolioModel(post('Portfolio'));
+    $this->portfolio = PortfolioModel::create(post('Portfolio'));
 
-    $result = $this->portfolio->onCreate();
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_creation'));
     return Redirect::to($url);
@@ -189,8 +188,8 @@ class Portfolio extends ComponentBase
 
   public function onDeletePortfolio() {
     $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
+    $this->portfolio->delete();
 
-    $result = $this->portfolio->onDelete();
     $url = $this->pageUrl($this->portfolioListPage);
     Flash::success(trans('piratmac.smmm::lang.messages.success_deletion'));
     return Redirect::to($url);
@@ -202,7 +201,7 @@ class Portfolio extends ComponentBase
 
     // Workaround to avoid the asset / asset_id issue (the Form Fields behavior doesn't recognize it otherwise...)
     $defaults = array('portfolio_id' => $this->portfolio->id, 'asset_id' => post('PortfolioMovement[asset]'));
-    $movement = new PortfolioMovement($defaults + post('PortfolioMovement'));
+    $movement = PortfolioMovement::create($defaults + post('PortfolioMovement'));
 
     $result = $movement->onCreate();
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);

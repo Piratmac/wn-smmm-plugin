@@ -123,35 +123,13 @@ class Asset extends Model
                        User actions
 **********************************************************************/
 
-
-  /**
-  * Modifies a asset
-  * @return 0 if no error occurred
-  */
-  public function onUpdate ($userData) {
-    $this->update($userData);
-    return 0;
-  }
-
-
-  /**
-  * Creates a asset
-  * @return 0 if no error occurred
-  */
-  public function onCreate () {
-    $this->save();
-    return 0;
-  }
-
   /**
   * Deletes a asset
   * @return 0 if no error occurred
   */
-  public function onDelete () {
+  public function beforeDelete () {
     if ($this->portfolios()->count()>0)
       throw new ApplicationException(trans('piratmac.smmm::lang.messages.asset_in_use'));
-    $this->delete();
-    return 0;
   }
 
 

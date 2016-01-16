@@ -8,8 +8,6 @@ use Piratmac\Smmm\Models\Asset as AssetModel;
 use Piratmac\Smmm\Controllers\Asset as AssetController;
 
 use October\Rain\Exception\ApplicationException;
-use October\Rain\Exception\SystemException;
-use October\Rain\Exception\ValidationException;
 use Illuminate\Support\Facades\Redirect;
 
 class Asset extends ComponentBase
@@ -72,7 +70,6 @@ class Asset extends ComponentBase
   protected function loadAsset($asset_id)
   {
     if ($asset_id == '')
-      //@TODO: Ajouter redirection vers page d'erreur
       throw new ApplicationException ('piratmac.smmm::lang.messages.error_no_id');
 
 
@@ -112,19 +109,18 @@ class Asset extends ComponentBase
     $this->assetListPage = $this->property('assetList');
   }
 
-public function onUpdateAsset() {
+  public function onUpdateAsset() {
     $this->asset = $this->loadAsset($this->property('asset_id'));
+    $result = $this->asset->update(post('Asset'));
 
-    $result = $this->asset->onUpdate(post('Asset'));
     $url = $this->pageUrl($this->page->baseFileName, ['asset_id' => $this->asset->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_modification'));
     return Redirect::to($url);
   }
 
   public function onCreateAsset() {
-    $this->asset = new AssetModel(post(('Asset')));
+    $this->asset = AssetModel::create(post(('Asset')));
 
-    $result = $this->asset->onCreate();
     $url = $this->pageUrl($this->page->baseFileName, ['asset_id' => $this->asset->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_creation'));
     return Redirect::to($url);
@@ -133,8 +129,8 @@ public function onUpdateAsset() {
 
   public function onDeleteAsset() {
     $this->asset = $this->loadAsset($this->property('asset_id'));
+    $result = $this->asset->delete();
 
-    $result = $this->asset->onDelete();
     $url = $this->pageUrl($this->assetListPage);
     Flash::success(trans('piratmac.smmm::lang.messages.success_deletion'));
     return Redirect::to($url);
