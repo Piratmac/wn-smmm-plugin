@@ -10,27 +10,29 @@
             {{ 'Delete'|trans_label }}
         </button>
 
-        <a href="{{ ''| page({action: 'update' }) }}" class="btn btn-xs btn-primary pull-right col-sm-offset-1">Manage</a>
+        <a href="{{ ''| page({action: 'update' }) }}" class="btn btn-xs btn-primary pull-right col-sm-offset-1">
+          {{ 'manage'|trans_label }}
+        </a>
       </h3>
     </div>
     <div class="row">
       <div class="col-md-2 col-md-offset-2">
-        Opened on:
+        {{ 'opened_on'|trans_label }}:
         {{ portfolio.open_date }}
       </div>
 
       <div class="col-md-2">
-        Closed on:
+        {{ 'closed_on'|trans_label }}:
         {{ portfolio.close_date }}
       </div>
 
       <div class="col-md-2">
-        Broker:
+        {{ 'broker'|trans_label }}:
         {{ portfolio.broker }}
       </div>
 
       <div class="col-md-2">
-        Number:
+        {{ 'number'|trans_label }}:
         {{ portfolio.number }}
       </div>
     </div>
@@ -38,9 +40,21 @@
 
 {# Navigation tab headers #}
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#contents" aria-controls="contents" role="tab" data-toggle="tab">Contents</a></li>
-      <li role="presentation"><a href="#movements" aria-controls="movements" role="tab" data-toggle="tab">Movements</a></li>
-      <li role="presentation"><a href="#createMovement" aria-controls="createMovement" role="tab" data-toggle="tab">Arbitration</a></li>
+      <li role="presentation" class="active">
+        <a href="#contents" aria-controls="contents" role="tab" data-toggle="tab">
+          {{ 'contents'|trans_label }}
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#movements" aria-controls="movements" role="tab" data-toggle="tab">
+          {{ 'movements'|trans_label }}
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#createMovement" aria-controls="createMovement" role="tab" data-toggle="tab">
+          {{ 'arbitration'|trans_label }}
+        </a>
+      </li>
     </ul>
 
 {# Contents tab #}
@@ -50,21 +64,21 @@
         <table class="table-striped table">
           <tr>
             <th colspan="4">
-              Contents
+              {{ 'contents'|trans_label }}
             </th>
           </tr>
           <tr>
             <th>
-              Asset
+              {{ 'asset'|trans_label }}
             </th>
             <th class="text-right">
-              Count
+              {{ 'asset_count'|trans_label }}
             </th>
             <th class="text-right">
-              Average buy price
+              {{ 'average_buy_price'|trans_label }}
             </th>
             <th class="text-right">
-              Total buy price
+              {{ 'total_buy_price'|trans_label }}
             </th>
           </tr>
 
@@ -90,7 +104,7 @@
 
         <tr>
           <th colspan="3" class="text-right">
-            Assets
+            {{ 'stocks'|trans_label }}
           </th>
           <th class="text-right">
             {{ portfolio.balance.asset|number_format_amount }}
@@ -98,7 +112,7 @@
         </tr>
         <tr>
           <th colspan="3" class="text-right">
-            Bonds
+            {{ 'bonds'|trans_label }}
           </th>
           <th class="text-right">
             {{ portfolio.balance.bond|number_format_amount }}
@@ -106,7 +120,7 @@
         </tr>
         <tr>
           <th colspan="3" class="text-right">
-            Cash
+            {{ 'cash'|trans_label }}
           </th>
           <th class="text-right">
             {{ portfolio.balance.cash|number_format_amount }}
@@ -114,7 +128,7 @@
         </tr>
         <tr>
           <th colspan="3" class="text-right">
-            Total
+            {{ 'total'|trans_label }}
           </th>
           <th class="text-right">
             {{ portfolio.balance.total|number_format_amount }}
@@ -130,27 +144,27 @@
         <table class="table-striped table">
           <tr>
             <th colspan="5">
-              Movements
+              {{ 'movements'|trans_label }}
             </th>
           </tr>
           <tr>
             <th>
-              Asset
+              {{ 'asset'|trans_label }}
             </th>
             <th>
-              Type
+              {{ 'type'|trans_label }}
             </th>
             <th>
-              Date
+              {{ 'date'|trans_label }}
             </th>
             <th class="text-right">
-              Count
+              {{ 'asset_count'|trans_label }}
             </th>
             <th class="text-right">
-              Unit value
+              {{ 'unit_value'|trans_label }}
             </th>
             <th class="text-right">
-              Fee
+              {{ 'fee'|trans_label }}
             </th>
           </tr>
 

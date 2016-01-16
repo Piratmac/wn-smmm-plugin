@@ -56,8 +56,8 @@ class Plugin extends PluginBase
     return [
       'filters' => [
           'number_format_locale' => [$this, 'number_format_locale'],
-          'number_format_count' => [$this, 'number_format_count'],
-          'number_format_price' => [$this, 'number_format_price'],
+          'number_format_count'  => [$this, 'number_format_count'],
+          'number_format_price'  => [$this, 'number_format_price'],
           'number_format_amount' => [$this, 'number_format_amount'],
 
 

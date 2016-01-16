@@ -16,22 +16,22 @@
     </div>
     <div class="row">
       <div class="col-md-3 col-md-offset-1">
-        Code:
+        {{ 'code'|trans_label }}:
         {{ asset.id }}
       </div>
       <div class="col-md-2 col-md-offset-1">
-        Source:
+        {{ 'source'|trans_label }}:
         {{ asset.source }}
       </div>
       <div class="col-md-2 col-md-offset-1">
-        Type:
-        {{ asset.type }}
+        {{ 'type'|trans_label }}:
+        {{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans }}
       </div>
 
     </div>
 
     <div class="panel-heading">
-      <h3 class="panel-title">Value history
+      <h3 class="panel-title">{{ 'value_history'|trans_label }}
       </h3>
     </div>
     <div class="row">
@@ -39,10 +39,10 @@
         <table class="table table-striped">
           <tr>
             <th>
-              Date
+              {{ 'date'|trans_label }}
             </th>
             <th>
-              Value
+              {{ 'value'|trans_label }}
             </th>
           </tr>
           {% for value in asset.valueHistory %}

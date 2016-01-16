@@ -35,14 +35,6 @@ return [
     'asset_id_description'    => 'Asset\'s unique identifier',
 
   ],
-  'properties' => [
-    'description'              => 'Description',
-    'opened_on'                => 'Opened on',
-    'closed_on'                => 'Closed on',
-
-
-
-  ],
   'messages' => [
     'error_no_id'              => 'There is no portfolio here.',
     'fatal_error'              => 'Fatal error. Please try again',
@@ -54,21 +46,50 @@ return [
     'success_deletion'        => 'Deletion successful',
 
     'confirm_deletion'        => 'This will be deleted. Please confirm.',
+
+    'old_assets_hidden'       => 'Old assets have been hidden',
+    'old_assets_displayed'    => 'Old assets are now displayed',
+
+    'closed_portfolios_hidden'       => 'Closed portfolios have been hidden',
+    'closed_portfolios_displayed'    => 'Closed portfolios are now displayed',
   ],
   'labels' => [
+    'available_assets' => 'Available assets',
+    'display_old_assets'         => 'Display old assets',
+    'hide_old_assets'            => 'Hide old assets',
+
     'asset'       => 'Asset',
     'title'       => 'Title',
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
 
-    'portfolio'      => 'Portfolio',
-    'description'    => 'Description',
-    'opened_on'      => 'Opened on',
-    'closed_on'      => 'Closed on',
-    'number'      => 'Number',
-    'broker'      => 'Broker',
+    'value_history'    => 'Value history',
+    'value'            => 'Value',
 
+
+
+    'portfolios' => 'Portfolios',
+    'display_closed_portfolios'         => 'Display closed portfolios',
+    'hide_closed_portfolios'            => 'Hide closed portfolios',
+
+    'portfolio'        => 'Portfolio',
+    'description'      => 'Description',
+    'opened_on'        => 'Opened on',
+    'closed_on'        => 'Closed on',
+    'number'           => 'Number',
+    'broker'           => 'Broker',
+    'contents'         => 'Contenu',
+    'average_buy_price'       => 'Average buy price',
+    'total_buy_price'         => 'Total cost',
+    'stocks'           => 'Stocks',
+    'bonds'            => 'Bonds',
+    'cash'             => 'Cash',
+    'total'            => 'Total',
+    'arbitration'      => 'Arbitration',
+
+
+    'movements'   => 'Movements',
     'date'        => 'Date',
     'asset_count' => 'Asset count',
     'unit_value'  => 'Unit value / Amount',
@@ -79,6 +100,7 @@ return [
     'save'        => 'Save',
     'cancel'      => 'Cancel',
     'delete'      => 'Delete',
+    'new'         => 'New',
 
 
   ],

@@ -35,14 +35,6 @@ return [
     'asset_id_description'       => 'Identifiant unique de l\'action',
 
   ],
-  'properties' => [
-    'description'              => 'Description',
-    'opened_on'                => 'Ouvert le',
-    'closed_on'                => 'Clos le',
-
-
-
-  ],
   'messages' => [
     'error_no_id'              => 'Il n\'y a pas de portefeuille ici.',
     'fatal_error'              => 'Erreur fatale. Veuillez réessayer.',
@@ -55,21 +47,49 @@ return [
 
     'confirm_deletion'        => 'Êtes-vous sûr de vouloir supprimer?',
 
+    'old_assets_hidden'       => 'Les anciennes valeurs sont masquées',
+    'old_assets_displayed'    => 'Les anciennes valeurs sont affichées',
+
+    'closed_portfolios_hidden'       => 'Les portefeuilles clos sont masqués',
+    'closed_portfolios_displayed'    => 'Les portefeuilles clos sont affichés',
   ],
   'labels' => [
+    'available_assets' => 'Valeurs disponibles',
+    'display_old_assets'         => 'Afficher les anciennes valeurs',
+    'hide_old_assets'            => 'Masquer les anciennes valeurs',
+
     'asset'       => 'Actif',
     'title'       => 'Titre',
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
 
+    'value_history'    => 'Historique de la valeur',
+    'value'            => 'Valeur',
+
+
+
+    'portfolios' => 'Portefeuilles',
+    'display_closed_portfolios'         => 'Afficher les portefeuilles clos',
+    'hide_closed_portfolios'            => 'Masquer les portefeuilles clos',
+
     'portfolio'        => 'Portefeuille',
     'description'      => 'Description',
     'opened_on'        => 'Ouvert le',
     'closed_on'        => 'Clos le',
-    'number'      => 'Numéro',
-    'broker'      => 'Banque',
+    'number'           => 'Numéro',
+    'broker'           => 'Banque',
+    'contents'         => 'Contenu',
+    'average_buy_price'       => 'Prix moyen d\'achat',
+    'total_buy_price'         => 'Prix total',
+    'stocks'           => 'Actions',
+    'bonds'            => 'Obligations',
+    'cash'             => 'Espèces',
+    'total'            => 'Total',
+    'arbitration'      => 'Arbitrage',
 
+
+    'movements'   => 'Mouvements',
     'date'        => 'Date',
     'asset_count' => 'Nombre d\'actions',
     'unit_value'  => 'Valeur unitaire / Montant',
@@ -80,6 +100,7 @@ return [
     'save'        => 'Sauvegarder',
     'cancel'      => 'Annuler',
     'delete'      => 'Supprimer',
+    'new'         => 'Nouveau',
 
 
   ],

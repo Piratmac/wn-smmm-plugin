@@ -4,10 +4,7 @@
   </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Portfolios of {% if user %} {{ user.name }} {% else %} guests {% endif %}
-
-
-
+        <h3 class="panel-title">{{ 'portfolios'|trans_label }}
 
           <button id="closedPortfolioDisplay" class="btn btn-xs pull-right col-md-offset-1" type="button"
             data-request="{{ __SELF__}}::onRefresh"
@@ -15,9 +12,9 @@
             data-request-update="'{{ __SELF__ }}::portfolioList': '#portfolioList'"
             data-request-success="$('#closedPortfolioHide').removeClass('hidden');
                                   $('#closedPortfolioDisplay').addClass('hidden');
-                                  smmmDisplayMessage('Closed portfolios are now displayed', 'info');"
+                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.closed_portfolios_displayed'|trans }}', 'info');"
           >
-            Display closed portfolios
+            {{ 'display_closed_portfolios'|trans_label }}
           </button>
           <button id="closedPortfolioHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
             data-request="{{ __SELF__}}::onRefresh"
@@ -25,13 +22,13 @@
             data-request-update="'{{ __SELF__ }}::portfolioList': '#portfolioList'"
             data-request-success="$('#closedPortfolioDisplay').removeClass('hidden');
                                   $('#closedPortfolioHide').addClass('hidden');
-                                  smmmDisplayMessage('Closed portfolios have been hidden', 'info');"
+                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.closed_portfolios_hidden'|trans }}', 'info');"
           >
-            Hide closed portfolios
+            {{ 'hide_closed_portfolios'|trans_label }}
           </button>
 
           <a href="{{ __SELF__.portfolioDetails|page({portfolio_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
-            New
+            {{ 'new'|trans_label }}
           </a>
         </h3>
       </div>

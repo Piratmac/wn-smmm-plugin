@@ -4,7 +4,7 @@
   </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Available assets
+        <h3 class="panel-title">{{ 'available_assets'|trans_label }}
 
 
 
@@ -15,9 +15,9 @@
             data-request-update="'{{ __SELF__ }}::assetList': '#assetList'"
             data-request-success="$('#oldAssetHide').removeClass('hidden');
                                   $('#oldAssetDisplay').addClass('hidden');
-                                  smmmDisplayMessage('Old assets are now displayed', 'info');"
+                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.old_assets_displayed'|trans }}', 'info');"
           >
-            Display old assets
+            {{ 'display_old_assets'|trans_label }}
           </button>
           <button id="oldAssetHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
             data-request="{{ __SELF__}}::onRefresh"
@@ -25,13 +25,13 @@
             data-request-update="'{{ __SELF__ }}::assetList': '#assetList'"
             data-request-success="$('#oldAssetDisplay').removeClass('hidden');
                                   $('#oldAssetHide').addClass('hidden');
-                                  smmmDisplayMessage('Old assets have been hidden', 'info');"
+                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.old_assets_hidden'|trans }}', 'info');"
           >
-            Hide old assets
+            {{ 'hide_old_assets'|trans_label }}
           </button>
 
           <a href="{{ __SELF__.assetDetails|page({asset_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
-            New
+            {{ 'new'|trans_label }}
           </a>
         </h3>
       </div>

@@ -1,14 +1,8 @@
         <tbody>
           <tr>
-            <th>Description</th>
-            <th>Opened on</th>
-            <th>Closed on</th>
-{#
-            <th>{{ lang_get('piratmac.smmm::lang.properties.description') }}</th>
-            <th><?= e(trans('piratmac.smmm::lang.properties.opened_on')) ?></th>
-            <th><?= e(trans('piratmac.smmm::lang.properties.closed_on')) ?></th>
-#}
-
+            <th>{{ 'description'|trans_label }}</th>
+            <th>{{ 'opened_on'|trans_label }}</th>
+            <th>{{ 'closed_on'|trans_label }}</th>
 
             <th></th>
           </tr>
