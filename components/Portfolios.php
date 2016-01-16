@@ -35,6 +35,11 @@ class Portfolios extends ComponentBase
     'include_closed' => false,
   );
 
+  /*
+   * Folder containing the images related to this plugin
+   */
+  public $imageFolder = 'plugins/piratmac/smmm/assets/images';
+
 
   public function componentDetails()
   {

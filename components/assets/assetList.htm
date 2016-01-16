@@ -16,7 +16,14 @@
               {{ ('piratmac.smmm::lang.dropdowns.asset.source.' ~ asset.source) |trans  }}
               {% endif %}
             </td>
-            <td><a href="{{ asset.url_update }}">{{ ('manage') |trans_label }}</a></td>
+            <td style="padding:6px">
+              <a href="{{ asset.url_view }}">
+                <img src="{{ __SELF__.imageFolder }}/magnifyingglass.png" alt="{{ 'details'|trans_label }}" class="image_circle" width="25px" height="25x" />
+              </a>
+              <a href="{{ asset.url_update }}">
+                <img src="{{ __SELF__.imageFolder }}/compose.png" alt="{{ 'manage'|trans_label }}" class="image_circle" width="25px" height="25x" />
+              </a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

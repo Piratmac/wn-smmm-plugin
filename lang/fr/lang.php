@@ -75,6 +75,7 @@ return [
     'unit_value'  => 'Valeur unitaire / Montant',
     'fee'         => 'Frais',
 
+    'details'     => 'Détails',
     'manage'      => 'Gérer',
     'save'        => 'Sauvegarder',
     'cancel'      => 'Annuler',

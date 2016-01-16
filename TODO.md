@@ -17,6 +17,8 @@
     * Display the realized capital gain / loss (based on the valuation at time of buy & sell)
     * Display the sum of deposits + the gain / loss
     * Identify account as "Regular deposits" (will be displayed differently)
+    * Paginate the list of movements
+    * Divide the list of assets according to their type
 
 * Graphs
     * This is the thing I'll work on last (too many variables now...)

@@ -74,6 +74,7 @@ return [
     'unit_value'  => 'Unit value / Amount',
     'fee'         => 'Fee',
 
+    'details'     => 'Details',
     'manage'      => 'Manage',
     'save'        => 'Save',
     'cancel'      => 'Cancel',
