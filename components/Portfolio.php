@@ -203,7 +203,6 @@ class Portfolio extends ComponentBase
     $defaults = array('portfolio_id' => $this->portfolio->id, 'asset_id' => post('PortfolioMovement[asset]'));
     $movement = PortfolioMovement::create($defaults + post('PortfolioMovement'));
 
-    $result = $movement->onCreate();
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_creation'));
     return Redirect::to($url);

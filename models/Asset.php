@@ -67,8 +67,11 @@ class Asset extends Model
 
   public function getDropdownOptions($fieldName = null, $keyValue = null)
   {
-    if (in_array($fieldName, ['type', 'source']))
-      return [NULL => ''] + Lang::get('piratmac.smmm::lang.dropdowns.asset.'.$fieldName);
+    if (in_array($fieldName, ['type', 'source'])) {
+      $dropdown = [NULL => ''] + Lang::get('piratmac.smmm::lang.dropdowns.asset.'.$fieldName);
+      if ($fieldName == 'type') unset ($dropdown['cash']);
+      return $dropdown;
+    }
     else
       return ['' => '-- none --'];
   }

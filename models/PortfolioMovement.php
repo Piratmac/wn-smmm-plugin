@@ -2,7 +2,6 @@
 
 use Model;
 use Lang;
-use Validator;
 use October\Rain\Exception\ValidationException;
 use \October\Rain\Database\Traits\SoftDeleting;
 
@@ -11,6 +10,8 @@ use \October\Rain\Database\Traits\SoftDeleting;
  */
 class PortfolioMovement extends Model
 {
+  use \October\Rain\Database\Traits\Validation;
+
   /**
    * @var string The database table used by the model.
    */
@@ -32,19 +33,21 @@ class PortfolioMovement extends Model
   public $timestamps = false;
 
   protected $rules = [
-    'asset_id' => 'required_if:type,asset_buy|required_if:type,asset_sell',
+    'asset_id' => 'required_if:type,asset_buy|required_if:type,asset_sell|not_in:cash',
     'portfolio' => 'required',
     'date' => 'required|date',
     'type' => 'required',
     'asset_count' => 'numeric|required_if:type,asset_buy|required_if:type,asset_sell',
-    'unit_value' => 'numeric|required',
+    'unit_value' => [
+      'numeric',
+      'required_if:type,asset_buy', // The only case when it's not required is "fee"
+      'required_if:type,asset_sell',
+      'required_if:type,cash_deposit',
+      'required_if:type,cash_withdraw',
+    ],
     'fee' => 'numeric',
 
   ];
-
-// Ajouter warning sur le solde du compte
-// Ajouter erreur quand on vend plus que ce qu'on a
-// Ajouter calculs de mise à jour des soldes
 
 
   /**
@@ -70,4 +73,23 @@ class PortfolioMovement extends Model
     else
       return ['' => '-- none --'];
   }
+
+
+/**********************************************************************
+                       User actions
+**********************************************************************/
+
+  public function afterSave () {
+    $this->portfolio->updateHeldAssets($this);
+  }
+
+  public function afterDelete () {
+    $this->portfolio->updateHeldAssets($this);
+  }
+
+  public function afterRestore () {
+    $this->portfolio->updateHeldAssets($this);
+  }
+
+
 }

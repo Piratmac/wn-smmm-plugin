@@ -60,7 +60,7 @@
 {# Contents tab #}
 
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="contents">
+      <div role="tabpanel" class="tab-pane " id="contents">
         <table class="table-striped table">
           <tr>
             <th colspan="4">
@@ -203,7 +203,7 @@
 
 
 {# New movement tab #}
-      <div role="tabpanel" class="tab-pane" id="createMovement">
+      <div role="tabpanel" class="tab-pane active" id="createMovement">
         {{ form_open() }}
         {{ formPortfolioMovement.formRender()|raw }}
 
@@ -221,7 +221,6 @@
           </div>
         </div>
         {{ form_close() }}
-
       </div>
 
 

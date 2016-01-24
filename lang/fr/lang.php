@@ -127,14 +127,6 @@ return [
       ],
     ],
   ],
-
-  // Custom error messages
-  'custom' => [
-    'asset_id' => [
-      'required_if' => 'Pour ce type d\'opération, veuillez indiquer un actif.',
-    ],
-  ],
-
 ];
 
 

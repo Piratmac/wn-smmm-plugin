@@ -3,6 +3,10 @@
 # ===================================
 
 fields:
+  type:
+    label: piratmac.smmm::lang.labels.type
+    type: dropdown
+
   asset:
     label: piratmac.smmm::lang.labels.asset
     type: Backend\FormWidgets\Relation
@@ -35,9 +39,6 @@ fields:
       field: type
       condition: value[fee], value[cash_entry], value[cash_exit]
 
-  type:
-    label: piratmac.smmm::lang.labels.type
-    type: dropdown
 
   date:
     label: piratmac.smmm::lang.labels.date

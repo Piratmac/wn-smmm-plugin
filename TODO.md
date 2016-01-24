@@ -4,12 +4,15 @@
     * Add the ability to sync / not sync the assets
     * If disabling sync, add message if held on any account
     * Paginate the values
+    * Allow creation, modification and deletion of the values in the history
 
 * Movements
     * Allow modification of movements
     * Allow deletion of movements
-    * Update the portfolio's balance upon any change
     * Additional fields: count in entry / exit of the portfolio, count in the initial value (will be useful for graphs)
+    * Include warning on the balance of the account
+    * Include errors when selling more than we own
+    * Add checks to prevent movements after closure of portfolio or before creation
 
 * Portfolios
     * Add the valuation of currently held stocks (beware of dates)
@@ -27,5 +30,4 @@
     * Display graphs for "regular deposit" accounts
 
 * Misc
-    * [DONE] Translate all texts in partials
     * Display nice messages when there are no results

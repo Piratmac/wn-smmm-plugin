@@ -5,6 +5,8 @@ use \October\Rain\Database\Traits\SoftDeleting;
 use RainLab\User\Components\Account;
 use Auth;
 use October\Rain\Exception\ValidationException;
+use October\Rain\Exception\ApplicationException;
+use Barryvdh\DebugBar;
 
 /**
  * Portfolio Model
@@ -177,6 +179,228 @@ class Portfolio extends Model
     return 0;
   }
 
+
+  /**
+   * Updates the "held asset" table based on the movements
+   */
+  public function updateHeldAssets ($movement) {
+    $impactedCashBalance = $this->heldAssets()
+                                 ->wherePivot('date_to', '>=', $movement->date)
+                                 ->wherePivot('asset_id', 'cash');
+
+    switch ($movement->type) {
+      case 'cash_entry':
+      case 'cash_exit':
+      case 'fee':
+        $changeInCash = ($movement->type=='cash_entry'?+1:-1)*$movement->unit_value - $movement->fee;
+
+        if ($impactedCashBalance->count() == 0) {
+          // There is no history for that portfolio in cash ==> setting it up
+          $heldCashData = [
+            'date_from' => $movement->date,
+            'date_to'   => '9999-12-31',
+            'asset_count' => $changeInCash,
+            'average_price_tag' => 1,
+          ];
+
+          $this->heldAssets()->attach('cash', $heldCashData);
+        }
+        else {
+          // Update the cash balance
+          $this->updateFutureBalance($movement, $changeInCash, 'cash');
+        }
+        break;
+
+      case 'asset_buy':
+        //Update the cash balance
+        $changeInCash = -1 * $movement->asset_count * $movement->unit_value - $movement->fee;
+        $this->updateFutureBalance($movement, $changeInCash, 'cash');
+
+        $changeInAsset =   $movement->asset_count;
+        $this->updateFutureBalance($movement, $changeInAsset, $movement->asset_id);
+
+
+        break;
+      case 'asset_sell':
+        // Update the cash balance
+        $changeInCash =      $movement->asset_count * $movement->unit_value - $movement->fee;
+        $this->updateFutureBalance($movement, $changeInCash, 'cash');
+
+        $changeInAsset = - $movement->asset_count;
+        $this->updateFutureBalance($movement, $changeInAsset, $movement->asset_id);
+        break;
+    }
+
+
+    // Case when movement is deleted
+    // Case when movement is restored
+    // Case when movement is created
+    // Case when there is no more of a given asset (it should be removed)
+  }
+
+  /**
+  * Updates all held asset values after the given date
+  * @param movementDate The date of the movement
+  * @param changeInCount The change in asset_count to be applied
+  * @param asset The asset being modified
+  */
+  private function updateFutureBalance ($movement, $changeInCount, $asset) {
+/**************************************************************************
+ * This function performs a lot of operations on the asset history
+ * Please find below some examples to help understand what happens
+ **********************************
+ * Case 1
+ *  A new movement is added where there was no data
+ *
+ *  Timeline (days)      | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+ *  Existing records:               [None]
+ *  New movement is added:       ^ (+ 200)
+ *  Expected result:             | 200   --> (to infinity and beyond)
+ *
+ *  Operations to perform:
+ *    1. Enter the new value
+ **********************************
+ * Case 2
+ *  A new movement is added in the middle of existing data
+ *
+ *  Timeline (days)      | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+ *  Existing records:    |      100      |     50    |
+ *  New movement is added:       ^ (+ 200)
+ *  Expected result:     |   100 | 300   |    250    |
+ *
+ *  Operations to perform:
+ *    1. Split the existing movement
+ *    2. Modify the end date of the first part
+ *    3. Modify the asset_count after day 3 (so that 50 becomes 50 + 200)
+ *    4. Insert the new record
+ **********************************
+ * Case 3
+ *  A new movement is added and erases an existing one
+ *
+ *  Timeline (days)      | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+ *  Existing records:    |     100   | 10|     50    |
+ *  New movement is added:           ^ (+ 200)
+ *  Expected result:     |   100     |210|    250    |
+ *
+ *  Operations to perform:
+ *    1. Split the existing movement
+ *    2. Modify the asset_count on or after day 4 (so that 10 becomes 210 and 50 becomes 250)
+ **********************************
+ * Case 4
+ *  A new movement is added strictly before an existing one
+ *
+ *  Timeline (days)      | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+ *  Existing records:                |         50    |
+ *  New movement is added:   ^ (+ 200)
+ *  Expected result:         |  200  |        250    |
+ *
+ *  Operations to perform:
+ *    1. Create the new movement (beware of the date)
+ *    2. Modify the asset_count on or after day 4 (so that 50 becomes 250)
+ **************************************************************************
+ */
+
+    // Find the record currently existing, so that we can set up the new one properly
+    // Example: case 2 step 1 and case 3 step 1
+    $currentBalance = $this->heldAssets()
+                           ->wherePivot('date_from', '<=', $movement->date)
+                           ->wherePivot('date_to',   '>=', $movement->date)
+                           ->wherePivot('asset_id', $asset)
+                           ->first();
+
+    if (!is_null($currentBalance)) {
+      // Creating a new record that starts after the existing (modified) one
+      // Example: Case 2 step 4
+      // As of now all data except dates are identical to the existing balance (they'll get updated later)
+      $newBalanceData = [
+        'date_from'    => $movement->date,
+        'date_to'      => $currentBalance->pivot->date_to,
+        'asset_count'  => $currentBalance->pivot->asset_count,
+        'average_price_tag' => $currentBalance->pivot->average_price_tag,
+      ];
+      if ($newBalanceData['date_from'] != $currentBalance->pivot->date_from)
+        $this->heldAssets()->attach($asset, $newBalanceData);
+
+
+      // Updating the existing record that overlaps the new one AND starts before it (only the date_to changes)
+      // Example: Case 2 step 2
+      $newDate = date('Y-m-d', strtotime($movement->date.' a day ago'));
+      $this->heldAssets()
+           ->wherePivot('date_from', '<', $movement->date)
+           ->wherePivot('date_to', '>=', $movement->date)
+           ->wherePivot('asset_id', $asset)
+           ->update(['date_to' => $newDate]);
+    }
+    else {
+      // There is no balance valid at current date
+      // There is another balance valid only after the current date ==> we need to stop the new balance before that
+      // Example: Case 4 step 1
+      $futureBalance = $this->heldAssets()
+                            ->wherePivot('date_from', '>', $movement->date)
+                            ->wherePivot('asset_id', $asset)
+                            ->orderBy('date_from')
+                            ->first();
+
+      if (!is_null($futureBalance)) {
+        $newBalanceData = [
+          'date_from'    => $movement->date,
+          'date_to'      => date('Y-m-d', strtotime($futureBalance->pivot->date_from.' a day ago')),
+          'asset_count'  => 0,
+          'average_price_tag' => ($movement->asset_id == 'cash'?1:0),
+        ];
+        if ($newBalanceData['date_from'] != $newBalanceData['date_to'])
+          $this->heldAssets()->attach($asset, $newBalanceData);
+      }
+      else {
+        $newBalanceData = [
+          'date_from'    => $movement->date,
+          'date_to'      => '9999-12-31',
+          'asset_count'  => 0,
+          'average_price_tag' => ($movement->asset_id == 'cash'?1:$movement->unit_value),
+        ];
+        $this->heldAssets()->attach($asset, $newBalanceData);
+      }
+    }
+
+    // Updating the average price tag for assets: it is equal to :
+    // (existing_price * existing_units + movement_price*movement_units) / (existing_units + movement_units)
+    if ($asset != 'cash') {
+      $impactedAssetBalance = $this->heldAssets()
+                                   ->wherePivot('date_to',   '>=', $movement->date)
+                                   ->wherePivot('asset_id', $asset)
+                                   ->get();
+
+      if (!is_null($impactedAssetBalance) && $changeInCount >= 0) {
+        foreach ($impactedAssetBalance as $impactedBalance) {
+          if ($impactedBalance->pivot->asset_count + $movement->asset_count != 0) {
+            $impactedBalance->pivot->average_price_tag =
+              ($impactedBalance->pivot->average_price_tag * $impactedBalance->pivot->asset_count +
+               $movement->unit_value                      * $movement->asset_count)
+              / ($impactedBalance->pivot->asset_count + $movement->asset_count);
+            \Debugbar::addMessage($impactedBalance->pivot->attributes, '$impactedBalance');
+            $this->heldAssets()
+                 ->wherePivot('date_from', $impactedBalance->pivot->date_from)
+                 ->wherePivot('date_to',   $impactedBalance->pivot->date_to)
+                 ->wherePivot('asset_id',  $impactedBalance->pivot->asset_id)
+                 ->update(['average_price_tag' => $impactedBalance->pivot->average_price_tag]);
+          }
+        }
+      }
+    }
+
+    // Modify the asset count of any record that ends after the movement date (as they will all be impacted)
+    // Example: Case 2 step 3
+    $this->heldAssets()
+         ->wherePivot('date_to', '>=', $movement->date)
+         ->wherePivot('asset_id', $asset)
+         ->increment('asset_count', $changeInCount);
+  }
+
+
+
+
+
+
 /**********************************************************************
                        Portfolio movements
 **********************************************************************/
@@ -189,8 +413,6 @@ class Portfolio extends Model
     $query = $this->movements()->with(array('asset' => function($query) {
       $query->withTrashed();
     }));
-
-
 
     if ($dateFrom != 0 && strtotime($dateFrom) && isset($dateFrom))
       $query->where('date_from', '>=', $dateFrom);

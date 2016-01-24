@@ -106,7 +106,7 @@ class CreatePortfolioTables extends Migration
 
 
       $table->date('date_from');
-      $table->date('date_to')->default(NULL)->nullable();
+      $table->date('date_to')->default('9999-12-31');
       $table->decimal('asset_count', 10, 5);
       $table->decimal('average_price_tag', 12, 2);
 
