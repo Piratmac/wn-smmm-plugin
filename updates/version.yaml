@@ -7,3 +7,6 @@
  - Movements can now be created
  - Now using Form behavior for front-end
  - Several improvements in display, bug fixes, ...
+
+1.0.3:
+ - Movements update portfolios' balance
