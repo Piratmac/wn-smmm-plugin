@@ -34,7 +34,7 @@ class Assets extends ComponentBase
   /*
    * Folder containing the images related to this plugin
    */
-  public $imageFolder = 'plugins/piratmac/smmm/assets/images';
+  public $imageFolder = '/plugins/piratmac/smmm/assets/images';
 
 
 
@@ -85,7 +85,7 @@ class Assets extends ComponentBase
 
     // Getting filtered list
     $this->assetList = $this->assetList->orderBy('title', 'ASC');
-    $this->assetList = $this->assetList->get();
+    $this->assetList = $this->assetList->paginate(5);
 
 
     if ($this->assetList && $this->assetList->count()) {

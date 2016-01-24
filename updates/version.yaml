@@ -14,3 +14,6 @@
 1.0.4:
  - Assets can be 'synced' or not (to allow for use of external tools such as Finance::Quote)
  - v1.0.4_tables.php
+
+1.0.5:
+ - Added pagination on a few pages

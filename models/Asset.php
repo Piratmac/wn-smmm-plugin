@@ -5,8 +5,6 @@ use Lang;
 use Flash;
 use \October\Rain\Database\Traits\SoftDeleting;
 use October\Rain\Exception\ApplicationException;
-use October\Rain\Exception\SystemException;
-
 
 /**
  * Asset Model
@@ -119,7 +117,7 @@ class Asset extends Model
     if ($dateFrom != NULL) $query = $query->where('date', '>=', $dateFrom);
     if ($dateTo != NULL)   $query = $query->where('date', '<=', $dateTo);
 
-    $this->valueHistory = $query->get();
+    $this->valueHistory = $query->getQuery()->paginate(10);
   }
 
 

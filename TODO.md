@@ -1,7 +1,6 @@
 # The todo list
 * Assets pages
     * Display portfolios containing those assets
-    * Paginate the values
     * Allow creation, modification and deletion of the values in the history
 
 * Movements
@@ -18,7 +17,6 @@
     * Display the realized capital gain / loss (based on the valuation at time of buy & sell)
     * Display the sum of deposits + the gain / loss
     * Identify account as "Regular deposits" (will be displayed differently)
-    * Paginate the list of movements
     * Divide the list of assets according to their type
 
 * Graphs

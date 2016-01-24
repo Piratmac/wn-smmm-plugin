@@ -229,12 +229,6 @@ class Portfolio extends Model
         $this->updateFutureBalance($movement, $changeInAsset, $movement->asset_id);
         break;
     }
-
-
-    // Case when movement is deleted
-    // Case when movement is restored
-    // Case when movement is created
-    // Case when there is no more of a given asset (it should be removed)
   }
 
   /**
@@ -417,7 +411,7 @@ class Portfolio extends Model
     if ($dateTo != 0 && strtotime($dateTo) && isset($dateTo))
       $query->where('date_to', '<=', $dateTo);
 
-    $this->movements = $query->get();
+    $this->movements = $query->getQuery()->paginate(15);
   }
 
   /**

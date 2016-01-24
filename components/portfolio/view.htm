@@ -198,6 +198,11 @@
             </td>
           </tr>
           {% endfor %}
+          <tr>
+            <td colspan="6" class="text-center">
+              {{ portfolio.movements.fragment('movements').render|raw }}
+            </td>
+          </tr>
         </table>
       </div>
 

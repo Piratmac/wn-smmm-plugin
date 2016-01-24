@@ -39,3 +39,10 @@ function smmmHideMessage (element) {
 if ($('.datepicker').length) {
   $('.datepicker').datepicker();
 }
+
+if (window.location.hash.length && $('.tab-pane').length) {
+  $('.tab-pane.active').removeClass('active');
+  $('.nav-tabs .active').removeClass('active');
+  $(window.location.hash).addClass('active');
+  $(window.location.hash).show();
+}
