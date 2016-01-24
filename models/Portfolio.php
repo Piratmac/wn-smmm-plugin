@@ -6,7 +6,6 @@ use RainLab\User\Components\Account;
 use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Exception\ApplicationException;
-use Barryvdh\DebugBar;
 
 /**
  * Portfolio Model
@@ -377,7 +376,6 @@ class Portfolio extends Model
               ($impactedBalance->pivot->average_price_tag * $impactedBalance->pivot->asset_count +
                $movement->unit_value                      * $movement->asset_count)
               / ($impactedBalance->pivot->asset_count + $movement->asset_count);
-            \Debugbar::addMessage($impactedBalance->pivot->attributes, '$impactedBalance');
             $this->heldAssets()
                  ->wherePivot('date_from', $impactedBalance->pivot->date_from)
                  ->wherePivot('date_to',   $impactedBalance->pivot->date_to)

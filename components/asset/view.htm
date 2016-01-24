@@ -19,13 +19,17 @@
         {{ 'code'|trans_label }}:
         {{ asset.id }}
       </div>
-      <div class="col-md-2 col-md-offset-1">
+      <div class="col-md-2">
         {{ 'source'|trans_label }}:
         {{ asset.source }}
       </div>
       <div class="col-md-2 col-md-offset-1">
         {{ 'type'|trans_label }}:
         {{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans }}
+      </div>
+      <div class="col-md-2">
+        {{ 'synced'|trans_label }}:
+        {{ asset.synced ? 'Yes'|trans_label : 'No'|trans_label }}
       </div>
 
     </div>

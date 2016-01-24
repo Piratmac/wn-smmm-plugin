@@ -1,8 +1,6 @@
 # The todo list
 * Assets pages
     * Display portfolios containing those assets
-    * Add the ability to sync / not sync the assets
-    * If disabling sync, add message if held on any account
     * Paginate the values
     * Allow creation, modification and deletion of the values in the history
 

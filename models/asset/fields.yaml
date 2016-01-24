@@ -25,3 +25,7 @@ fields:
         label: piratmac.smmm::lang.labels.source
         type: dropdown
 
+    synced:
+        label: piratmac.smmm::lang.labels.synced
+        type: checkbox
+

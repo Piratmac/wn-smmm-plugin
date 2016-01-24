@@ -52,6 +52,8 @@ return [
 
     'closed_portfolios_hidden'       => 'Closed portfolios have been hidden',
     'closed_portfolios_displayed'    => 'Closed portfolios are now displayed',
+
+    'used_and_not_synced'    => 'Warning: This asset is not synced, but belongs to a portfolio',
   ],
   'labels' => [
     'available_assets' => 'Available assets',
@@ -63,6 +65,7 @@ return [
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
+    'synced'      => 'Sync values',
 
     'value_history'    => 'Value history',
     'value'            => 'Value',
@@ -103,6 +106,10 @@ return [
     'new'         => 'New',
 
 
+    'yes'         => 'Yes',
+    'no'          => 'No',
+
+
   ],
   'dropdowns' => [
     'asset' => [
@@ -126,33 +133,6 @@ return [
         'cash_exit' => 'Cash withdrawal',
       ],
     ],
-  ],
-
-  // Custom error messages
-  'custom' => [
-    'asset_id' => [
-      'required_if' => 'For this type of operation, please choose an asset',
-      'not_in' => 'Please don\'t use Cash as an asset (it\'s calculated for you.)',
-    ],
-  ],
-
-];
-
-
-$OLD = [
-  'settings' => [
-    'portfolioview_page'           => 'View a portfolio',
-    'portfolioview_description'    => 'Name of the portfolio page to view details on a portfolio',
-    'portfoliomanage_page'           => 'Manage a portfolio',
-    'portfoliomanage_description'    => 'Name of the portfolio page to manage portfolios',
-    'portfoliocreate_page'           => 'Create a portfolio',
-    'portfoliocreate_description'    => 'Name of the portfolio page to create portfolios',
-
-    'display_mode'               => 'Display mode',
-    'display_mode_description'   => 'Choose whether the page will allow modification or not',
-    'display_mode_view'             => 'Read-only',
-    'display_mode_manage'           => 'Modification',
-    'display_mode_create'           => 'Creation',
   ],
 
 ];

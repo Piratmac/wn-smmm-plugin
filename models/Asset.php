@@ -2,9 +2,10 @@
 
 use Model;
 use Lang;
+use Flash;
 use \October\Rain\Database\Traits\SoftDeleting;
 use October\Rain\Exception\ApplicationException;
-
+use October\Rain\Exception\SystemException;
 
 
 /**
@@ -28,7 +29,7 @@ class Asset extends Model
   /**
    * @var array Fillable fields
    */
-  protected $fillable = ['id', 'title', 'source', 'type'];
+  protected $fillable = ['id', 'title', 'source', 'type', 'synced'];
 
 
   protected $rules = [
@@ -133,6 +134,15 @@ class Asset extends Model
   public function beforeDelete () {
     if ($this->portfolios()->count()>0)
       throw new ApplicationException(trans('piratmac.smmm::lang.messages.asset_in_use'));
+  }
+
+  /**
+  * After update of the asset
+  * @return 0 if no error occurred
+  */
+  public function beforeSave () {
+    if ($this->portfolios()->wherePivot('date_to', '>=', date('Y-m-d'))->count() > 0 && !$this->synced)
+      Flash::warning(trans('piratmac.smmm::lang.messages.used_and_not_synced'));
   }
 
 

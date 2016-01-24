@@ -52,6 +52,8 @@ return [
 
     'closed_portfolios_hidden'       => 'Les portefeuilles clos sont masqués',
     'closed_portfolios_displayed'    => 'Les portefeuilles clos sont affichés',
+
+    'used_and_not_synced'    => 'Attention: Cette valeur n\{est pas synchronisé et apparait dans un portefeuille.',
   ],
   'labels' => [
     'available_assets' => 'Valeurs disponibles',
@@ -63,6 +65,7 @@ return [
     'code'        => 'Code',
     'type'        => 'Type',
     'source'      => 'Source',
+    'synced'      => 'Télécharger les valeurs',
 
     'value_history'    => 'Historique de la valeur',
     'value'            => 'Valeur',
@@ -101,6 +104,10 @@ return [
     'cancel'      => 'Annuler',
     'delete'      => 'Supprimer',
     'new'         => 'Nouveau',
+
+
+    'yes'         => 'Oui',
+    'no'          => 'Non',
 
 
   ],
