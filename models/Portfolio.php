@@ -134,15 +134,18 @@ class Portfolio extends Model
   * Determines the contents of the portfolio
   * @param date The date at which to determine the contents
   */
-  public function getHeldAssets ($date = 0) {
-    if ($date = 0 || !strtotime($date) || !isset($date))
+  public function getHeldAssets ($date = 0, $asset_id = NULL) {
+    if ($date == 0 || !strtotime($date) || !isset($date))
       $date = date('Y-m-d');
     $this->contents = $this->heldAssets()
                            ->where('date_from', '<=', $date)
                            ->where(function ($query) use($date) {
                               $query->where('date_to', '>=', $date)
-                                    ->orWherenull('date_to');})
-                           ->get();
+                                    ->orWherenull('date_to');});
+    if (!is_null($asset_id))
+      $this->contents->where('asset_id', $asset_id);
+
+    $this->contents = $this->contents->get();
     return $this->contents;
   }
   /**

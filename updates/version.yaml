@@ -17,3 +17,6 @@
 
 1.0.5:
  - Added pagination on a few pages
+
+1.0.6:
+ - Added several validations in movements (asset and cash balance, dates match)

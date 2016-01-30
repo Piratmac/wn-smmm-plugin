@@ -54,6 +54,10 @@ return [
     'closed_portfolios_displayed'    => 'Les portefeuilles clos sont affichés',
 
     'used_and_not_synced'    => 'Attention: Cette valeur n\{est pas synchronisé et apparait dans un portefeuille.',
+
+    'negative_asset_count'    => 'Vous n\'avez pas autant d\'actifs à vendre.',
+    'negative_cash_balance'    => 'Le solde de votre compte est négatif.',
+    'movement_outside_portfolio_dates'    => 'La date du mouvement n\'est pas cohérente avec celles du portefeuille.',
   ],
   'labels' => [
     'available_assets' => 'Valeurs disponibles',

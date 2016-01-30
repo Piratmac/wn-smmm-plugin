@@ -54,6 +54,10 @@ return [
     'closed_portfolios_displayed'    => 'Closed portfolios are now displayed',
 
     'used_and_not_synced'    => 'Warning: This asset is not synced, but belongs to a portfolio',
+
+    'negative_asset_count'    => 'You don\'t have that many assets to sell.',
+    'negative_cash_balance'    => 'You are in the red.',
+    'movement_outside_portfolio_dates'    => 'The movement\'s date doesn\'t match with the portfolio\'s ones.',
   ],
   'labels' => [
     'available_assets' => 'Available assets',

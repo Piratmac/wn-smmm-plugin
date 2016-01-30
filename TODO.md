@@ -7,9 +7,6 @@
     * Allow modification of movements
     * Allow deletion of movements
     * Additional fields: count in entry / exit of the portfolio, count in the initial value (will be useful for graphs)
-    * Include warning on the balance of the account
-    * Include errors when selling more than we own
-    * Add checks to prevent movements after closure of portfolio or before creation
 
 * Portfolios
     * Add the valuation of currently held stocks (beware of dates)

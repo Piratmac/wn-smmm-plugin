@@ -2,8 +2,10 @@
 
 use Model;
 use Lang;
+use Flash;
 use October\Rain\Exception\ValidationException;
 use \October\Rain\Database\Traits\SoftDeleting;
+use Barryvdh\DebugBar;
 
 /**
  * PortfolioMovement Model
@@ -78,6 +80,36 @@ class PortfolioMovement extends Model
 /**********************************************************************
                        User actions
 **********************************************************************/
+
+  public function beforeSave () {
+    // Checking asset balance
+    if ($this->type == 'asset_sell') {
+      $heldAssets = $this->portfolio->getHeldAssets($this->date, $this->asset_id)->first();
+      if (is_null($heldAssets) || (int)$heldAssets->pivot->asset_count < (int)$this->asset_count)
+        throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.negative_asset_count')]);
+    }
+
+    // Checking cash balance
+    if ($this->type == 'cash_exit') {
+      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
+      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < $this->asset_count)
+        Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
+    }
+
+    // Checking cash balance
+    if ($this->type == 'asset_buy') {
+      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
+      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < ($this->asset_count * $this->unit_value))
+        Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
+    }
+
+    // Checking date of movement against date of portfolio
+    if ( (!is_null($this->portfolio->close_date) && $this->portfolio->close_date < $this->date)
+        || $this->portfolio->open_date > $this->date)
+      throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.movement_outside_portfolio_dates')]);
+
+
+  }
 
   public function afterSave () {
     $this->portfolio->updateHeldAssets($this);
