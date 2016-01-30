@@ -20,3 +20,6 @@
 
 1.0.6:
  - Added several validations in movements (asset and cash balance, dates match)
+
+1.0.7:
+ - Portfolio contents are displayed per category

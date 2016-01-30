@@ -91,6 +91,7 @@ return [
     'total_buy_price'         => 'Total cost',
     'stocks'           => 'Stocks',
     'bonds'            => 'Bonds',
+    'mixed'            => 'Mixed',
     'cash'             => 'Cash',
     'total'            => 'Total',
     'arbitration'      => 'Arbitration',

@@ -82,7 +82,18 @@
             </th>
           </tr>
 
-          {% for heldAsset in portfolio.contents if heldAsset.type != 'cash' %}
+
+
+
+    {# Stocks #}
+          {% for heldAsset in portfolio.contents if heldAsset.type == 'stock' and heldAsset.pivot.asset_count != 0 %}
+          {% if loop.first %}
+          <tr>
+            <th colspan="6">
+              {{ 'stocks'|trans_label }}
+            </th>
+          </tr>
+          {% endif %}
           <tr>
             <td>
               <a href="{{ heldAsset.url_view }}">
@@ -99,25 +110,99 @@
               {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
             </td>
           </tr>
+
           {% endfor %}
+          {% if portfolio.balance.stock != 0 %}
+          <tr>
+            <th colspan="3" class="text-right">
+              {{ 'stocks'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.balance.stock|number_format_amount }}
+            </th>
+          </tr>
+          {% endif %}
 
 
-        <tr>
-          <th colspan="3" class="text-right">
-            {{ 'stocks'|trans_label }}
-          </th>
-          <th class="text-right">
-            {{ portfolio.balance.asset|number_format_amount }}
-          </th>
-        </tr>
-        <tr>
-          <th colspan="3" class="text-right">
-            {{ 'bonds'|trans_label }}
-          </th>
-          <th class="text-right">
-            {{ portfolio.balance.bond|number_format_amount }}
-          </th>
-        </tr>
+
+
+          {% for heldAsset in portfolio.contents if heldAsset.type == 'bond' and heldAsset.pivot.asset_count != 0 %}
+          {% if loop.first %}
+          <tr>
+            <th colspan="6">
+              {{ 'bonds'|trans_label }}
+            </th>
+          </tr>
+          {% endif %}
+          <tr>
+            <td>
+              <a href="{{ heldAsset.url_view }}">
+                {{ heldAsset.title }} ({{ heldAsset.id }})
+              </a>
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.asset_count|number_format_count }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.average_price_tag|number_format_price }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
+            </td>
+          </tr>
+
+          {% endfor %}
+          {% if portfolio.balance.bond != 0 %}
+          <tr>
+            <th colspan="3" class="text-right">
+              {{ 'bonds'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.balance.bond|number_format_amount }}
+            </th>
+          </tr>
+          {% endif %}
+
+
+
+          {% for heldAsset in portfolio.contents if heldAsset.type == 'mixed' and heldAsset.pivot.asset_count != 0 %}
+          {% if loop.first %}
+          <tr>
+            <th colspan="6">
+              {{ 'mixed'|trans_label }}
+            </th>
+          </tr>
+          {% endif %}
+          <tr>
+            <td>
+              <a href="{{ heldAsset.url_view }}">
+                {{ heldAsset.title }} ({{ heldAsset.id }})
+              </a>
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.asset_count|number_format_count }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.average_price_tag|number_format_price }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
+            </td>
+          </tr>
+
+          {% endfor %}
+          {% if portfolio.balance.mixed != 0 %}
+          <tr>
+            <th colspan="3" class="text-right">
+              {{ 'mixed'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.balance.mixed|number_format_amount }}
+            </th>
+          </tr>
+          {% endif %}
+
+
         <tr>
           <th colspan="3" class="text-right">
             {{ 'cash'|trans_label }}
