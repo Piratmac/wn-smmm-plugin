@@ -58,6 +58,11 @@ return [
     'negative_asset_count'    => 'You don\'t have that many assets to sell.',
     'negative_cash_balance'    => 'You are in the red.',
     'movement_outside_portfolio_dates'    => 'The movement\'s date doesn\'t match with the portfolio\'s ones.',
+
+    'no_movement'         => 'No mouvement found.',
+    'no_value_history'    => 'No value history found.',
+    'no_asset'            => 'No asset found.',
+    'no_portfolio'        => 'No portfolio found.',
   ],
   'labels' => [
     'available_assets' => 'Available assets',
@@ -86,7 +91,7 @@ return [
     'closed_on'        => 'Closed on',
     'number'           => 'Number',
     'broker'           => 'Broker',
-    'contents'         => 'Contenu',
+    'contents'         => 'Contents',
     'average_buy_price'       => 'Average buy price',
     'total_buy_price'         => 'Total cost',
     'stocks'           => 'Stocks',

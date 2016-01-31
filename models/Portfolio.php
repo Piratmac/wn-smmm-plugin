@@ -6,7 +6,6 @@ use RainLab\User\Components\Account;
 use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Exception\ApplicationException;
-use Barryvdh\DebugBar;
 
 /**
  * Portfolio Model
@@ -436,7 +435,6 @@ class Portfolio extends Model
           })
           ->map (function ($balance) { return $balance->pivot->asset_count; })->first();
       });
-      \Debugbar::info($this->movements->first()->cashBalance);
     }
   }
 

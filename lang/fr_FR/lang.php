@@ -58,6 +58,11 @@ return [
     'negative_asset_count'    => 'Vous n\'avez pas autant d\'actifs à vendre.',
     'negative_cash_balance'    => 'Le solde de votre compte est négatif.',
     'movement_outside_portfolio_dates'    => 'La date du mouvement n\'est pas cohérente avec celles du portefeuille.',
+
+    'no_movement'         => 'Aucun mouvement trouvé.',
+    'no_value_history'    => 'Aucun historique de valeur trouvé.',
+    'no_asset'            => 'Aucun actif trouvé.',
+    'no_portfolio'        => 'Aucun portefeuille trouvé.',
   ],
   'labels' => [
     'available_assets' => 'Valeurs disponibles',

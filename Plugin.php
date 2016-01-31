@@ -47,8 +47,6 @@ class Plugin extends PluginBase
     User::extend(function($model){
       $model->hasMany['piratmac_smmm_portfolios'] = ['Piratmac\Smmm\Models\Portfolio'];
     });
-
-
   }
 
   public function registerMarkupTags()

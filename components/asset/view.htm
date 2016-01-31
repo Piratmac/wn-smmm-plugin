@@ -34,6 +34,21 @@
 
     </div>
 
+
+
+    {% if asset.valueHistory.count == 0 %}
+    <table class="table-striped table">
+      <tr>
+        <th>
+          {{ 'piratmac.smmm::lang.messages.no_value_history'|trans }}
+        </th>
+      </tr>
+    </table>
+    {% else %}
+    {% for value in asset.valueHistory %}
+    {% if loop.first %}
+
+
     <div class="panel-heading">
       <h3 class="panel-title">{{ 'value_history'|trans_label }}
       </h3>
@@ -49,7 +64,7 @@
               {{ 'value'|trans_label }}
             </th>
           </tr>
-          {% for value in asset.valueHistory %}
+    {% endif %}
           <tr>
             <td>
               {{ value.date }}
@@ -58,7 +73,8 @@
               {{ value.value|number_format_price }}
             </td>
           </tr>
-          {% endfor %}
+    {% if loop.last %}
+
           <tr>
             <td colspan="2" class="text-center">
               {{ asset.valueHistory.render|raw }}
@@ -67,3 +83,6 @@
         </table>
       </div>
     </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}

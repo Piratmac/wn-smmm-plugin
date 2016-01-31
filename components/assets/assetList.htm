@@ -1,4 +1,16 @@
         <tbody>
+        {% if __SELF__.assetList.count == 0 %}
+          <tr>
+            <th>
+              {{ 'piratmac.smmm::lang.messages.no_asset'|trans }}
+            </th>
+          </tr>
+        {% else %}
+        {% for asset in __SELF__.assetList %}
+        {% if loop.first %}
+
+
+
           <tr>
             <th>{{ 'title'|trans_label }}</th>
             <th>{{ 'code'|trans_label }}</th>
@@ -6,7 +18,7 @@
             <th>{{ 'source'|trans_label }}</th>
             <th></th>
           </tr>
-          {% for asset in __SELF__.assetList %}
+          {% endif %}
           <tr>
             <td>
               {% if asset.type != 'cash' %}
@@ -35,10 +47,13 @@
               {% endif %}
             </td>
           </tr>
-          {% endfor %}
+          {% if loop.last %}
           <tr>
             <td colspan="5" class="text-center">
               {{ __SELF__.assetList.render|raw }}
             </td>
           </tr>
         </tbody>
+        {% endif %}
+        {% endfor %}
+        {% endif %}

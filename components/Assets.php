@@ -85,7 +85,7 @@ class Assets extends ComponentBase
 
     // Getting filtered list
     $this->assetList = $this->assetList->orderBy('title', 'ASC');
-    $this->assetList = $this->assetList->paginate(5);
+    $this->assetList = $this->assetList->paginate(15);
 
 
     if ($this->assetList && $this->assetList->count()) {

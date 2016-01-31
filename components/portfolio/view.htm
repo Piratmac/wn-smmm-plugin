@@ -63,11 +63,6 @@
       <div role="tabpanel" class="tab-pane active" id="contents">
         <table class="table-striped table">
           <tr>
-            <th colspan="4">
-              {{ 'contents'|trans_label }}
-            </th>
-          </tr>
-          <tr>
             <th>
               {{ 'asset'|trans_label }}
             </th>
@@ -226,6 +221,17 @@
 {# Movements tab #}
 
       <div role="tabpanel" class="tab-pane" id="movements">
+        {% if portfolio.movements.count == 0 %}
+        <table class="table-striped table">
+          <tr>
+            <th>
+              {{ 'piratmac.smmm::lang.messages.no_movement'|trans }}
+            </th>
+          </tr>
+        </table>
+        {% else %}
+        {% for movement in portfolio.movements %}
+        {% if loop.first %}
         <table class="table-striped table">
           <tr>
             <th colspan="7">
@@ -255,8 +261,8 @@
               {{ 'cash_balance'|trans_label }}
             </th>
           </tr>
+        {% endif %}
 
-          {% for movement in portfolio.movements %}
           <tr>
             <td>
               {% if movement.asset.title == '' %}
@@ -288,13 +294,16 @@
               {{ movement.cashBalance|number_format_amount }}
             </td>
           </tr>
-          {% endfor %}
+        {% if loop.last %}
           <tr>
             <td colspan="7" class="text-center">
               {{ portfolio.movements.fragment('movements').render|raw }}
             </td>
           </tr>
         </table>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
       </div>
 
 

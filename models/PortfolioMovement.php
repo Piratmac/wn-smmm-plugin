@@ -5,7 +5,6 @@ use Lang;
 use Flash;
 use October\Rain\Exception\ValidationException;
 use \October\Rain\Database\Traits\SoftDeleting;
-use Barryvdh\DebugBar;
 
 /**
  * PortfolioMovement Model
@@ -103,7 +102,7 @@ class PortfolioMovement extends Model
         Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
     }
 
-    // Checking cash balance for cash entry (not likely, but fee may beabove what is entering the portfolio)
+    // Checking cash balance for cash entry (not likely, but fee may be above what is entering the portfolio)
     if ($this->type == 'cash_entry') {
       $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
       if (is_null($heldAssets) || ( $heldAssets->pivot->asset_count + $this->unit_value) < $this->fee)

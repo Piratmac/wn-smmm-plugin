@@ -1,4 +1,14 @@
         <tbody>
+        {% if __SELF__.portfolioList.count == 0 %}
+          <tr>
+            <th>
+              {{ 'piratmac.smmm::lang.messages.no_portfolio'|trans }}
+            </th>
+          </tr>
+        {% else %}
+        {% for portfolio in __SELF__.portfolioList %}
+        {% if loop.first %}
+
           <tr>
             <th>{{ 'description'|trans_label }}</th>
             <th>{{ 'opened_on'|trans_label }}</th>
@@ -6,7 +16,7 @@
 
             <th></th>
           </tr>
-          {% for portfolio in __SELF__.portfolioList %}
+          {% endif %}
           <tr>
             <td><a href="{{ portfolio.url_view }}">{{ portfolio.description }}</a></td>
             <td>{{ portfolio.open_date }}</td>
@@ -20,5 +30,8 @@
               </a>
             </td>
           </tr>
-          {% endfor %}
+        {% if loop.last %}
         </tbody>
+        {% endif %}
+        {% endfor %}
+        {% endif %}

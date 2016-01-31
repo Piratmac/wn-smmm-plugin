@@ -20,6 +20,3 @@
     * Display portfolio's value over time
     * Include ability to compare portfolios (with common reference point)
     * Display graphs for "regular deposit" accounts
-
-* Misc
-    * Display nice messages when there are no results
