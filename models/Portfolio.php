@@ -6,6 +6,7 @@ use RainLab\User\Components\Account;
 use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Exception\ApplicationException;
+use Barryvdh\DebugBar;
 
 /**
  * Portfolio Model
@@ -415,6 +416,28 @@ class Portfolio extends Model
       $query->where('date_to', '<=', $dateTo);
 
     $this->movements = $query->getQuery()->orderBy('date', 'DESC')->paginate(15);
+
+
+    $movementDates = $this->movements->map(function ($movement) { return $movement->date; });
+    $maxDate = $movementDates->first();
+    $minDate = $movementDates->last();
+
+    if (count($movementDates) > 0) {
+      $cashBalance = $this->heldAssets()
+                          ->where('asset_id', 'cash')
+                          ->where('date_from', '<=', $maxDate)
+                          ->where(function ($query) use($minDate) {
+                             $query->where('date_to', '>=', $minDate)
+                                   ->orWherenull('date_to');})->get();
+
+      $this->movements->each(function ($movement) use ($cashBalance) {
+        $movement->cashBalance = $cashBalance->filter (function ($balance) use ($movement) {
+          return (strtotime($balance->pivot->date_from) <= strtotime($movement->date) && strtotime($balance->pivot->date_to) >= strtotime($movement->date));
+          })
+          ->map (function ($balance) { return $balance->pivot->asset_count; })->first();
+      });
+      \Debugbar::info($this->movements->first()->cashBalance);
+    }
   }
 
   /**

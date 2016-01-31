@@ -125,7 +125,7 @@
 
 
 
-
+    {# Bonds #}
           {% for heldAsset in portfolio.contents if heldAsset.type == 'bond' and heldAsset.pivot.asset_count != 0 %}
           {% if loop.first %}
           <tr>
@@ -164,7 +164,7 @@
           {% endif %}
 
 
-
+    {# Mixed #}
           {% for heldAsset in portfolio.contents if heldAsset.type == 'mixed' and heldAsset.pivot.asset_count != 0 %}
           {% if loop.first %}
           <tr>
@@ -228,7 +228,7 @@
       <div role="tabpanel" class="tab-pane" id="movements">
         <table class="table-striped table">
           <tr>
-            <th colspan="6">
+            <th colspan="7">
               {{ 'movements'|trans_label }}
             </th>
           </tr>
@@ -250,6 +250,9 @@
             </th>
             <th class="text-right">
               {{ 'fee'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ 'cash_balance'|trans_label }}
             </th>
           </tr>
 
@@ -281,10 +284,13 @@
             <td class="text-right">
               {{ movement.fee|hide_if_zero }}
             </td>
+            <td class="text-right">
+              {{ movement.cashBalance|number_format_amount }}
+            </td>
           </tr>
           {% endfor %}
           <tr>
-            <td colspan="6" class="text-center">
+            <td colspan="7" class="text-center">
               {{ portfolio.movements.fragment('movements').render|raw }}
             </td>
           </tr>

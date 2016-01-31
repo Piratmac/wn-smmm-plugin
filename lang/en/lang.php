@@ -95,6 +95,7 @@ return [
     'cash'             => 'Cash',
     'total'            => 'Total',
     'arbitration'      => 'Arbitration',
+    'cash_balance'     => 'Cash balance',
 
 
     'movements'   => 'Movements',

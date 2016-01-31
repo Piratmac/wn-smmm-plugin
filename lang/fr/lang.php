@@ -95,6 +95,7 @@ return [
     'cash'             => 'Espèces',
     'total'            => 'Total',
     'arbitration'      => 'Arbitrage',
+    'cash_balance'     => 'Solde espèces',
 
 
     'movements'   => 'Mouvements',
