@@ -24,12 +24,21 @@ function smmmDisplayMessage (message, type) {
     $('#smmmMessage').parent().removeClass('hidden');
     $('#smmmMessage').parent().addClass('alert-' + type);
     $('#smmmMessage').html(message);
+
+    setInterval ( function () {
+      smmmHideMessage($('#smmmMessage'));
+    }, 3000);
   }
   else {
     alert('error occurred in smmmDisplayMessage. type: ' + type + ' - message: ' + message);
   }
-
 }
+
+$(document).ready(function () {
+  setInterval ( function () {
+    smmmHideMessage($('#flashMessageContent'));
+  }, 3000);
+});
 
 //Hides flash messages
 function smmmHideMessage (element) {

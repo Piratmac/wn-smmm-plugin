@@ -89,17 +89,31 @@ class PortfolioMovement extends Model
         throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.negative_asset_count')]);
     }
 
-    // Checking cash balance
+    // Checking cash balance when withdrawing
     if ($this->type == 'cash_exit') {
       $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
-      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < $this->asset_count)
+      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < ($this->unit_value + $this->fee))
         Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
     }
 
-    // Checking cash balance
+    // Checking cash balance for fees and when selling assets (the fee may use all the cash)
+    if (in_array($this->type, ['fee', 'asset_sell'])) {
+      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
+      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < $this->fee)
+        Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
+    }
+
+    // Checking cash balance for cash entry (not likely, but fee may beabove what is entering the portfolio)
+    if ($this->type == 'cash_entry') {
+      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
+      if (is_null($heldAssets) || ( $heldAssets->pivot->asset_count + $this->unit_value) < $this->fee)
+        Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
+    }
+
+    // Checking cash balance for assets buy
     if ($this->type == 'asset_buy') {
       $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
-      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < ($this->asset_count * $this->unit_value))
+      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < ($this->asset_count * $this->unit_value + $this->fee))
         Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
     }
 
@@ -107,8 +121,6 @@ class PortfolioMovement extends Model
     if ( (!is_null($this->portfolio->close_date) && $this->portfolio->close_date < $this->date)
         || $this->portfolio->open_date > $this->date)
       throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.movement_outside_portfolio_dates')]);
-
-
   }
 
   public function afterSave () {

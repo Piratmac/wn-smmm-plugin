@@ -414,7 +414,7 @@ class Portfolio extends Model
     if ($dateTo != 0 && strtotime($dateTo) && isset($dateTo))
       $query->where('date_to', '<=', $dateTo);
 
-    $this->movements = $query->getQuery()->paginate(15);
+    $this->movements = $query->getQuery()->orderBy('date', 'DESC')->paginate(15);
   }
 
   /**
