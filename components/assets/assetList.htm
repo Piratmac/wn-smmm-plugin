@@ -1,4 +1,3 @@
-        <tbody>
         {% if __SELF__.assetList.count == 0 %}
           <tr>
             <th>
@@ -53,7 +52,6 @@
               {{ __SELF__.assetList.render|raw }}
             </td>
           </tr>
-        </tbody>
-        {% endif %}
+          {% endif %}
         {% endfor %}
         {% endif %}

@@ -300,6 +300,7 @@
               <button
                 type="button"
                 class="btn btn-xs pull-right col-sm-offset-1"
+                style="background:none"
                 data-request="onDeleteMovement"
                 data-request-data="movement_id: {{ movement.id }}"
                 data-request-confirm="{{ 'piratmac.smmm::lang.messages.confirm_deletion'|trans }}">
@@ -307,12 +308,14 @@
               </button>
             </td>
           </tr>
-        {% if loop.last %}
+        {% if loop.last and portfolio.movements.fragment('movements').render|raw|length >0  %}
           <tr>
             <td colspan="8" class="text-center">
               {{ portfolio.movements.fragment('movements').render|raw }}
             </td>
           </tr>
+        {% endif %}
+        {% if loop.last %}
         </table>
         {% endif %}
         {% endfor %}

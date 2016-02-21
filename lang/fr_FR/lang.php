@@ -55,6 +55,8 @@ return [
 
     'used_and_not_synced'    => 'Attention: Cette valeur n\{est pas synchronisé et apparait dans un portefeuille.',
 
+    'existing_value_replaced'   => 'La valeur existante à cette date a été remplacée.',
+
     'negative_asset_count'    => 'Vous n\'avez pas autant d\'actifs à vendre.',
     'negative_cash_balance'    => 'Le solde de votre compte est négatif.',
     'movement_outside_portfolio_dates'    => 'La date du mouvement n\'est pas cohérente avec celles du portefeuille.',

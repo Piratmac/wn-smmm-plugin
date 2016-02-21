@@ -26,3 +26,7 @@
 
 1.0.8:
  - Movements can be deleted
+
+1.0.9:
+ - Asset values can be added and deleted
+ - v1.0.9_tables.php

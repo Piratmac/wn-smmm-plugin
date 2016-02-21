@@ -39,7 +39,7 @@
     {% if asset.valueHistory.count == 0 %}
     <table class="table-striped table">
       <tr>
-        <th>
+        <th colspan="3">
           {{ 'piratmac.smmm::lang.messages.no_value_history'|trans }}
         </th>
       </tr>
@@ -55,34 +55,72 @@
     </div>
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <table class="table table-striped">
-          <tr>
-            <th>
-              {{ 'date'|trans_label }}
-            </th>
-            <th>
-              {{ 'value'|trans_label }}
-            </th>
-          </tr>
-    {% endif %}
-          <tr>
-            <td>
-              {{ value.date }}
-            </td>
-            <td class="text-right">
-              {{ value.value|number_format_price }}
-            </td>
-          </tr>
-    {% if loop.last %}
+        <form
+          data-request="{{ __SELF__}}::onAddAssetValue"
+        >
+          <table class="table table-striped">
+            <tr>
+              <th>
+                {{ 'date'|trans_label }}
+              </th>
+              <th>
+                {{ 'value'|trans_label }}
+              </th>
+              <th>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <input type="text" id="newValue[date]" name="newValue[date]" class="form-control" value="" />
+              </td>
+              <td>
+                <input type="text" id="newValue[value]" name="newValue[value]" class="form-control pull-left" value="" style="width:70%;" />
+              </td>
+              <td>
+                <button
+                  type="submit"
+                  class="btn btn-xs pull-right"
+                  style="background:none"
+                  data-request="onAddAssetValue">
+                    <img src="{{ (__SELF__.imageFolder ~ '/tick.png')|app}}" alt="{{ 'confirm'|trans_label }}" class="image_circle" width="25px" height="25x" />
+                </button>
 
-          <tr>
-            <td colspan="2" class="text-center">
-              {{ asset.valueHistory.render|raw }}
-            </td>
-          </tr>
-        </table>
+
+              </td>
+            </tr>
+      {% endif %}
+            <tr>
+              <td>
+                {{ value.date }}
+              </td>
+              <td class="text-right">
+                {{ value.value|number_format_price }}
+              </td>
+              <td class="text-right">
+                <button
+                  type="button"
+                  class="btn btn-xs pull-right"
+                  style="background:none"
+                  data-request="onDeleteAssetValue"
+                  data-request-data="date: '{{ value.date }}'"
+                  data-request-confirm="{{ 'piratmac.smmm::lang.messages.confirm_deletion'|trans }}">
+                    <img src="{{ (__SELF__.imageFolder ~ '/denied.png')|app}}" alt="{{ 'delete'|trans_label }}" class="image_circle" width="25px" height="25x" />
+                </button>
+              </td>
+            </tr>
+      {% if loop.last and asset.valueHistory.render|raw|length > 0 %}
+
+            <tr>
+              <td colspan="2" class="text-center">
+                {{ asset.valueHistory.render|raw }}
+              </td>
+            </tr>
+      {% endif %}
+      {% if loop.last %}
+          </table>
+        </form>
       </div>
     </div>
-    {% endif %}
+      {% endif %}
     {% endfor %}
     {% endif %}

@@ -26,6 +26,10 @@ class Asset extends ComponentBase
    */
   public $assetListPage = [];
 
+  /*
+   * Folder containing the images related to this plugin
+   */
+  public $imageFolder = '/plugins/piratmac/smmm/assets/images';
 
 
   public function componentDetails()
@@ -132,6 +136,28 @@ class Asset extends ComponentBase
     $result = $this->asset->delete();
 
     $url = $this->pageUrl($this->assetListPage);
+    Flash::success(trans('piratmac.smmm::lang.messages.success_deletion'));
+    return Redirect::to($url);
+  }
+
+
+  public function onAddAssetValue () {
+    $this->asset = $this->loadAsset($this->property('asset_id'));
+
+    $this->asset->onAddValue (post('newValue'));
+
+    $url = $this->pageUrl($this->page->baseFileName, ['asset_id' => $this->asset->id, 'action' => 'view']);
+    Flash::success(trans('piratmac.smmm::lang.messages.success_creation'));
+    return Redirect::to($url);
+  }
+
+
+  public function onDeleteAssetValue () {
+    $this->asset = $this->loadAsset($this->property('asset_id'));
+
+    $this->asset->onDeleteValue (post('date'));
+
+    $url = $this->pageUrl($this->page->baseFileName, ['asset_id' => $this->asset->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_deletion'));
     return Redirect::to($url);
   }

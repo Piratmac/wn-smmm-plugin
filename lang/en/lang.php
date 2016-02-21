@@ -55,6 +55,8 @@ return [
 
     'used_and_not_synced'    => 'Warning: This asset is not synced, but belongs to a portfolio',
 
+    'existing_value_replaced'   => 'There was an existing value at that date. It has been replaced.',
+
     'negative_asset_count'    => 'You don\'t have that many assets to sell.',
     'negative_cash_balance'    => 'You are in the red.',
     'movement_outside_portfolio_dates'    => 'The movement\'s date doesn\'t match with the portfolio\'s ones.',

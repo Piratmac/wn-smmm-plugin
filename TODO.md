@@ -1,7 +1,6 @@
 # The todo list
 * Assets pages
     * Display portfolios containing those assets
-    * Allow creation, modification and deletion of the values in the history
 
 * Movements
     * Additional fields: count in entry / exit of the portfolio, count in the initial value (will be useful for graphs)

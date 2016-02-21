@@ -104,7 +104,7 @@ class Asset extends Model
    * Fetches the values of the asset during a given timeframe
    * @param string $dateFrom the earliest date (NULL for all values)
    * @param string $dateTo the last date (NULL for all values)
-   * @param string $dateRouding How is the date interpreted if the value is missing: 'exact' will return NULL, 'rounded' will seek the closest existing value (only possible when both dates are equal)
+   * @param string $dateRounding How is the date interpreted if the value is missing: 'exact' will return NULL, 'rounded' will seek the closest existing value (only possible when both dates are equal)
    */
   public function getValues($dateFrom = '', $dateTo = '', $dateRounding = 'exact')
   {
@@ -117,7 +117,7 @@ class Asset extends Model
     if ($dateFrom != NULL) $query = $query->where('date', '>=', $dateFrom);
     if ($dateTo != NULL)   $query = $query->where('date', '<=', $dateTo);
 
-    $this->valueHistory = $query->getQuery()->paginate(10);
+    $this->valueHistory = $query->orderBy('date')->getQuery()->paginate(10);
   }
 
 
@@ -127,7 +127,6 @@ class Asset extends Model
 
   /**
   * Deletes a asset
-  * @return 0 if no error occurred
   */
   public function beforeDelete () {
     if ($this->portfolios()->count()>0)
@@ -136,7 +135,6 @@ class Asset extends Model
 
   /**
   * After update of the asset
-  * @return 0 if no error occurred
   */
   public function beforeSave () {
     if ($this->portfolios()->wherePivot('date_to', '>=', date('Y-m-d'))->count() > 0 && !$this->synced)
@@ -144,5 +142,19 @@ class Asset extends Model
   }
 
 
+  /**
+  * Adding a new value
+  */
+  public function onAddValue ($userData) {
+    $value = new AssetValue($userData);
+    $this->value()->save($value);
+  }
+
+  /**
+  * Deleting an existing value
+  */
+  public function onDeleteValue ($date) {
+    $this->value()->where('date', $date)->delete();
+  }
 
 }

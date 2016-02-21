@@ -27,7 +27,7 @@ function smmmDisplayMessage (message, type) {
 
     setInterval ( function () {
       smmmHideMessage($('#smmmMessage'));
-    }, 3000);
+    }, 5000);
   }
   else {
     alert('error occurred in smmmDisplayMessage. type: ' + type + ' - message: ' + message);
@@ -37,7 +37,7 @@ function smmmDisplayMessage (message, type) {
 $(document).ready(function () {
   setInterval ( function () {
     smmmHideMessage($('#flashMessageContent'));
-  }, 3000);
+  }, 5000);
 });
 
 //Hides flash messages
