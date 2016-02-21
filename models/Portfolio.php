@@ -1,6 +1,7 @@
 <?php namespace Piratmac\Smmm\Models;
 
 use Model;
+use Db;
 use \October\Rain\Database\Traits\SoftDeleting;
 use RainLab\User\Components\Account;
 use Auth;
@@ -232,6 +233,9 @@ class Portfolio extends Model
         $this->updateFutureBalance($movement, $changeInAsset, $movement->asset_id);
         break;
     }
+
+    // Clean-up of old values
+    Db::table('piratmac_smmm_portfolio_contents')->where('asset_count', 0)->delete();
   }
 
   /**
@@ -366,7 +370,7 @@ class Portfolio extends Model
                                    ->wherePivot('asset_id', $asset)
                                    ->get();
 
-      if (!is_null($impactedAssetBalance) && $changeInCount >= 0) {
+      if (!is_null($impactedAssetBalance) && $movement->type == 'asset_buy') {
         foreach ($impactedAssetBalance as $impactedBalance) {
           if ($impactedBalance->pivot->asset_count + $movement->asset_count != 0) {
             $impactedBalance->pivot->average_price_tag =

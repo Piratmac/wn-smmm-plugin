@@ -4,8 +4,6 @@
     * Allow creation, modification and deletion of the values in the history
 
 * Movements
-    * Allow modification of movements
-    * Allow deletion of movements
     * Additional fields: count in entry / exit of the portfolio, count in the initial value (will be useful for graphs)
 
 * Portfolios

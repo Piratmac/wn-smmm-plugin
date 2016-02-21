@@ -234,7 +234,7 @@
         {% if loop.first %}
         <table class="table-striped table">
           <tr>
-            <th colspan="7">
+            <th colspan="8">
               {{ 'movements'|trans_label }}
             </th>
           </tr>
@@ -259,6 +259,9 @@
             </th>
             <th class="text-right">
               {{ 'cash_balance'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ 'delete'|trans_label }}
             </th>
           </tr>
         {% endif %}
@@ -293,10 +296,20 @@
             <td class="text-right">
               {{ movement.cashBalance|number_format_amount }}
             </td>
+            <td class="text-right">
+              <button
+                type="button"
+                class="btn btn-xs pull-right col-sm-offset-1"
+                data-request="onDeleteMovement"
+                data-request-data="movement_id: {{ movement.id }}"
+                data-request-confirm="{{ 'piratmac.smmm::lang.messages.confirm_deletion'|trans }}">
+                  <img src="{{ (__SELF__.imageFolder ~ '/denied.png')|app}}" alt="{{ 'delete'|trans_label }}" class="image_circle" width="25px" height="25x" />
+              </button>
+            </td>
           </tr>
         {% if loop.last %}
           <tr>
-            <td colspan="7" class="text-center">
+            <td colspan="8" class="text-center">
               {{ portfolio.movements.fragment('movements').render|raw }}
             </td>
           </tr>

@@ -85,7 +85,7 @@ class PortfolioMovement extends Model
     if ($this->type == 'asset_sell') {
       $heldAssets = $this->portfolio->getHeldAssets($this->date, $this->asset_id)->first();
       if (is_null($heldAssets) || (int)$heldAssets->pivot->asset_count < (int)$this->asset_count)
-        throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.negative_asset_count')]);
+        throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.negative_asset_count').$this->portfolio.'-'.$this->date]);
     }
 
     // Checking cash balance when withdrawing
@@ -127,6 +127,7 @@ class PortfolioMovement extends Model
   }
 
   public function afterDelete () {
+    $this->asset_count = - $this->asset_count;
     $this->portfolio->updateHeldAssets($this);
   }
 

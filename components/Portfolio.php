@@ -88,7 +88,10 @@ class Portfolio extends ComponentBase
     return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
   }
 
-
+  /*
+   * Folder containing the images related to this plugin
+   */
+  public $imageFolder = '/plugins/piratmac/smmm/assets/images';
 
 
 /**********************************************************************
@@ -205,6 +208,19 @@ class Portfolio extends ComponentBase
 
     $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
     Flash::success(trans('piratmac.smmm::lang.messages.success_creation'));
+    return Redirect::to($url);
+  }
+
+
+  public function onDeleteMovement() {
+    $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
+
+    $movement = PortfolioMovement::where(['portfolio_id' => $this->portfolio->id, 'id' => post('movement_id')])->first();
+    $movement->delete();
+
+
+    $url = $this->pageUrl($this->page->baseFileName, ['portfolio_id' => $this->portfolio->id, 'action' => 'view']);
+    Flash::success(trans('piratmac.smmm::lang.messages.success_deletion'));
     return Redirect::to($url);
   }
 }
