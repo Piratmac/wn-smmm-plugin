@@ -74,6 +74,11 @@ class Portfolio extends Model
    */
   public $balance = [];
 
+  /**
+   * @var array Total money invested in the portfolio
+   */
+  public $moneyInvested = [];
+
 
 /**********************************************************************
                        Authorization checks
@@ -156,13 +161,25 @@ class Portfolio extends Model
     if ($this->contents->count() == 0) return;
 
     $this->contents->each(function ($heldAsset) {
+      // Calculate the price (cost) of the asset
       $heldAsset->pivot->totalBuyPrice = $heldAsset->pivot->average_price_tag * $heldAsset->pivot->asset_count;
 
+      if (!isset($this->moneyInvested[$heldAsset->type])) $this->moneyInvested[$heldAsset->type] = 0;
+      $this->moneyInvested[$heldAsset->type] += $heldAsset->pivot->totalBuyPrice;
+
+      if (!isset($this->moneyInvested['total'])) $this->moneyInvested['total'] = 0;
+      $this->moneyInvested['total'] += $heldAsset->pivot->totalBuyPrice;
+
+      // Valuation of the portfolio
+      $heldAsset->pivot->valueDate = $heldAsset->getValueAsOfDate(date('Y-m-d'))->date;
+      $heldAsset->pivot->unitValue = $heldAsset->getValueAsOfDate(date('Y-m-d'))->value;
+      $heldAsset->pivot->totalValue = $heldAsset->getValueAsOfDate(date('Y-m-d'))->value * $heldAsset->pivot->asset_count;
+
       if (!isset($this->balance[$heldAsset->type])) $this->balance[$heldAsset->type] = 0;
-      $this->balance[$heldAsset->type] += $heldAsset->pivot->totalBuyPrice;
+      $this->balance[$heldAsset->type] += $heldAsset->pivot->totalValue;
 
       if (!isset($this->balance['total'])) $this->balance['total'] = 0;
-      $this->balance['total'] += $heldAsset->pivot->totalBuyPrice;
+      $this->balance['total'] += $heldAsset->pivot->totalValue;
     });
 
     return $this->contents;

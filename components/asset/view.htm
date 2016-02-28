@@ -15,112 +15,108 @@
       </h3>
     </div>
     <div class="row">
-      <div class="col-md-3 col-md-offset-1">
-        {{ 'code'|trans_label }}:
-        {{ asset.id }}
-      </div>
-      <div class="col-md-2">
-        {{ 'source'|trans_label }}:
-        {{ asset.source }}
-      </div>
-      <div class="col-md-2 col-md-offset-1">
-        {{ 'type'|trans_label }}:
-        {{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans }}
-      </div>
-      <div class="col-md-2">
-        {{ 'synced'|trans_label }}:
-        {{ asset.synced ? 'Yes'|trans_label : 'No'|trans_label }}
+      <div class="col-md-4 col-md-offset-1">
+        <div class="col-md-12 text-center">
+          {{ 'basic_information'|trans_label }}
+        </div>
+        <div class="col-md-6">
+          {{ 'code'|trans_label }}:
+        </div>
+        <div class="col-md-6">
+          {{ asset.id }}
+        </div>
+        <div class="col-md-6">
+          {{ 'source'|trans_label }}:
+        </div>
+        <div class="col-md-6">
+          {{ asset.source }}
+        </div>
+        <div class="col-md-6">
+          {{ 'type'|trans_label }}:
+        </div>
+        <div class="col-md-6">
+          {{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans }}
+        </div>
+        <div class="col-md-6">
+          {{ 'synced'|trans_label }}:
+        </div>
+        <div class="col-md-6">
+          {{ asset.synced ? 'Yes'|trans_label : 'No'|trans_label }}
+        </div>
       </div>
 
+      <div class="col-md-4 col-md-offset-2">
+        <div class="col-md-12 text-center">
+          {{ 'value_evolution'|trans_label }}
+        </div>
+        <div class="col-md-3 col-md-offset-6">
+          {{ 'value'|trans_label }}
+        </div>
+        <div class="col-md-3">
+          {{ 'value_evolution'|trans_label }}
+        </div>
+      {% for date, performanceHistory in asset.performanceHistory %}
+        <div class="col-md-6">
+          {{ date | trans_label }}
+        </div>
+        <div class="col-md-3">
+          {{ performanceHistory.value | number_format_amount }}
+        </div>
+        <div class="col-md-3">
+          {{ performanceHistory.evolution | number_format_evolution }}
+        </div>
+      {% endfor %}
+      </div>
     </div>
-
-
-
-    {% if asset.valueHistory.count == 0 %}
-    <table class="table-striped table">
-      <tr>
-        <th colspan="3">
-          {{ 'piratmac.smmm::lang.messages.no_value_history'|trans }}
-        </th>
-      </tr>
-    </table>
-    {% else %}
-    {% for value in asset.valueHistory %}
-    {% if loop.first %}
-
 
     <div class="panel-heading">
-      <h3 class="panel-title">{{ 'value_history'|trans_label }}
+      <h3 class="panel-title col-md-2" style="padding:7px;">{{ 'value_history'|trans_label }}
       </h3>
+      <form
+        data-request="onGetAssetValues"
+        data-request-update="'{{ __SELF__ }}::listValues': '#listValues'"
+      >
+        <div class="row">
+          <div class="col-md-1 text-right" style="padding:5px;">
+            <label for="valueHistory_datefrom">
+              {{ 'date_from' | trans_label }}
+            </label>
+          </div>
+          <div class="col-md-2">
+            <div id="DatePicker-formDate-date" class="field-datepicker" data-control="datepicker">
+              <div class="input-with-icon right-align">
+                <i class="icon icon-calendar-o"></i>
+                <input id="valueHistory_datefrom" name="valueHistory_datefrom" value="{{ '1 month ago'|date('Y-m-d') }}" class="form-control align-right" autocomplete="off" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 text-right" style="padding:5px;">
+            <label for="valueHistory_dateto">
+              {{ 'date_to' | trans_label }}
+            </label>
+          </div>
+          <div class="col-md-2">
+            <div id="DatePicker-formDate-date" class="field-datepicker" data-control="datepicker">
+              <div class="input-with-icon right-align">
+                <i class="icon icon-calendar-o"></i>
+                <input id="valueHistory_dateto" name="valueHistory_dateto" value="{{ 'now'|date('Y-m-d') }}" class="form-control align-right" autocomplete="off" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 col-md-offset-1">
+            <button
+                type="submit"
+                class="btn btn-xs btn-primary"
+                >
+                {{ 'display'|trans_label }}
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="row">
-      <div class="col-md-4 col-md-offset-4">
-        <form
-          data-request="{{ __SELF__}}::onAddAssetValue"
-        >
-          <table class="table table-striped">
-            <tr>
-              <th>
-                {{ 'date'|trans_label }}
-              </th>
-              <th>
-                {{ 'value'|trans_label }}
-              </th>
-              <th>
-              </th>
-            </tr>
-            <tr>
-              <td>
-                <input type="text" id="newValue[date]" name="newValue[date]" class="form-control" value="" />
-              </td>
-              <td>
-                <input type="text" id="newValue[value]" name="newValue[value]" class="form-control pull-left" value="" style="width:70%;" />
-              </td>
-              <td>
-                <button
-                  type="submit"
-                  class="btn btn-xs pull-right"
-                  style="background:none"
-                  data-request="onAddAssetValue">
-                    <img src="{{ (__SELF__.imageFolder ~ '/tick.png')|app}}" alt="{{ 'confirm'|trans_label }}" class="image_circle" width="25px" height="25x" />
-                </button>
 
 
-              </td>
-            </tr>
-      {% endif %}
-            <tr>
-              <td>
-                {{ value.date }}
-              </td>
-              <td class="text-right">
-                {{ value.value|number_format_price }}
-              </td>
-              <td class="text-right">
-                <button
-                  type="button"
-                  class="btn btn-xs pull-right"
-                  style="background:none"
-                  data-request="onDeleteAssetValue"
-                  data-request-data="date: '{{ value.date }}'"
-                  data-request-confirm="{{ 'piratmac.smmm::lang.messages.confirm_deletion'|trans }}">
-                    <img src="{{ (__SELF__.imageFolder ~ '/denied.png')|app}}" alt="{{ 'delete'|trans_label }}" class="image_circle" width="25px" height="25x" />
-                </button>
-              </td>
-            </tr>
-      {% if loop.last and asset.valueHistory.render|raw|length > 0 %}
-
-            <tr>
-              <td colspan="2" class="text-center">
-                {{ asset.valueHistory.render|raw }}
-              </td>
-            </tr>
-      {% endif %}
-      {% if loop.last %}
-          </table>
-        </form>
-      </div>
+    <div id="listValues">
+    {% partial __SELF__ ~ '::listValues' asset=__SELF__.asset %}
     </div>
-      {% endif %}
-    {% endfor %}
-    {% endif %}
+

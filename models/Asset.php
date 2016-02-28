@@ -31,7 +31,7 @@ class Asset extends Model
 
 
   protected $rules = [
-    'id' => 'required|unique:piratmac_smmm_assets|regex:#^[0-9A-Za-z.]*$#',
+    'id' => 'required|unique:piratmac_smmm_assets|regex:#^[0-9A-Za-z.^]*$#',
     'type' => 'required',
   ];
   /**
@@ -63,6 +63,11 @@ class Asset extends Model
    * @var array Value history of this asset
    */
   public $valueHistory = [];
+
+  /**
+   * @var array Indicators on the evolution of the value
+   */
+  public $performanceHistory = [];
 
   public function getDropdownOptions($fieldName = null, $keyValue = null)
   {
@@ -117,7 +122,39 @@ class Asset extends Model
     if ($dateFrom != NULL) $query = $query->where('date', '>=', $dateFrom);
     if ($dateTo != NULL)   $query = $query->where('date', '<=', $dateTo);
 
-    $this->valueHistory = $query->orderBy('date')->getQuery()->paginate(10);
+    $this->valueHistory = $query->orderBy('date', 'desc')->get();
+  }
+
+
+  /**
+   * Calculates past performance of the asset
+   * @param string $dateList A list of dates upon which to calculate the value
+   */
+  public function getPastPerformance($dateList)
+  {
+    if (!is_array($dateList)) return;
+
+    $valueToday = $this->getValueAsOfDate(date('Y-m-d'))['value'];
+
+    foreach ($dateList as $dateCode => $date) {
+      if ($dateCode == 'today')
+        $this->performanceHistory[$dateCode] = ['value' => $valueToday, 'evolution' => 0];
+      else {
+        $value = $this->getValueAsOfDate($date);
+        $this->performanceHistory[$dateCode] = ['value' => $value['value'], 'evolution' => ($valueToday - $value['value'])/$value['value']];
+      }
+    }
+  }
+
+  /**
+   * Gets the latest value before the provided date
+   * @param string $date A date
+   */
+  public function getValueAsOfDate ($date)
+  {
+    if ($this->type == 'cash') return new AssetValue(['date' => $date, 'value' => 1]);
+    $query = $this->value()->where('date', '<=', $date)->orderBy('date', 'DESC')->first();
+    return $query;
   }
 
 

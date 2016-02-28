@@ -73,7 +73,16 @@
               {{ 'average_buy_price'|trans_label }}
             </th>
             <th class="text-right">
+              {{ 'unit_value'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ 'value_as_of'|trans_label }}
+            </th>
+            <th class="text-right">
               {{ 'total_buy_price'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ 'value'|trans_label }}
             </th>
           </tr>
 
@@ -84,7 +93,7 @@
           {% for heldAsset in portfolio.contents if heldAsset.type == 'stock' and heldAsset.pivot.asset_count != 0 %}
           {% if loop.first %}
           <tr>
-            <th colspan="6">
+            <th colspan="9">
               {{ 'stocks'|trans_label }}
             </th>
           </tr>
@@ -102,15 +111,27 @@
               {{ heldAsset.pivot.average_price_tag|number_format_price }}
             </td>
             <td class="text-right">
+              {{ heldAsset.pivot.unitValue|number_format_amount }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.valueDate }}
+            </td>
+            <td class="text-right">
               {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.totalValue|number_format_amount }}
             </td>
           </tr>
 
           {% endfor %}
           {% if portfolio.balance.stock != 0 %}
           <tr>
-            <th colspan="3" class="text-right">
+            <th colspan="5" class="text-right">
               {{ 'stocks'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.moneyInvested.stock|number_format_amount }}
             </th>
             <th class="text-right">
               {{ portfolio.balance.stock|number_format_amount }}
@@ -124,7 +145,7 @@
           {% for heldAsset in portfolio.contents if heldAsset.type == 'bond' and heldAsset.pivot.asset_count != 0 %}
           {% if loop.first %}
           <tr>
-            <th colspan="6">
+            <th colspan="9">
               {{ 'bonds'|trans_label }}
             </th>
           </tr>
@@ -142,15 +163,27 @@
               {{ heldAsset.pivot.average_price_tag|number_format_price }}
             </td>
             <td class="text-right">
+              {{ heldAsset.pivot.unitValue|number_format_amount }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.valueDate }}
+            </td>
+            <td class="text-right">
               {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.totalValue|number_format_amount }}
             </td>
           </tr>
 
           {% endfor %}
           {% if portfolio.balance.bond != 0 %}
           <tr>
-            <th colspan="3" class="text-right">
+            <th colspan="5" class="text-right">
               {{ 'bonds'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.moneyInvested.bond|number_format_amount }}
             </th>
             <th class="text-right">
               {{ portfolio.balance.bond|number_format_amount }}
@@ -163,7 +196,7 @@
           {% for heldAsset in portfolio.contents if heldAsset.type == 'mixed' and heldAsset.pivot.asset_count != 0 %}
           {% if loop.first %}
           <tr>
-            <th colspan="6">
+            <th colspan="9">
               {{ 'mixed'|trans_label }}
             </th>
           </tr>
@@ -181,15 +214,27 @@
               {{ heldAsset.pivot.average_price_tag|number_format_price }}
             </td>
             <td class="text-right">
+              {{ heldAsset.pivot.unitValue|number_format_amount }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.valueDate }}
+            </td>
+            <td class="text-right">
               {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
+            </td>
+            <td class="text-right">
+              {{ heldAsset.pivot.totalValue|number_format_amount }}
             </td>
           </tr>
 
           {% endfor %}
           {% if portfolio.balance.mixed != 0 %}
           <tr>
-            <th colspan="3" class="text-right">
+            <th colspan="5" class="text-right">
               {{ 'mixed'|trans_label }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.moneyInvested.mixed|number_format_amount }}
             </th>
             <th class="text-right">
               {{ portfolio.balance.mixed|number_format_amount }}
@@ -199,17 +244,23 @@
 
 
         <tr>
-          <th colspan="3" class="text-right">
+          <th colspan="5" class="text-right">
             {{ 'cash'|trans_label }}
           </th>
+            <th class="text-right">
+              {{ portfolio.moneyInvested.cash|number_format_amount }}
+            </th>
           <th class="text-right">
             {{ portfolio.balance.cash|number_format_amount }}
           </th>
         </tr>
         <tr>
-          <th colspan="3" class="text-right">
+          <th colspan="5" class="text-right">
             {{ 'total'|trans_label }}
           </th>
+            <th class="text-right">
+              {{ portfolio.moneyInvested.total|number_format_amount }}
+            </th>
           <th class="text-right">
             {{ portfolio.balance.total|number_format_amount }}
           </th>

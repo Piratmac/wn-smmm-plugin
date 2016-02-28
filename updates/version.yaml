@@ -1,7 +1,6 @@
 1.0.1:
  - First public version of Show Me My Money
  - v1.0.1_tables.php
- - seed_tables.php
 
 1.0.2:
  - Movements can now be created
@@ -30,3 +29,7 @@
 1.0.9:
  - Asset values can be added and deleted
  - v1.0.9_tables.php
+
+1.0.10:
+ - Portfolios page now display their value + Improved display of asset page
+ - seed_tables.php

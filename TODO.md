@@ -6,7 +6,6 @@
     * Additional fields: count in entry / exit of the portfolio, count in the initial value (will be useful for graphs)
 
 * Portfolios
-    * Add the valuation of currently held stocks (beware of dates)
     * Display the expected capital gain / loss (based on the current valuation)
     * Display the realized capital gain / loss (based on the valuation at time of buy & sell)
     * Display the sum of deposits + the gain / loss

@@ -53,10 +53,11 @@ class Plugin extends PluginBase
   {
     return [
       'filters' => [
-          'number_format_locale' => [$this, 'number_format_locale'],
-          'number_format_count'  => [$this, 'number_format_count'],
-          'number_format_price'  => [$this, 'number_format_price'],
-          'number_format_amount' => [$this, 'number_format_amount'],
+          'number_format_locale'    => [$this, 'number_format_locale'],
+          'number_format_count'     => [$this, 'number_format_count'],
+          'number_format_price'     => [$this, 'number_format_price'],
+          'number_format_amount'    => [$this, 'number_format_amount'],
+          'number_format_evolution' => [$this, 'number_format_evolution'],
 
 
           'trans'        => function ($string) { return Lang::get(strtolower($string)); },
@@ -90,6 +91,16 @@ class Plugin extends PluginBase
 
   public function number_format_amount ($number) {
     return $this->number_format_locale($number, 2);
+  }
+
+  public function number_format_evolution ($number) {
+    $return = '<strong class="text-';
+    $return .= ($number > 0)?'success':'danger';
+    $return .= '">';
+    $return .= ($number >= 0)?'+':'';
+    $return .= $this->number_format_locale($number, 2);
+    $return .= ' %</strong>';
+    return $return;
   }
 
   public function form_select_options ($dropdown) {

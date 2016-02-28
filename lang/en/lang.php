@@ -117,10 +117,28 @@ return [
     'cancel'      => 'Cancel',
     'delete'      => 'Delete',
     'new'         => 'New',
+    'display'     => 'Display',
 
 
     'yes'         => 'Yes',
     'no'          => 'No',
+
+
+    'basic_information'        => 'Basic information',
+    'value_evolution'          => 'Evolution',
+
+
+    'today'            => 'Today',
+    'jan_1st'          => 'January 1st',
+    '3_months'         => '3 months',
+    '1_year'           => '1 year',
+    '3_years'          => '3 years',
+    '5_years'          => '5 years',
+
+
+    'date_from'          => 'From',
+    'date_to'            => 'To',
+    'value_as_of'        => 'Value as of',
 
 
   ],

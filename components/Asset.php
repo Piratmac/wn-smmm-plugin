@@ -81,7 +81,7 @@ class Asset extends ComponentBase
     return $asset;
   }
 /**********************************************************************
-                     User actions
+                     Display of the page
 **********************************************************************/
   public function onRun()
   {
@@ -104,7 +104,19 @@ class Asset extends ComponentBase
 
       case 'view':
         $this->asset = $this->loadAsset($this->property('asset_id'));
-        $this->asset->getValues(NULL, NULL);
+        $this->asset->getValues (date('Y-m-d', strtotime('1 month ago')), date('Y-m-d'));
+        $this->asset->getPastPerformance(
+          ['today'    => date('Y-m-d'),
+           'jan_1st'  => date('Y-01-01'),
+           '3_months' => date('Y-m-d', strtotime('3 months ago')),
+           '1_year'   => date('Y-m-d', strtotime('1 year ago')),
+           '3_years'  => date('Y-m-d', strtotime('3 years ago')),
+           '5_years'  => date('Y-m-d', strtotime('5 years ago')),
+          ]);
+
+        # Adding the Pickaday component (for date picker)
+        $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
+        $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
         break;
     }
   }
@@ -112,6 +124,11 @@ class Asset extends ComponentBase
   public function init () {
     $this->assetListPage = $this->property('assetList');
   }
+
+
+/**********************************************************************
+                     User actions
+**********************************************************************/
 
   public function onUpdateAsset() {
     $this->asset = $this->loadAsset($this->property('asset_id'));
@@ -140,6 +157,13 @@ class Asset extends ComponentBase
     return Redirect::to($url);
   }
 
+
+  public function onGetAssetValues () {
+    $this->asset = $this->loadAsset($this->property('asset_id'));
+    \Debugbar::info(post());
+    $this->asset->getValues (post('valueHistory_datefrom'), post('valueHistory_dateto'));
+    \Debugbar::info($this->asset->valueHistory);
+  }
 
   public function onAddAssetValue () {
     $this->asset = $this->loadAsset($this->property('asset_id'));

@@ -117,11 +117,28 @@ return [
     'cancel'      => 'Annuler',
     'delete'      => 'Supprimer',
     'new'         => 'Nouveau',
+    'display'     => 'Afficher',
 
 
     'yes'         => 'Oui',
     'no'          => 'Non',
 
+
+    'basic_information'        => 'Informations',
+    'value_evolution'          => 'Evolution',
+
+
+    'today'          => 'Aujourd\'hui',
+    'jan_1st'          => '1er janvier',
+    '3_months'         => '3 mois',
+    '1_year'           => '1 an',
+    '3_years'          => '3 ans',
+    '5_years'          => '5 ans',
+
+
+    'date_from'          => 'De',
+    'date_to'            => 'A',
+    'value_as_of'        => 'Date',
 
   ],
   'dropdowns' => [
