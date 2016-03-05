@@ -3,7 +3,7 @@
 use Schema;
 use October\Rain\Database\Updates\Migration;
 
-class UpdateAssetsTable extends Migration
+class AssetsAddSync extends Migration
 {
 
   public function up()

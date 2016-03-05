@@ -96,11 +96,12 @@ return [
     'contents'         => 'Contents',
     'average_buy_price'       => 'Average buy price',
     'total_buy_price'         => 'Total cost',
-    'stocks'           => 'Stocks',
-    'bonds'            => 'Bonds',
+    'stock'            => 'Stock',
+    'bond'             => 'Bond',
     'mixed'            => 'Mixed',
     'cash'             => 'Cash',
     'total'            => 'Total',
+    'subtotal'         => 'Sub-total',
     'arbitration'      => 'Arbitration',
     'cash_balance'     => 'Cash balance',
 
@@ -126,6 +127,13 @@ return [
 
     'basic_information'        => 'Basic information',
     'value_evolution'          => 'Evolution',
+
+    'summary'                  => 'Summary',
+    'total_deposits'           => 'Total of deposits',
+    'total_withdrawals'        => 'Total of withdrawals',
+    'total_fees'               => 'Total of fees',
+    'expected_gain'            => 'Expected gain',
+    'actual_gain'              => 'Actual gain',
 
 
     'today'            => 'Today',

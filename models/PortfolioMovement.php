@@ -120,6 +120,13 @@ class PortfolioMovement extends Model
     if ( (!is_null($this->portfolio->close_date) && $this->portfolio->close_date < $this->date)
         || $this->portfolio->open_date > $this->date)
       throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.movement_outside_portfolio_dates')]);
+
+
+    // Adding the gain/loss upon selling the asset
+    if ($this->type == 'asset_sell') {
+      $heldAssets = $this->portfolio->getHeldAssets($this->date, $this->asset_id)->first();
+      $this->unit_gain_upon_sell = $this->unit_value - $heldAssets->average_price_tag;
+    }
   }
 
   public function afterSave () {

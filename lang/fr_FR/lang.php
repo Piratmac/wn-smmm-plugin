@@ -96,11 +96,12 @@ return [
     'contents'         => 'Contenu',
     'average_buy_price'       => 'Prix moyen d\'achat',
     'total_buy_price'         => 'Prix total',
-    'stocks'           => 'Actions',
-    'bonds'            => 'Obligations',
+    'stock'            => 'Action',
+    'bond'             => 'Obligation',
     'mixed'            => 'Mixte',
     'cash'             => 'Espèces',
     'total'            => 'Total',
+    'subtotal'         => 'Sous-total',
     'arbitration'      => 'Arbitrage',
     'cash_balance'     => 'Solde espèces',
 
@@ -127,6 +128,13 @@ return [
     'basic_information'        => 'Informations',
     'value_evolution'          => 'Evolution',
 
+    'summary'                  => 'Résumé',
+    'total_deposits'           => 'Total des versements',
+    'total_withdrawals'        => 'Total des retraits',
+    'total_fees'               => 'Total des frais',
+    'expected_gain'            => 'Plus-value(s) attendue(s)',
+    'actual_gain'              => 'Plus-value(s) réalisée(s)',
+
 
     'today'          => 'Aujourd\'hui',
     'jan_1st'          => '1er janvier',
@@ -145,8 +153,8 @@ return [
     'asset' => [
       'type' => [
         'stock' => 'Action',
-        'bond' => 'Obligation',
-        'cash' => 'Espèces',
+        'bond'  => 'Obligation',
+        'cash'  => 'Espèces',
         'mixed' => 'Mixte',
       ],
       'source' => [

@@ -32,4 +32,8 @@
 
 1.0.10:
  - Portfolios page now display their value + Improved display of asset page
+
+1.0.11:
+ - Portfolio page displays gains/losses and various sums
+ - v1.0.11_tables.php
  - seed_tables.php

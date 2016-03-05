@@ -117,6 +117,7 @@ class Portfolio extends ComponentBase
     $portfolio->getHeldAssets();
     $portfolio->setHeldAssetsLinks($this->controller, $this->assetDetailsPage);
     $portfolio->calculateValuation();
+    $portfolio->calculateResults();
     $portfolio->getMovements();
     $portfolio->setMovementsLinks($this->controller, $this->assetDetailsPage);
     $this->prepareMovementForm();

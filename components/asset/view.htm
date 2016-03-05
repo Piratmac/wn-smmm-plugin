@@ -15,37 +15,37 @@
       </h3>
     </div>
     <div class="row">
-      <div class="col-md-4 col-md-offset-1">
+      <div class="col-md-3 col-md-offset-1">
         <div class="col-md-12 text-center">
           {{ 'basic_information'|trans_label }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           {{ 'code'|trans_label }}:
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           {{ asset.id }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           {{ 'source'|trans_label }}:
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           {{ asset.source }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           {{ 'type'|trans_label }}:
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           {{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           {{ 'synced'|trans_label }}:
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           {{ asset.synced ? 'Yes'|trans_label : 'No'|trans_label }}
         </div>
       </div>
 
-      <div class="col-md-4 col-md-offset-2">
+      <div class="col-md-4 col-md-offset-3">
         <div class="col-md-12 text-center">
           {{ 'value_evolution'|trans_label }}
         </div>
@@ -62,8 +62,8 @@
         <div class="col-md-3">
           {{ performanceHistory.value | number_format_amount }}
         </div>
-        <div class="col-md-3">
-          {{ performanceHistory.evolution | number_format_evolution }}
+        <div class="col-md-3 text-right">
+          {{ performanceHistory.evolution | number_format_evolution('%') }}
         </div>
       {% endfor %}
       </div>

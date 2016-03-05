@@ -79,6 +79,11 @@ class Portfolio extends Model
    */
   public $moneyInvested = [];
 
+  /**
+   * @var array Overall results of the portfolio (small-scale performance factor)
+   */
+  public $results = [];
+
 
 /**********************************************************************
                        Authorization checks
@@ -147,12 +152,45 @@ class Portfolio extends Model
                            ->where('date_from', '<=', $date)
                            ->where(function ($query) use($date) {
                               $query->where('date_to', '>=', $date)
-                                    ->orWherenull('date_to');});
+                                    ->orWherenull('date_to');})
+                           ->orderBy('type', 'DESC')
+                           ->orderBy('title', 'ASC');
+
     if (!is_null($asset_id))
       $this->contents->where('asset_id', $asset_id);
 
     $this->contents = $this->contents->get();
+
+    // Getting the latest value
+    $heldAssetsIds = [];
+    $this->contents->each(function ($heldAsset) use (&$heldAssetsIds) {
+      $heldAssetsIds[] = $heldAsset->id;
+    });
+
+    // I'm not particularly proud of this solution.
+    // Basically the first query looks for the most probable case (= there is a value in the last 2 months)
+    // If there is no result, a separate query is then executed.
+    // It could be performed with a single JOIN query with sub-selects, but I couldn't find how to do it through OctoberCMS
+    $values = AssetValue::whereIn('asset_id', $heldAssetsIds)
+                          ->where('date', '<=', $date)
+                          ->where('date', '>', date('Y-m-d', strtotime($date . ' 2 months ago')))
+                          ->orderBy('asset_id')
+                          ->orderBy('date', 'ASC')
+                          ->get();
+    $values = $values->keyBy('asset_id');
+
+
+    $this->contents->each (function ($heldAsset) use ($values, $date) {
+      $value = $values->where('asset_id', $heldAsset->id)->first();
+      if (!isset($value))
+        $value = $heldAsset->getValueAsOfDate($date);
+      if (isset($value))
+        $heldAsset->lastValue = ['value' => $value->value,
+                                 'date' => $value->date ];
+    });
+
     return $this->contents;
+
   }
   /**
   * Calculates various amounts related to the portfolio
@@ -161,7 +199,7 @@ class Portfolio extends Model
     if ($this->contents->count() == 0) return;
 
     $this->contents->each(function ($heldAsset) {
-      // Calculate the price (cost) of the asset
+        // Calculate the price (cost) of the asset
       $heldAsset->pivot->totalBuyPrice = $heldAsset->pivot->average_price_tag * $heldAsset->pivot->asset_count;
 
       if (!isset($this->moneyInvested[$heldAsset->type])) $this->moneyInvested[$heldAsset->type] = 0;
@@ -171,9 +209,9 @@ class Portfolio extends Model
       $this->moneyInvested['total'] += $heldAsset->pivot->totalBuyPrice;
 
       // Valuation of the portfolio
-      $heldAsset->pivot->valueDate = $heldAsset->getValueAsOfDate(date('Y-m-d'))->date;
-      $heldAsset->pivot->unitValue = $heldAsset->getValueAsOfDate(date('Y-m-d'))->value;
-      $heldAsset->pivot->totalValue = $heldAsset->getValueAsOfDate(date('Y-m-d'))->value * $heldAsset->pivot->asset_count;
+      $heldAsset->pivot->valueDate = $heldAsset->lastValue['date'];
+      $heldAsset->pivot->unitValue = $heldAsset->lastValue['value'];
+      $heldAsset->pivot->totalValue = $heldAsset->lastValue['value'] * $heldAsset->pivot->asset_count;
 
       if (!isset($this->balance[$heldAsset->type])) $this->balance[$heldAsset->type] = 0;
       $this->balance[$heldAsset->type] += $heldAsset->pivot->totalValue;
@@ -183,6 +221,37 @@ class Portfolio extends Model
     });
 
     return $this->contents;
+  }
+
+
+  /**
+  * Calculates "performance" of the portfolio
+  */
+  public function calculateResults () {
+    $totals = $this->movements()
+                   ->select(Db::raw('type, sum(fee) as sum_fee, sum(asset_count * unit_value) as sum_value'))
+                   ->groupBy('type')
+                   ->get();
+
+    $totals = $totals->keyBy('type');
+
+    $this->results = [
+      'total_deposits' => isset($totals['cash_entry'])?$totals['cash_entry']->sum_value:0,
+
+      'total_withdrawals' => isset($totals['cash_exit'])?$totals['cash_exit']->sum_value:0,
+      'total_fees' => $totals->reduce(function ($carry, $item) { return $carry + $item->sum_fee;}),
+      'expected_gain' => [
+        'amount' => $this->balance['total'] - $this->moneyInvested['total'],
+        'percent' => $this->moneyInvested['total']==0?'N/A': ($this->balance['total'] - $this->moneyInvested['total']) / $this->moneyInvested['total'] * 100,
+      ],
+      'actual_gain' => [
+        'amount' => (isset($totals['asset_sell'])?$totals['asset_sell']->unit_gain_upon_sell * $totals['asset_sell']->asset_count:0) - $totals->reduce(function ($carry, $item) { return $carry + $item->sum_fee;}),
+        'percent' => 'N/A'
+      ]
+    ];
+
+    if ($this->moneyInvested['total'] != 0)
+      $this->results['actual_gain']['percent'] = $this->results['actual_gain']['amount'] / $this->moneyInvested['total'] * 100;
   }
 
 

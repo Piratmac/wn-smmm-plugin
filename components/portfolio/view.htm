@@ -16,26 +16,94 @@
       </h3>
     </div>
     <div class="row">
-      <div class="col-md-2 col-md-offset-2">
-        {{ 'opened_on'|trans_label }}:
-        {{ portfolio.open_date }}
+      <div class="col-md-3 col-md-offset-1">
+        <div class="col-md-12 text-center">
+          {{ 'basic_information'|trans_label }}
+        </div>
+        <div class="col-md-8">
+          {{ 'opened_on'|trans_label }}:
+        </div>
+        <div class="col-md-4">
+          {{ portfolio.open_date }}
+        </div>
+        <div class="col-md-8">
+          {{ 'closed_on'|trans_label }}:
+        </div>
+        <div class="col-md-4">
+          {{ portfolio.close_date }}
+        </div>
+        <div class="col-md-8">
+          {{ 'broker'|trans_label }}:
+        </div>
+        <div class="col-md-4">
+          {{ portfolio.broker }}
+        </div>
+        <div class="col-md-8">
+          {{ 'number'|trans_label }}:
+        </div>
+        <div class="col-md-4">
+          {{ portfolio.number }}
+        </div>
       </div>
 
-      <div class="col-md-2">
-        {{ 'closed_on'|trans_label }}:
-        {{ portfolio.close_date }}
-      </div>
+      <div class="col-md-5 col-md-offset-2">
+        <div class="col-md-12 text-center">
+          {{ 'summary'|trans_label }}
+        </div>
 
-      <div class="col-md-2">
-        {{ 'broker'|trans_label }}:
-        {{ portfolio.broker }}
-      </div>
 
-      <div class="col-md-2">
-        {{ 'number'|trans_label }}:
-        {{ portfolio.number }}
+        <div class="col-md-6">
+          {{ 'total_deposits'|trans_label }}:
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.total_deposits|number_format_amount }}
+        </div>
+        <div class="col-md-6">
+          {{ 'total_withdrawals'|trans_label }}:
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.total_withdrawals|number_format_amount }}
+        </div>
+        <div class="col-md-6">
+          {{ 'total_fees'|trans_label }}:
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.total_fees|number_format_amount }}
+        </div>
+
+        <div class="col-md-6">
+          {{ 'expected_gain'|trans_label }}:
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.expected_gain.amount|number_format_evolution('') }}
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.expected_gain.percent|number_format_evolution('%') }}
+        </div>
+        <div class="col-md-6">
+          {{ 'actual_gain'|trans_label }}:
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.actual_gain.amount|number_format_evolution('') }}
+        </div>
+        <div class="col-md-3 text-right">
+          {{ portfolio.results.actual_gain.percent|number_format_evolution('%') }}
+        </div>
+
+
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
 {#
 
 {# Navigation tab headers #}
@@ -87,17 +155,27 @@
           </tr>
 
 
-
-
-    {# Stocks #}
-          {% for heldAsset in portfolio.contents if heldAsset.type == 'stock' and heldAsset.pivot.asset_count != 0 %}
-          {% if loop.first %}
+  {% for assetType in ['stock', 'bond', 'mixed', 'cash'] %}
+    {% for heldAsset in portfolio.contents if heldAsset.type == assetType and heldAsset.pivot.asset_count != 0 %}
+        {% if loop.first %}
           <tr>
-            <th colspan="9">
-              {{ 'stocks'|trans_label }}
+            <th colspan="4">
+              {{ assetType|trans_label }}
+            </th>
+            <th class="text-right">
+              <i class="text-muted">
+              {{ 'subtotal'|trans_label }}
+              </i>
+            </th>
+            <th class="text-right">
+              {{ portfolio.moneyInvested[assetType]|number_format_amount }}
+            </th>
+            <th class="text-right">
+              {{ portfolio.balance[assetType]|number_format_amount }}
             </th>
           </tr>
-          {% endif %}
+        {% endif %} {# End of first loop #}
+      {% if assetType != 'cash' %} {# Details on cash are not displayed (not interesting data) #}
           <tr>
             <td>
               <a href="{{ heldAsset.url_view }}">
@@ -108,7 +186,7 @@
               {{ heldAsset.pivot.asset_count|number_format_count }}
             </td>
             <td class="text-right">
-              {{ heldAsset.pivot.average_price_tag|number_format_price }}
+              {{ heldAsset.pivot.average_price_tag|number_format_amount }}
             </td>
             <td class="text-right">
               {{ heldAsset.pivot.unitValue|number_format_amount }}
@@ -123,137 +201,9 @@
               {{ heldAsset.pivot.totalValue|number_format_amount }}
             </td>
           </tr>
-
-          {% endfor %}
-          {% if portfolio.balance.stock != 0 %}
-          <tr>
-            <th colspan="5" class="text-right">
-              {{ 'stocks'|trans_label }}
-            </th>
-            <th class="text-right">
-              {{ portfolio.moneyInvested.stock|number_format_amount }}
-            </th>
-            <th class="text-right">
-              {{ portfolio.balance.stock|number_format_amount }}
-            </th>
-          </tr>
-          {% endif %}
-
-
-
-    {# Bonds #}
-          {% for heldAsset in portfolio.contents if heldAsset.type == 'bond' and heldAsset.pivot.asset_count != 0 %}
-          {% if loop.first %}
-          <tr>
-            <th colspan="9">
-              {{ 'bonds'|trans_label }}
-            </th>
-          </tr>
-          {% endif %}
-          <tr>
-            <td>
-              <a href="{{ heldAsset.url_view }}">
-                {{ heldAsset.title }} ({{ heldAsset.id }})
-              </a>
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.asset_count|number_format_count }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.average_price_tag|number_format_price }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.unitValue|number_format_amount }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.valueDate }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.totalValue|number_format_amount }}
-            </td>
-          </tr>
-
-          {% endfor %}
-          {% if portfolio.balance.bond != 0 %}
-          <tr>
-            <th colspan="5" class="text-right">
-              {{ 'bonds'|trans_label }}
-            </th>
-            <th class="text-right">
-              {{ portfolio.moneyInvested.bond|number_format_amount }}
-            </th>
-            <th class="text-right">
-              {{ portfolio.balance.bond|number_format_amount }}
-            </th>
-          </tr>
-          {% endif %}
-
-
-    {# Mixed #}
-          {% for heldAsset in portfolio.contents if heldAsset.type == 'mixed' and heldAsset.pivot.asset_count != 0 %}
-          {% if loop.first %}
-          <tr>
-            <th colspan="9">
-              {{ 'mixed'|trans_label }}
-            </th>
-          </tr>
-          {% endif %}
-          <tr>
-            <td>
-              <a href="{{ heldAsset.url_view }}">
-                {{ heldAsset.title }} ({{ heldAsset.id }})
-              </a>
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.asset_count|number_format_count }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.average_price_tag|number_format_price }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.unitValue|number_format_amount }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.valueDate }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.totalBuyPrice|number_format_amount }}
-            </td>
-            <td class="text-right">
-              {{ heldAsset.pivot.totalValue|number_format_amount }}
-            </td>
-          </tr>
-
-          {% endfor %}
-          {% if portfolio.balance.mixed != 0 %}
-          <tr>
-            <th colspan="5" class="text-right">
-              {{ 'mixed'|trans_label }}
-            </th>
-            <th class="text-right">
-              {{ portfolio.moneyInvested.mixed|number_format_amount }}
-            </th>
-            <th class="text-right">
-              {{ portfolio.balance.mixed|number_format_amount }}
-            </th>
-          </tr>
-          {% endif %}
-
-
-        <tr>
-          <th colspan="5" class="text-right">
-            {{ 'cash'|trans_label }}
-          </th>
-            <th class="text-right">
-              {{ portfolio.moneyInvested.cash|number_format_amount }}
-            </th>
-          <th class="text-right">
-            {{ portfolio.balance.cash|number_format_amount }}
-          </th>
-        </tr>
+      {% endif %} {# End of "cash" condition #}
+    {% endfor %}  {# Asset looping #}
+  {% endfor %}   {# Asset type looping #}
         <tr>
           <th colspan="5" class="text-right">
             {{ 'total'|trans_label }}

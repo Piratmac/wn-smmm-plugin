@@ -71,6 +71,7 @@ class Plugin extends PluginBase
   }
 
   public function number_format_locale ($number,$decimals=-1) {
+    if (!is_numeric($number)) return $number;
     // Let's try to keep enough precision
     if ($decimals == -1) {
       $decimals = ( (int) $number != $number ) ? (strlen($number) - strpos($number, '.')) - 1 : 0;
@@ -93,13 +94,14 @@ class Plugin extends PluginBase
     return $this->number_format_locale($number, 2);
   }
 
-  public function number_format_evolution ($number) {
+  public function number_format_evolution ($number, $unit) {
+    if (!is_numeric($number)) return $number;
     $return = '<strong class="text-';
     $return .= ($number > 0)?'success':'danger';
     $return .= '">';
     $return .= ($number >= 0)?'+':'';
     $return .= $this->number_format_locale($number, 2);
-    $return .= ' %</strong>';
+    $return .= ' '.$unit.'</strong>';
     return $return;
   }
 

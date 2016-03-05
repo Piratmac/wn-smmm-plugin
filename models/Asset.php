@@ -141,7 +141,10 @@ class Asset extends Model
         $this->performanceHistory[$dateCode] = ['value' => $valueToday, 'evolution' => 0];
       else {
         $value = $this->getValueAsOfDate($date);
-        $this->performanceHistory[$dateCode] = ['value' => $value['value'], 'evolution' => ($valueToday - $value['value'])/$value['value']];
+        if (is_null($value))
+          $this->performanceHistory[$dateCode] = ['value' => 'N/A', 'evolution' => 'N/A'];
+        else
+          $this->performanceHistory[$dateCode] = ['value' => $value['value'], 'evolution' => ($valueToday - $value['value'])/$value['value']*100];
       }
     }
   }

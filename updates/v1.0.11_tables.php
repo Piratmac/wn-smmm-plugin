@@ -3,16 +3,16 @@
 use Schema;
 use October\Rain\Database\Updates\Migration;
 
-class AssetValueAddIndex extends Migration
+class MovementAddGain extends Migration
 {
 
   public function up()
   {
 
     // Table containing all existing assets (at least the ones the user wants)
-    Schema::table('piratmac_smmm_asset_values', function($table)
+    Schema::table('piratmac_smmm_portfolio_movements', function($table)
     {
-      $table->primary(['asset_id', 'date']);
+      $table->decimal('unit_gain_upon_sell', 15, 5);
     });
 
 
