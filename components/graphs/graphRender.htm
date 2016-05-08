@@ -1,0 +1,57 @@
+{% set timeDots_rendering = __SELF__.timeDots_rendering %}
+<canvas id="graph" height="500px" style="width:95%;margin-top:20px;"></canvas>
+
+
+
+<script type="text/javascript" >
+var chartContext = document.getElementById("graph").getContext("2d");
+
+var colors = [ "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"];
+
+var chartData = {
+  responsive: false,
+  labels: [{{ timeDots_rendering.labels|raw }}],
+  datasets: [
+    {% for dataset in timeDots_rendering.datasets %}
+    {
+      label: "{{ dataset.label }}",
+      data: [{{ dataset.data }}],
+      data_label: [{{ dataset.data_label|raw }}],
+      fill: false,
+      lineTension: 0,
+      borderWidth: 1,
+      borderColor: colors[{{ loop.index0 % 11 }}],
+      backgroundColor: colors[{{ loop.index0 % 11 }}],
+      pointHoverBackgroundColor: "rgba(0,0,0,0)",
+      pointStyle: 'circle',
+      pointRadius: 0,
+      pointHitRadius: 7,
+      pointHoverRadius: 7,
+
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+};
+var chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  legend: {
+    display:     true,
+    position:    'bottom'
+  },
+  hover: {
+    mode: 'label'
+  },
+  tooltips: {
+    mode: 'label',
+    callbacks: {
+      label: function(tooltipItem, data) {
+        var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+        return datasetLabel + ': ' + data.datasets[tooltipItem.datasetIndex].data_label[tooltipItem.index];
+      }
+    }
+  },
+};
+
+new Chart(chartContext, {type: 'line', data: chartData, options: chartOptions});
+</script>

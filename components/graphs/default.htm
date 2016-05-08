@@ -1,0 +1,132 @@
+{% set assets = __SELF__.assets %}
+{% set portfolios = __SELF__.portfolios %}
+
+<form
+  data-request="{{ __SELF__}}::onGraphRender"
+  data-request-update="'{{ __SELF__ }}::graphRender': '#graphRender'"
+>
+
+<div class="container">
+  <div id="flashMessage">
+    {% partial __SELF__ ~ '::flash' %}
+  </div>
+  <div class="panel panel-default">
+
+{# Portfolios #}
+    <div class="panel-heading">
+      <a class="panel-title" role="button" data-toggle="collapse" href="#portfolios" aria-expanded="true" aria-controls="portfolios">
+        {{ 'portfolios'|trans_label }}
+      </a>
+    </div>
+    <div class="panel-contents">
+      <div class="row collapse in col-md-offset-1" id="portfolios">
+{% for portfolio in portfolios %}
+        <div class="col-md-3">
+          <label>
+            <input type="checkbox" name="portfolio[]" value="{{portfolio.id}}">
+            {{ portfolio.description }}
+          </label>
+          <br />
+  {% for asset in portfolio.heldAssetsList %}
+    {% if loop.first %}
+            <label class="col-md-12">
+              {{ 'contents'|trans_label }}
+              <select multiple class="form-control" name="asset[]">
+    {% endif %}
+    {% if asset.type != 'cash' %}
+                <option value="{{ asset.id }}">{{ asset.title }}</option>
+    {% endif %}
+    {% if loop.last %}
+              </select>
+            </label>
+    {% endif %}
+  {% endfor %}
+        </div>
+{% endfor %}
+      </div>
+    </div>
+
+{# Assets #}
+    <div class="panel-heading">
+      <a class="panel-title" role="button" data-toggle="collapse" href="#assets" aria-expanded="false" aria-controls="assets">
+        {{ 'assets'|trans_label }}
+      </a>
+    </div>
+    <div class="panel-contents">
+      <div class="row collapse col-md-offset-1" id="assets">
+{% for asset in assets if asset.type != 'cash' %}
+        <div class="col-md-3">
+          <label>
+            <input type="checkbox"  name="asset[]" value="{{asset.id}}">
+            {{ asset.title }}
+          </label>
+          <br />
+
+        </div>
+{% endfor %}
+      </div>
+    </div>
+
+
+{# Other parameters #}
+    <div class="panel-heading">
+      <a class="panel-title" role="button" data-toggle="collapse" href="#parameters" aria-expanded="true" aria-controls="parameters">
+        {{ 'parameters'|trans_label }}
+      </a>
+    </div>
+    <div class="panel-contents">
+      <div class="row collapse in col-md-offset-1" id="parameters">
+        <div class="form-group col-md-3">
+          <label for="start_date" style="padding:8px;">
+            {{ 'start_date'|trans_label }}:
+          </label>
+          <div class="input-with-icon pull-right right-align" style="width:60%;" data-control="datepicker">
+            <i class="icon icon-calendar-o"></i>
+            <input type="text" name="start_date" class="form-control pull-right" value="{{ '1 year ago'|date('Y-m-d') }}">
+          </div>
+        </div>
+
+        <div class="form-group col-md-3">
+          <label for="end_date" style="padding:8px;">
+            {{ 'end_date'|trans_label }}:
+          </label>
+          <div class="input-with-icon pull-right right-align" style="width:60%;" data-control="datepicker">
+            <i class="icon icon-calendar-o"></i>
+            <input type="text" name="end_date" class="form-control pull-right" value="{{ 'now'|date('Y-m-d') }}">
+          </div>
+        </div>
+
+
+
+        <div class="form-group col-md-3">
+          <label for="basis_date" style="padding:8px;">
+            {{ 'date_basis'|trans_label }}:
+          </label>
+          <div class="input-with-icon pull-right right-align" style="width:60%;" data-control="datepicker">
+            <i class="icon icon-calendar-o"></i>
+            <input type="text" name="basis_date" class="form-control pull-right" value="{{ '1 year ago'|date('Y-m-d') }}">
+          </div>
+        </div>
+
+        <button class="col-md-2 btn btn-success" type="submit">
+          {{ 'display'|trans_label }}
+        </button>
+
+      </div>
+    </div>
+    <div class="panel-heading">
+      <a class="panel-title" role="button" data-toggle="collapse" href="#graphRender" aria-expanded="false" aria-controls="graphRender">
+        {{ 'graphs'|trans_label }}
+      </a>
+    </div>
+    <div class="panel-contents row">
+      <div class="collapse in col-md-offset-1 col-md-10" id="graphRender">
+
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+</div>
+</form>

@@ -2,45 +2,44 @@
   <div id="flashMessage">
     {% partial __SELF__ ~ '::flash' %}
   </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{ 'available_assets'|trans_label }}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'available_assets'|trans_label }}
 
 
 
 
-          <button id="oldAssetDisplay" class="btn btn-xs pull-right col-md-offset-1" type="button"
-            data-request="{{ __SELF__}}::onRefresh"
-            data-request-data="include_old: true"
-            data-request-update="'{{ __SELF__ }}::assetList': '#assetList'"
-            data-request-success="$('#oldAssetHide').removeClass('hidden');
-                                  $('#oldAssetDisplay').addClass('hidden');
-                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.old_assets_displayed'|trans }}', 'info');"
-          >
-            {{ 'display_old_assets'|trans_label }}
-          </button>
-          <button id="oldAssetHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
-            data-request="{{ __SELF__}}::onRefresh"
-            data-request-data="include_old: false"
-            data-request-update="'{{ __SELF__ }}::assetList': '#assetList'"
-            data-request-success="$('#oldAssetDisplay').removeClass('hidden');
-                                  $('#oldAssetHide').addClass('hidden');
-                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.old_assets_hidden'|trans }}', 'info');"
-          >
-            {{ 'hide_old_assets'|trans_label }}
-          </button>
+        <button id="oldAssetDisplay" class="btn btn-xs pull-right col-md-offset-1" type="button"
+          data-request="{{ __SELF__}}::onRefresh"
+          data-request-data="include_old: true"
+          data-request-update="'{{ __SELF__ }}::assetList': '#assetList'"
+          data-request-success="$('#oldAssetHide').removeClass('hidden');
+                                $('#oldAssetDisplay').addClass('hidden');
+                                smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.old_assets_displayed'|trans }}', 'info');"
+        >
+          {{ 'display_old_assets'|trans_label }}
+        </button>
+        <button id="oldAssetHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
+          data-request="{{ __SELF__}}::onRefresh"
+          data-request-data="include_old: false"
+          data-request-update="'{{ __SELF__ }}::assetList': '#assetList'"
+          data-request-success="$('#oldAssetDisplay').removeClass('hidden');
+                                $('#oldAssetHide').addClass('hidden');
+                                smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.old_assets_hidden'|trans }}', 'info');"
+        >
+          {{ 'hide_old_assets'|trans_label }}
+        </button>
 
-          <a href="{{ __SELF__.assetDetails|page({asset_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
-            {{ 'new'|trans_label }}
-          </a>
-        </h3>
-      </div>
+        <a href="{{ __SELF__.assetDetails|page({asset_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
+          {{ 'new'|trans_label }}
+        </a>
+      </h3>
+    </div>
 
 
 <!-- Assets list -->
-      <table class="table table-striped" id="assetList">
-        {% partial __SELF__ ~ '::assetList' %}
-      </table>
-    </div>
-  </form>
+    <table class="table table-striped" id="assetList">
+      {% partial __SELF__ ~ '::assetList' %}
+    </table>
+  </div>
 </div>

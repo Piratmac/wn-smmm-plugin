@@ -2,10 +2,8 @@
 
 use Cms\Classes\ComponentBase;
 use Auth;
-use Flash;
 use Lang;
 use Cms\Classes\Page;
-use RainLab\User\Components\Account;
 use Piratmac\Smmm\Models\Portfolio as PortfolioModel;
 
 class Portfolios extends ComponentBase

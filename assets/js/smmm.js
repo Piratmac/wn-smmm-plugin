@@ -1,12 +1,24 @@
 /**********************************************************************
                       Flash messages
  **********************************************************************/
-// Handler for form validation errors occuring through AJAX
-$(window).on('ajaxErrorMessage', function(event, message){
-  smmmDisplayMessage(message, 'danger');
+document.addEventListener("DOMContentLoaded", whenDocumentReady);
 
-  event.preventDefault();
-});
+function whenDocumentReady () {
+  // Handler for form validation errors occuring through AJAX
+  $(window).on('ajaxErrorMessage', function(event, message){
+    smmmDisplayMessage(message, 'danger');
+
+    event.preventDefault();
+  });
+
+  // Defined the date pickers
+  var datepickerElements = document.getElementsByClassName('datepicker');
+  for (var i = 0; i < datepickerElements.length; ++i) {
+      datepickerElements.datepicker();
+  }
+}
+
+
 
 //Displays the flash messages
 function smmmDisplayMessage (message, type) {
@@ -19,39 +31,24 @@ function smmmDisplayMessage (message, type) {
   );
 
   if (allAlertTypes.indexOf(type) != -1) {
-  //  $('#flashMessageContent').parent().addClass('hidden');
-    $('#smmmMessage').parent().removeClass(allAlertClasses);
-    $('#smmmMessage').parent().removeClass('hidden');
-    $('#smmmMessage').parent().addClass('alert-' + type);
-    $('#smmmMessage').html(message);
+    smmmMessageDiv = document.getElementById('smmmMessage');
+    smmmMessageDiv.parentNode.className = smmmMessageDiv.parentNode.className.replace(/\balert-[a-z]{1,}/g, '');
+    smmmMessageDiv.parentNode.className = smmmMessageDiv.parentNode.className.replace(/\bhidden/g, '');
+    smmmMessageDiv.parentNode.className += ' alert-' + type;
+    smmmMessageDiv.innerHTML = message;
 
     setInterval ( function () {
-      smmmHideMessage($('#smmmMessage'));
-    }, 5000);
+      smmmHideMessage(smmmMessageDiv);
+    }, 10000);
   }
   else {
     alert('error occurred in smmmDisplayMessage. type: ' + type + ' - message: ' + message);
   }
 }
 
-$(document).ready(function () {
-  setInterval ( function () {
-    smmmHideMessage($('#flashMessageContent'));
-  }, 5000);
-});
 
 //Hides flash messages
 function smmmHideMessage (element) {
-  $(element).parent().addClass('hidden');
+  element.parentNode.className += ' hidden';
 }
 
-if ($('.datepicker').length) {
-  $('.datepicker').datepicker();
-}
-
-if (window.location.hash.length && $('.tab-pane').length) {
-  $('.tab-pane.active').removeClass('active');
-  $('.nav-tabs .active').removeClass('active');
-  $(window.location.hash).addClass('active');
-  $(window.location.hash).show();
-}

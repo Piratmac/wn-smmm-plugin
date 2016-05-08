@@ -4,7 +4,6 @@ use Cms\Classes\ComponentBase;
 use Flash;
 use Lang;
 use Cms\Classes\Page;
-use RainLab\User\Components\Account;
 use Piratmac\Smmm\Models\Asset as AssetModel;
 
 class Assets extends ComponentBase

@@ -4,7 +4,6 @@ use Model;
 use Lang;
 use Flash;
 use October\Rain\Exception\ValidationException;
-use \October\Rain\Database\Traits\SoftDeleting;
 
 /**
  * PortfolioMovement Model

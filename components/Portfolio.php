@@ -1,20 +1,13 @@
 <?php namespace Piratmac\Smmm\Components;
 
 use Cms\Classes\ComponentBase;
-use Auth;
-use Flash;
 use Lang;
 use Cms\Classes\Page;
-use RainLab\User\Components\Account;
 use Piratmac\Smmm\Models\Portfolio as PortfolioModel;
 use Piratmac\Smmm\Models\PortfolioMovement as PortfolioMovement;
 use Piratmac\Smmm\Controllers\Portfolio as PortfolioController;
 use Piratmac\Smmm\Controllers\PortfolioMovement as PortfolioMovementController;
-use Piratmac\Smmm\Controllers\Asset as AssetController;
 
-use October\Rain\Exception\ApplicationException;
-use October\Rain\Exception\SystemException;
-use October\Rain\Exception\ValidationException;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -44,8 +37,8 @@ class Portfolio extends ComponentBase
   public function componentDetails()
   {
     return [
-      'name'    => 'piratmac.smmm::lang.components.portfolios_name',
-      'description' => 'piratmac.smmm::lang.components.portfolios_description'
+      'name'    => 'piratmac.smmm::lang.components.portfolio_name',
+      'description' => 'piratmac.smmm::lang.components.portfolio_description'
     ];
   }
 

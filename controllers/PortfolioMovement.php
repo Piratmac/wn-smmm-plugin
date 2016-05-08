@@ -1,6 +1,5 @@
 <?php namespace Piratmac\Smmm\Controllers;
 
-use BackendMenu;
 use Backend\Classes\Controller;
 use Piratmac\Smmm\Models\Portfolio;
 use Piratmac\Smmm\Models\PortfolioMovement as MovementModel;

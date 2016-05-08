@@ -14,6 +14,8 @@ return [
     'assets_description'    => 'Displays a list of all assets',
     'asset_name'           => 'Asset details',
     'asset_description'    => 'Details about a asset',
+    'graphs_name'           => 'Graphs',
+    'graphs_description'    => 'Displays various graphs',
   ],
   'settings' => [
     'portfolio_page'           => 'Portfolio details',
@@ -65,6 +67,12 @@ return [
     'no_value_history'    => 'No value history found.',
     'no_asset'            => 'No asset found.',
     'no_portfolio'        => 'No portfolio found.',
+
+
+
+    'basis_date_outside_scope'        => 'The basis date must be between the start and end dates.',
+    'no_element_selected'             => 'No element selected.',
+    'no_value_found_for_on'           => 'No value found for %s on %s.',
   ],
   'labels' => [
     'available_assets' => 'Available assets',
@@ -96,6 +104,9 @@ return [
     'contents'         => 'Contents',
     'average_buy_price'       => 'Average buy price',
     'total_buy_price'         => 'Total cost',
+
+
+    'assets'           => 'Assets',
     'stock'            => 'Stock',
     'bond'             => 'Bond',
     'mixed'            => 'Mixed',
@@ -147,6 +158,15 @@ return [
     'date_from'          => 'From',
     'date_to'            => 'To',
     'value_as_of'        => 'Value as of',
+
+
+
+    'graphs'        => 'Graphs',
+    'elements_to_display'        => 'Elements to display',
+    'parameters'        => 'Parameters',
+    'start_date'        => 'Start date',
+    'end_date'          => 'End date',
+    'date_basis'        => 'Basis',
 
 
   ],

@@ -2,42 +2,41 @@
   <div id="flashMessage">
     {% partial __SELF__ ~ '::flash' %}
   </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{ 'portfolios'|trans_label }}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'portfolios'|trans_label }}
 
-          <button id="closedPortfolioDisplay" class="btn btn-xs pull-right col-md-offset-1" type="button"
-            data-request="{{ __SELF__}}::onRefresh"
-            data-request-data="include_closed: true"
-            data-request-update="'{{ __SELF__ }}::portfolioList': '#portfolioList'"
-            data-request-success="$('#closedPortfolioHide').removeClass('hidden');
-                                  $('#closedPortfolioDisplay').addClass('hidden');
-                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.closed_portfolios_displayed'|trans }}', 'info');"
-          >
-            {{ 'display_closed_portfolios'|trans_label }}
-          </button>
-          <button id="closedPortfolioHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
-            data-request="{{ __SELF__}}::onRefresh"
-            data-request-data="include_closed: false"
-            data-request-update="'{{ __SELF__ }}::portfolioList': '#portfolioList'"
-            data-request-success="$('#closedPortfolioDisplay').removeClass('hidden');
-                                  $('#closedPortfolioHide').addClass('hidden');
-                                  smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.closed_portfolios_hidden'|trans }}', 'info');"
-          >
-            {{ 'hide_closed_portfolios'|trans_label }}
-          </button>
+        <button id="closedPortfolioDisplay" class="btn btn-xs pull-right col-md-offset-1" type="button"
+          data-request="{{ __SELF__}}::onRefresh"
+          data-request-data="include_closed: true"
+          data-request-update="'{{ __SELF__ }}::portfolioList': '#portfolioList'"
+          data-request-success="$('#closedPortfolioHide').removeClass('hidden');
+                                $('#closedPortfolioDisplay').addClass('hidden');
+                                smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.closed_portfolios_displayed'|trans }}', 'info');"
+        >
+          {{ 'display_closed_portfolios'|trans_label }}
+        </button>
+        <button id="closedPortfolioHide" class="btn btn-xs pull-right hidden col-md-offset-1" type="button"
+          data-request="{{ __SELF__}}::onRefresh"
+          data-request-data="include_closed: false"
+          data-request-update="'{{ __SELF__ }}::portfolioList': '#portfolioList'"
+          data-request-success="$('#closedPortfolioDisplay').removeClass('hidden');
+                                $('#closedPortfolioHide').addClass('hidden');
+                                smmmDisplayMessage('{{ 'piratmac.smmm::lang.messages.closed_portfolios_hidden'|trans }}', 'info');"
+        >
+          {{ 'hide_closed_portfolios'|trans_label }}
+        </button>
 
-          <a href="{{ __SELF__.portfolioDetails|page({portfolio_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
-            {{ 'new'|trans_label }}
-          </a>
-        </h3>
-      </div>
+        <a href="{{ __SELF__.portfolioDetails|page({portfolio_id: -1, action: 'create' }) }}" class="btn btn-xs pull-right btn-default" >
+          {{ 'new'|trans_label }}
+        </a>
+      </h3>
+    </div>
 
 
 <!-- Portfolios list -->
-      <table class="table table-striped" id="portfolioList">
-        {% partial __SELF__ ~ '::portfolioList' %}
-      </table>
-    </div>
-  </form>
+    <table class="table table-striped" id="portfolioList">
+      {% partial __SELF__ ~ '::portfolioList' %}
+    </table>
+  </div>
 </div>

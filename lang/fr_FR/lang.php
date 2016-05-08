@@ -14,6 +14,8 @@ return [
     'assets_description'    => 'Affiche la liste des actions',
     'asset_name'           => 'Détail d\'une action',
     'asset_description'    => 'Modifie une action',
+    'graphs_name'           => 'Graphiques',
+    'graphs_description'    => 'Graphiques sur les portefeuilles',
   ],
   'settings' => [
     'portfolio_page'           => 'Détails du portefeuille',
@@ -65,6 +67,12 @@ return [
     'no_value_history'    => 'Aucun historique de valeur trouvé.',
     'no_asset'            => 'Aucun actif trouvé.',
     'no_portfolio'        => 'Aucun portefeuille trouvé.',
+
+
+
+    'basis_date_outside_scope'        => 'La date de base doit être entre la date de début et celle de fin.',
+    'no_element_selected'             => 'Aucun élément choisi.',
+    'no_value_found_for_on'           => 'Aucune valeur trouvée pour %s le %s.',
   ],
   'labels' => [
     'available_assets' => 'Valeurs disponibles',
@@ -96,6 +104,10 @@ return [
     'contents'         => 'Contenu',
     'average_buy_price'       => 'Prix moyen d\'achat',
     'total_buy_price'         => 'Prix total',
+
+
+
+    'assets'           => 'Actifs',
     'stock'            => 'Action',
     'bond'             => 'Obligation',
     'mixed'            => 'Mixte',
@@ -147,6 +159,15 @@ return [
     'date_from'          => 'De',
     'date_to'            => 'A',
     'value_as_of'        => 'Date',
+
+
+
+    'graphs'        => 'Graphiques',
+    'elements_to_display'        => 'Valeurs à afficher',
+    'parameters'        => 'Paramètres',
+    'start_date'        => 'Début',
+    'end_date'          => 'Fin',
+    'date_basis'        => 'Base',
 
   ],
   'dropdowns' => [

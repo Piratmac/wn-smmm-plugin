@@ -160,9 +160,7 @@ class Asset extends ComponentBase
 
   public function onGetAssetValues () {
     $this->asset = $this->loadAsset($this->property('asset_id'));
-    \Debugbar::info(post());
     $this->asset->getValues (post('valueHistory_datefrom'), post('valueHistory_dateto'));
-    \Debugbar::info($this->asset->valueHistory);
   }
 
   public function onAddAssetValue () {

@@ -2,7 +2,6 @@
 
 use System\Classes\PluginBase;
 use Backend\Models\User;
-use Backend;
 use Lang;
 use Route;
 
@@ -39,6 +38,7 @@ class Plugin extends PluginBase
       'Piratmac\Smmm\Components\Portfolios' => 'portfolios',
       'Piratmac\Smmm\Components\Asset' => 'asset',
       'Piratmac\Smmm\Components\Assets' => 'assets',
+      'Piratmac\Smmm\Components\Graphs' => 'graphs',
     ];
   }
 
