@@ -20,10 +20,6 @@ class CreateAllTables extends Migration
       $table->date('close_date')->default(NULL)->nullable();
       $table->string('broker')->default(NULL)->nullable();
 
-      // Link to user
-      $table->integer('user_id')->unsigned()->nullable();
-      $table->foreign('user_id', 'piratmac_smmm_portfolios_user_id_foreign')->references('id')->on('backend_users');
-
       $table->timestamps();
 
       $table->softDeletes();

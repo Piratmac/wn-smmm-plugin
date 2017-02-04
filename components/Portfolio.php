@@ -99,9 +99,6 @@ class Portfolio extends ComponentBase
 
     $portfolio = PortfolioModel::where('id', $portfolio_id)->firstOrFail();
 
-    if (!$portfolio->checkUser())
-      throw new ApplicationException (trans('piratmac.smmm::lang.messages.error_wrong_user'));
-
     return $portfolio;
   }
 

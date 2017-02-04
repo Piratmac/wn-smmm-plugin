@@ -9,7 +9,6 @@ class AssetValueAddIndex extends Migration
   public function up()
   {
 
-    // Table containing all existing assets (at least the ones the user wants)
     Schema::table('piratmac_smmm_asset_values', function($table)
     {
       $table->primary(['asset_id', 'date']);

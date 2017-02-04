@@ -76,13 +76,7 @@ class Portfolios extends ComponentBase
     // Defaulting options
     $options = array_merge ($this->listOptionsDefault, $options);
 
-    // Filter list according to connected user
-    if (Auth::check()) {
-      $this->portfolioList = PortfolioModel::where('user_id', '=', Auth::getUser()->id);
-    }
-    else {
-      $this->portfolioList = PortfolioModel::where('user_id', '=', NULL);
-    }
+    $this->portfolioList = PortfolioModel::get();
 
     // Applying options
     if ($options['include_closed'] == false) {

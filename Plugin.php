@@ -1,7 +1,6 @@
 <?php namespace Piratmac\Smmm;
 
 use System\Classes\PluginBase;
-use Backend\Models\User;
 use Lang;
 use Route;
 
@@ -29,7 +28,7 @@ class Plugin extends PluginBase
   /**
    * @var array Plugin dependencies
    */
-  public $require = ['RainLab.User'];
+  public $require = [];
 
   public function registerComponents()
   {
@@ -44,9 +43,6 @@ class Plugin extends PluginBase
 
 
   public function boot(){
-    User::extend(function($model){
-      $model->hasMany['piratmac_smmm_portfolios'] = ['Piratmac\Smmm\Models\Portfolio'];
-    });
   }
 
   public function registerMarkupTags()

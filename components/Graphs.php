@@ -61,7 +61,7 @@ class Graphs extends ComponentBase
     $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
     $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
 
-    $this->portfolios = PortfolioModel::where('user_id', '=', Auth::getUser()->id)->get();
+    $this->portfolios = PortfolioModel::get();
     $this->assets = AssetModel::all()->sortBy('title');
 
     $this->portfolios->each(function ($portfolio) {

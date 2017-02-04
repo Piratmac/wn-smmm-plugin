@@ -40,7 +40,6 @@ return [
   'messages' => [
     'error_no_id'              => 'Il n\'y a pas de portefeuille ici.',
     'fatal_error'              => 'Erreur fatale. Veuillez réessayer.',
-    'error_wrong_user'         => 'Ce portefeuille n\'est pas le votre.',
     'asset_in_use'             => 'Cette action est utilisée dans un portefeuille ou un mouvement. Vous ne pouvez la supprimer.',
 
     'success_modification'    => 'Modification réussie',

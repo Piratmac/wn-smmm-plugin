@@ -3,7 +3,6 @@
 use Model;
 use Db;
 use \October\Rain\Database\Traits\SoftDeleting;
-use RainLab\User\Components\Account;
 use Auth;
 use October\Rain\Exception\ValidationException;
 use October\Rain\Exception\ApplicationException;
@@ -45,7 +44,7 @@ class Portfolio extends Model
    */
   public $hasOne = [];
   public $hasMany = ['movements' => 'Piratmac\Smmm\Models\PortfolioMovement'];
-  public $belongsTo = ['User', 'foreignKey' => 'user_id'];
+  public $belongsTo = [];
   public $belongsToMany = [
       'heldAssets' => [
         'Piratmac\Smmm\Models\Asset',
@@ -83,34 +82,6 @@ class Portfolio extends Model
    * @var array Overall results of the portfolio (small-scale performance factor)
    */
   public $results = [];
-
-
-/**********************************************************************
-                       Authorization checks
-**********************************************************************/
-
-  /**
-    * Get current user
-    * @return The current user ID
-    */
-  public function getUser() {
-    if (Auth::check()) return Auth::getUser()->id;
-    else return NULL;
-  }
-
-  /**
-    * Checks user access before updating
-    */
-  public function checkUser($creation = false) {
-    $user_id = $this->getUser();
-
-    //In creation mode
-    if ($creation) return true;
-
-    //In modification mode
-    if ($this->user_id == $user_id) return true;
-    else return false;
-  }
 
 
 /**********************************************************************
@@ -553,31 +524,4 @@ class Portfolio extends Model
     if ($this->close_date == '0000-00-00' || $this->close_date == '')
       $this->close_date = null;
   }
-
-  /**
-  * Checks the user in case of update
-  */
-  public function beforeUpdate () {
-    // Check user
-    if (!$this->checkUser())
-      throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));
-  }
-
-  /**
-  * Checks the user in case of deletion
-  */
-  public function beforeDelete () {
-    // Check user
-    if (!$this->checkUser())
-      throw new ValidationException(trans('piratmac.smmm::lang.messages.fatal_error'));
-  }
-
-
-  /**
-  * Adds the user ID before creation
-  */
-  public function beforeCreate () {
-    $this->user_id = $this->user_id?$this->user_id:$this->getUser();
-  }
-
 }

@@ -40,7 +40,6 @@ return [
   'messages' => [
     'error_no_id'              => 'There is no portfolio here.',
     'fatal_error'              => 'Fatal error. Please try again',
-    'error_wrong_user'         => 'Wrong user. Try again.',
     'asset_in_use'             => 'This asset is used in a portfolio or movement. It can\'t be deleted.',
 
     'success_modification'    => 'Modification successful',
