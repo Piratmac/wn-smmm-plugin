@@ -37,7 +37,7 @@ function smmmDisplayMessage (message, type) {
     smmmMessageDiv.parentNode.className += ' alert-' + type;
     smmmMessageDiv.innerHTML = message;
 
-    setInterval ( function () {
+    setTimeout ( function () {
       smmmHideMessage(smmmMessageDiv);
     }, 10000);
   }

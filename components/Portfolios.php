@@ -76,7 +76,7 @@ class Portfolios extends ComponentBase
     // Defaulting options
     $options = array_merge ($this->listOptionsDefault, $options);
 
-    $this->portfolioList = PortfolioModel::get();
+    $this->portfolioList = PortfolioModel::orderBy('description', 'ASC');
 
     // Applying options
     if ($options['include_closed'] == false) {
@@ -84,7 +84,6 @@ class Portfolios extends ComponentBase
     }
 
     // Getting filtered list
-    $this->portfolioList = $this->portfolioList->orderBy('description', 'ASC');
     $this->portfolioList = $this->portfolioList->get();
 
 

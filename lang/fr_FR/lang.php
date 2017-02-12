@@ -54,7 +54,7 @@ return [
     'closed_portfolios_hidden'       => 'Les portefeuilles clos sont masqués',
     'closed_portfolios_displayed'    => 'Les portefeuilles clos sont affichés',
 
-    'used_and_not_synced'    => 'Attention: Cette valeur n\{est pas synchronisé et apparait dans un portefeuille.',
+    'used_and_not_synced'    => 'Attention: Cette valeur n\'est pas synchronisé et apparait dans un portefeuille.',
 
     'existing_value_replaced'   => 'La valeur existante à cette date a été remplacée.',
 

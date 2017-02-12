@@ -115,8 +115,14 @@ class Asset extends ComponentBase
           ]);
 
         # Adding the Pickaday component (for date picker)
-        $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
+        $this->addJs('/modules/system/assets/ui/js/foundation.baseclass.js');
+        $this->addJs('/modules/system/assets/ui/js/foundation.controlutils.js');
+        $this->addJs('/modules/system/assets/ui/vendor/moment/moment.js');
+        $this->addJs('/modules/system/assets/ui/vendor/moment/moment-timezone-with-data.js');
+        $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.js');
+        $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.jquery.js');
+        $this->addJs('/modules/system/assets/ui/js/datepicker.js');
+        $this->addCss('/modules/system/assets/ui/vendor/pikaday/css/pikaday.css');
         break;
     }
   }

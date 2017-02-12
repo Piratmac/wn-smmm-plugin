@@ -200,11 +200,14 @@ class Portfolio extends Model
   */
   public function calculateResults () {
     $totals = $this->movements()
-                   ->select(Db::raw('type, sum(fee) as sum_fee, sum(asset_count * unit_value) as sum_value'))
+                   ->select(Db::raw('type, sum(fee) as sum_fee, sum(asset_count * unit_value) as sum_value, sum(unit_gain_upon_sell * asset_count) as sum_gains'))
                    ->groupBy('type')
                    ->get();
 
     $totals = $totals->keyBy('type');
+
+    if (!key_exists('total', $this->balance)) $this->balance['total'] = 0;
+    if (!key_exists('total', $this->moneyInvested)) $this->moneyInvested['total'] = 0;
 
     $this->results = [
       'total_deposits' => isset($totals['cash_entry'])?$totals['cash_entry']->sum_value:0,
@@ -216,7 +219,7 @@ class Portfolio extends Model
         'percent' => $this->moneyInvested['total']==0?'N/A': ($this->balance['total'] - $this->moneyInvested['total']) / $this->moneyInvested['total'] * 100,
       ],
       'actual_gain' => [
-        'amount' => (isset($totals['asset_sell'])?$totals['asset_sell']->unit_gain_upon_sell * $totals['asset_sell']->asset_count:0) - $totals->reduce(function ($carry, $item) { return $carry + $item->sum_fee;}),
+        'amount' => (isset($totals['asset_sell'])?$totals['asset_sell']->sum_gains - $totals['asset_sell']->sum_fee:0),
         'percent' => 'N/A'
       ]
     ];
@@ -239,69 +242,13 @@ class Portfolio extends Model
     return 0;
   }
 
-
-  /**
-   * Updates the "held asset" table based on the movements
-   */
-  public function updateHeldAssets ($movement) {
-    $impactedCashBalance = $this->heldAssets()
-                                 ->wherePivot('date_to', '>=', $movement->date)
-                                 ->wherePivot('asset_id', 'cash');
-
-    switch ($movement->type) {
-      case 'cash_entry':
-      case 'cash_exit':
-      case 'fee':
-        $changeInCash = ($movement->type=='cash_entry'?+1:-1)*$movement->unit_value - $movement->fee;
-
-        if ($impactedCashBalance->count() == 0) {
-          // There is no history for that portfolio in cash ==> setting it up
-          $heldCashData = [
-            'date_from' => $movement->date,
-            'date_to'   => '9999-12-31',
-            'asset_count' => $changeInCash,
-            'average_price_tag' => 1,
-          ];
-
-          $this->heldAssets()->attach('cash', $heldCashData);
-        }
-        else {
-          // Update the cash balance
-          $this->updateFutureBalance($movement, $changeInCash, 'cash');
-        }
-        break;
-
-      case 'asset_buy':
-        //Update the cash balance
-        $changeInCash = -1 * $movement->asset_count * $movement->unit_value - $movement->fee;
-        $this->updateFutureBalance($movement, $changeInCash, 'cash');
-
-        $changeInAsset =   $movement->asset_count;
-        $this->updateFutureBalance($movement, $changeInAsset, $movement->asset_id);
-
-
-        break;
-      case 'asset_sell':
-        // Update the cash balance
-        $changeInCash =      $movement->asset_count * $movement->unit_value - $movement->fee;
-        $this->updateFutureBalance($movement, $changeInCash, 'cash');
-
-        $changeInAsset = - $movement->asset_count;
-        $this->updateFutureBalance($movement, $changeInAsset, $movement->asset_id);
-        break;
-    }
-
-    // Clean-up of old values
-    Db::table('piratmac_smmm_portfolio_contents')->where('asset_count', 0)->delete();
-  }
-
   /**
   * Updates all held asset values after the given date
   * @param movementDate The date of the movement
   * @param changeInCount The change in asset_count to be applied
   * @param asset The asset being modified
   */
-  private function updateFutureBalance ($movement, $changeInCount, $asset) {
+  public function updateFutureBalance ($movement, $changeInCount, $asset) {
 /**************************************************************************
  * This function performs a lot of operations on the asset history
  * Please find below some examples to help understand what happens
@@ -390,8 +337,7 @@ class Portfolio extends Model
     }
     else {
       // There is no balance valid at current date
-      // There is another balance valid only after the current date ==> we need to stop the new balance before that
-      // Example: Case 4 step 1
+      // We need to check if there is a future balance that may be impacted
       $futureBalance = $this->heldAssets()
                             ->wherePivot('date_from', '>', $movement->date)
                             ->wherePivot('asset_id', $asset)
@@ -399,16 +345,18 @@ class Portfolio extends Model
                             ->first();
 
       if (!is_null($futureBalance)) {
+        // There is another balance valid only after the current date ==> we need to stop the new balance before that
+        // Example: Case 4 step 1
         $newBalanceData = [
           'date_from'    => $movement->date,
           'date_to'      => date('Y-m-d', strtotime($futureBalance->pivot->date_from.' a day ago')),
           'asset_count'  => 0,
           'average_price_tag' => ($movement->asset_id == 'cash'?1:0),
         ];
-        if ($newBalanceData['date_from'] != $newBalanceData['date_to'])
-          $this->heldAssets()->attach($asset, $newBalanceData);
+        $this->heldAssets()->attach($asset, $newBalanceData);
       }
       else {
+        // There is no future balance impacted ==> we just register the new one
         $newBalanceData = [
           'date_from'    => $movement->date,
           'date_to'      => '9999-12-31',

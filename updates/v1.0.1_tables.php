@@ -80,9 +80,9 @@ class CreateAllTables extends Migration
       // Link to assets
       $table->string('asset_id')->nullable();
       $table->foreign('asset_id', 'piratmac_smmm_portfolio_movements_asset_foreign')->references('id')->on('piratmac_smmm_assets');
-      $table->decimal('asset_count', 10, 5);
-      $table->decimal('unit_value', 12, 5);
-      $table->decimal('fee', 10, 5);
+      $table->decimal('asset_count', 15, 5);
+      $table->decimal('unit_value', 15, 5);
+      $table->decimal('fee', 15, 5);
 
     });
 
@@ -103,8 +103,8 @@ class CreateAllTables extends Migration
 
       $table->date('date_from');
       $table->date('date_to')->default('9999-12-31');
-      $table->decimal('asset_count', 10, 5);
-      $table->decimal('average_price_tag', 12, 2);
+      $table->decimal('asset_count', 15, 5);
+      $table->decimal('average_price_tag', 15, 2);
 
     });
 

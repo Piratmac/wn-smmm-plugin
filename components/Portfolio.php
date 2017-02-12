@@ -2,6 +2,7 @@
 
 use Cms\Classes\ComponentBase;
 use Lang;
+use Flash;
 use Cms\Classes\Page;
 use Piratmac\Smmm\Models\Portfolio as PortfolioModel;
 use Piratmac\Smmm\Models\PortfolioMovement as PortfolioMovement;
@@ -37,7 +38,7 @@ class Portfolio extends ComponentBase
   public function componentDetails()
   {
     return [
-      'name'    => 'piratmac.smmm::lang.components.portfolio_name',
+      'name'        => 'piratmac.smmm::lang.components.portfolio_name',
       'description' => 'piratmac.smmm::lang.components.portfolio_description'
     ];
   }
@@ -127,6 +128,20 @@ class Portfolio extends ComponentBase
   public function onRun()
   {
     $this->addJs('/plugins/piratmac/smmm/assets/js/smmm.js');
+
+    // Pickaday (for date picker)
+    $this->addJs('/modules/system/assets/ui/js/foundation.baseclass.js');
+    $this->addJs('/modules/system/assets/ui/js/foundation.controlutils.js');
+    $this->addJs('/modules/system/assets/ui/vendor/moment/moment.js');
+    $this->addJs('/modules/system/assets/ui/vendor/moment/moment-timezone-with-data.js');
+    $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.js');
+    $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.jquery.js');
+    $this->addJs('/modules/system/assets/ui/js/datepicker.js');
+    $this->addCss('/modules/system/assets/ui/vendor/pikaday/css/pikaday.css');
+
+    $this->addJs('/modules/backend/formwidgets/recordfinder/assets/js/recordfinder.js', 'core');
+    $this->addJs('/modules/system/assets/ui/js/input.trigger.js', 'core');
+
     $this->action = $this->param('action');
     $this->portfolioListPage = $this->property('portfolioList');
     $this->assetDetailsPage = $this->property('assetDetails');
@@ -134,11 +149,7 @@ class Portfolio extends ComponentBase
     switch ($this->action) {
       case 'create':
       case 'update':
-        # Getting form fields ready for usage
-        $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
-
-        # Generating the form itself
+        # Generating the form
         $formController = new PortfolioController();
         if ($this->action == 'create')     $formController->create($this->action);
         elseif ($this->action == 'update') $formController->update($this->property('portfolio_id'), $this->action);
@@ -146,12 +157,6 @@ class Portfolio extends ComponentBase
         break;
 
       case 'view':
-        # Getting form fields ready for usage
-        $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js', 'core');
-        $this->addJs('/modules/backend/formwidgets/recordfinder/assets/js/recordfinder.js', 'core');
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css', 'core');
-        $this->addJs('/modules/system/assets/ui/js/input.trigger.js', 'core');
-
         $this->portfolio = $this->loadPortfolio($this->property('portfolio_id'));
         $this->portfolio = $this->getPortfolioDetails($this->portfolio);
         break;

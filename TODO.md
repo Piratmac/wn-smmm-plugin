@@ -1,3 +1,32 @@
+
+
+
+
+
+###############################################
+Use related movements ==> they will be deleted together
+
+
+Source                     Target                    Examples
+Compte ext NP              PF                        Abondement, dividendes, intérêts
+Compte ext P               PF                        Versement
+PF                         Compte P                  Retrait
+PF cash                    Compte NP                 Impôts, frais, prélèvement sociaux
+PF titres                  Compte NP                 Frais en actions, Arrondi ESPP
+PF cash                    PF titres                 Achat
+PF titres                  PF cash                   Vente
+PF titres                  PF titres                 Arbitrage
+
+Transferts inter-comptes? (compliqué :()
+
+###############################################
+
+
+
+
+
+
+
 # The todo list
 * Assets pages
     * Display portfolios containing those assets

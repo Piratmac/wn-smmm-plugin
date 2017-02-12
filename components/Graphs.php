@@ -8,7 +8,6 @@ use Piratmac\Smmm\Models\PortfolioMovement;
 use Piratmac\Smmm\Models\Asset as AssetModel;
 use Piratmac\Smmm\Models\AssetValue;
 use October\Rain\Exception\ApplicationException;
-use Barryvdh\DebugBar;
 
 class Graphs extends ComponentBase
 {
@@ -58,8 +57,14 @@ class Graphs extends ComponentBase
   public function init () {
     $this->addJs('/plugins/piratmac/smmm/assets/js/smmm.js');
     $this->addJs('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.0/Chart.min.js');
-    $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
-    $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
+    $this->addJs('/modules/system/assets/ui/js/foundation.baseclass.js');
+    $this->addJs('/modules/system/assets/ui/js/foundation.controlutils.js');
+    $this->addJs('/modules/system/assets/ui/vendor/moment/moment.js');
+    $this->addJs('/modules/system/assets/ui/vendor/moment/moment-timezone-with-data.js');
+    $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.js');
+    $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.jquery.js');
+    $this->addJs('/modules/system/assets/ui/js/datepicker.js');
+    $this->addCss('/modules/system/assets/ui/vendor/pikaday/css/pikaday.css');
 
     $this->portfolios = PortfolioModel::get();
     $this->assets = AssetModel::all()->sortBy('title');
@@ -201,7 +206,6 @@ class Graphs extends ComponentBase
       $timeDots_rendering['datasets'][$assetID]['data_label'] = implode(', ', $timeDots_rendering['datasets'][$assetID]['data_label']);
     }
     $this->timeDots_rendering = $timeDots_rendering;
-    \Debugbar::info($this->timeDots_rendering);
   }
 
 }
