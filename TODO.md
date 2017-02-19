@@ -1,48 +1,12 @@
-
-
-
-
-
-###############################################
-Use related movements ==> they will be deleted together
-
-
-Source                     Target                    Examples
-Compte ext NP              PF                        Abondement, dividendes, intérêts
-Compte ext P               PF                        Versement
-PF                         Compte P                  Retrait
-PF cash                    Compte NP                 Impôts, frais, prélèvement sociaux
-PF titres                  Compte NP                 Frais en actions, Arrondi ESPP
-PF cash                    PF titres                 Achat
-PF titres                  PF cash                   Vente
-PF titres                  PF titres                 Arbitrage
-
-Transferts inter-comptes? (compliqué :()
-
-###############################################
-
-
-
-
-
-
-
 # The todo list
 * Assets pages
     * Display portfolios containing those assets
-    * Handle split/merge of assets: through "obsolete" tag and relationship between old and new
     * Add default currency for valuation
     * Handle double conversion to display all amounts in same currency
 
 * Movements
     * Additional fields: description of the movement
     * Add possibilities to search / filter on all movements
-
-* Movement types
-    * Create new pages to manage movement types
-    * Should have title, description
-    * Should have source and target data: portfolio (either user choose, or "external"), asset type (cash / stock)
-    * To be confirmed: how to determine if it impacts the portfolio balance ? (main idea: if source or target = external)
 
 * Portfolios
     * Identify account as "Regular deposits" (will be displayed differently)
@@ -80,6 +44,3 @@ Transferts inter-comptes? (compliqué :()
         * Allow to change the basis over time when there are entry / exit movements
         * Allow to display the real value or the value in percents
         * Display special dots when there are movements
-
-* Cleanup
-    * Switch to back-end management and pages

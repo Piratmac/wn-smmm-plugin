@@ -21,24 +21,7 @@ fields:
     trigger:
       action: disable
       field: type
-      condition: value[fee], value[cash_entry], value[cash_exit]
-
-  portfolio:
-    label: piratmac.smmm::lang.labels.portfolio
-    type: Backend\FormWidgets\Relation
-    nameFrom: description
-    keyFrom: id
-    context: [asset]
-#Should use Backend\FormWidgets\RecordFinder instead. This would need the following elements:
-    #list: ~/plugins/piratmac/smmm/models/portfolio/columns.yaml
-    #title: Find portfolios
-    #prompt: Click the %s button to find a portfolio
-    #descriptionFrom: description
-    trigger:
-      action: disable
-      field: type
-      condition: value[fee], value[cash_entry], value[cash_exit]
-
+      condition: value[cash_entry], value[cash_exit], value[company_funding], value[dividends], value[fee_cash], value[interest], value[movement_fee], value[profit_cash], value[taxes_cash]
 
   date:
     label: piratmac.smmm::lang.labels.date
@@ -48,10 +31,6 @@ fields:
   asset_count:
     label: piratmac.smmm::lang.labels.asset_count
     type: number
-    trigger:
-      action: disable
-      field: type
-      condition: value[fee], value[cash_entry], value[cash_exit]
 
   unit_value:
     label: piratmac.smmm::lang.labels.unit_value
@@ -59,8 +38,4 @@ fields:
     trigger:
       action: disable
       field: type
-      condition: value[fee]
-
-  fee:
-    label: piratmac.smmm::lang.labels.fee
-    type: number
+      condition: value[cash_entry], value[cash_exit], value[company_funding], value[dividends], value[fee_cash], value[interest], value[movement_fee], value[profit_cash], value[taxes_cash]

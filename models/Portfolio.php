@@ -121,9 +121,7 @@ class Portfolio extends Model
       $date = date('Y-m-d');
     $this->contents = $this->heldAssets()
                            ->where('date_from', '<=', $date)
-                           ->where(function ($query) use($date) {
-                              $query->where('date_to', '>=', $date)
-                                    ->orWherenull('date_to');})
+                           ->where('date_to', '>=', $date)
                            ->orderBy('type', 'DESC')
                            ->orderBy('title', 'ASC');
 
@@ -200,7 +198,7 @@ class Portfolio extends Model
   */
   public function calculateResults () {
     $totals = $this->movements()
-                   ->select(Db::raw('type, sum(fee) as sum_fee, sum(asset_count * unit_value) as sum_value, sum(unit_gain_upon_sell * asset_count) as sum_gains'))
+                   ->select(Db::raw('type, sum(asset_count * unit_value) as sum_value, sum(unit_gain_upon_sell * asset_count) as sum_gains'))
                    ->groupBy('type')
                    ->get();
 
@@ -213,13 +211,12 @@ class Portfolio extends Model
       'total_deposits' => isset($totals['cash_entry'])?$totals['cash_entry']->sum_value:0,
 
       'total_withdrawals' => isset($totals['cash_exit'])?$totals['cash_exit']->sum_value:0,
-      'total_fees' => $totals->reduce(function ($carry, $item) { return $carry + $item->sum_fee;}),
       'expected_gain' => [
         'amount' => $this->balance['total'] - $this->moneyInvested['total'],
         'percent' => $this->moneyInvested['total']==0?'N/A': ($this->balance['total'] - $this->moneyInvested['total']) / $this->moneyInvested['total'] * 100,
       ],
       'actual_gain' => [
-        'amount' => (isset($totals['asset_sell'])?$totals['asset_sell']->sum_gains - $totals['asset_sell']->sum_fee:0),
+        'amount' => (isset($totals['asset_sell'])?$totals['asset_sell']->sum_gains:0),
         'percent' => 'N/A'
       ]
     ];
@@ -351,7 +348,7 @@ class Portfolio extends Model
           'date_from'    => $movement->date,
           'date_to'      => date('Y-m-d', strtotime($futureBalance->pivot->date_from.' a day ago')),
           'asset_count'  => 0,
-          'average_price_tag' => ($movement->asset_id == 'cash'?1:0),
+          'average_price_tag' => 0,
         ];
         $this->heldAssets()->attach($asset, $newBalanceData);
       }
@@ -361,7 +358,7 @@ class Portfolio extends Model
           'date_from'    => $movement->date,
           'date_to'      => '9999-12-31',
           'asset_count'  => 0,
-          'average_price_tag' => ($movement->asset_id == 'cash'?1:$movement->unit_value),
+          'average_price_tag' => $movement->unit_value,
         ];
         $this->heldAssets()->attach($asset, $newBalanceData);
       }
@@ -436,7 +433,8 @@ class Portfolio extends Model
                           ->where('date_from', '<=', $maxDate)
                           ->where(function ($query) use($minDate) {
                              $query->where('date_to', '>=', $minDate)
-                                   ->orWherenull('date_to');})->get();
+                                   ->orWherenull('date_to');})
+                          ->get();
 
       $this->movements->each(function ($movement) use ($cashBalance) {
         $movement->cashBalance = $cashBalance->filter (function ($balance) use ($movement) {

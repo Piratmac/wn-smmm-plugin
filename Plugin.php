@@ -79,7 +79,7 @@ class Plugin extends PluginBase
   }
 
   public function number_format_count ($number) {
-    return $this->number_format_locale($number, 3);
+    return $this->number_format_locale($number, 4);
   }
 
   public function number_format_price ($number) {

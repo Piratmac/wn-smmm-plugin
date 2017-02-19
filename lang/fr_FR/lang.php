@@ -121,7 +121,6 @@ return [
     'date'        => 'Date',
     'asset_count' => 'Nombre d\'actions',
     'unit_value'  => 'Valeur unitaire / Montant',
-    'fee'         => 'Frais',
 
     'details'     => 'Détails',
     'manage'      => 'Gérer',
@@ -142,7 +141,6 @@ return [
     'summary'                  => 'Résumé',
     'total_deposits'           => 'Total des versements',
     'total_withdrawals'        => 'Total des retraits',
-    'total_fees'               => 'Total des frais',
     'expected_gain'            => 'Plus-value(s) attendue(s)',
     'actual_gain'              => 'Plus-value(s) réalisée(s)',
 
@@ -184,31 +182,27 @@ return [
     ],
     'movement' => [
       'type' => [
-        'cash_entry' => 'Dépôt',
+        'arbitrage_buy' => 'Arbitrage - Achat',
+        'arbitrage_sell' => 'Arbitrage - Vente',
         'asset_buy' => 'Achat',
+        'asset_refund' => 'Revente immédiate',
         'asset_sell' => 'Vente',
-        'fee' => 'Frais',
+        'cash_entry' => 'Dépôt',
         'cash_exit' => 'Retrait',
+        'company_funding' => 'Rémunération employeur',
+        'dividends' => 'Dividendes',
+        'fee_asset' => 'Frais de gestion en nature',
+        'fee_cash' => 'Frais de gestion en espèces',
+        'forex' => 'Conversion',
+        'interest' => 'Intérêts',
+        'movement_fee' => 'Frais d\'arbitrage',
+        'profit_asset' => 'Profit - en titres',
+        'profit_cash' => 'Profit - en espèces',
+        'split_source' => 'Fusion/Division - Source',
+        'split_target' => 'Fusion/Division - Cible',
+        'taxes_cash' => 'Taxes - en espèces',
+        'taxes_asset' => 'Taxes - en titres',
       ],
     ],
   ],
-];
-
-
-$OLD = [
-  'settings' => [
-    'portfolioview_page'           => 'Page d\'affichage',
-    'portfolioview_description'    => 'Nom de la page pour afficher un portefeuille',
-    'portfoliomanage_page'           => 'Page de gestion',
-    'portfoliomanage_description'    => 'Nom de la page pour modifier un portefeuille',
-    'portfoliocreate_page'           => 'Page de création',
-    'portfoliocreate_description'    => 'Nom de la page pour créer un portefeuille',
-
-    'display_mode'               => 'Mode d\'affichage',
-    'display_mode_description'   => 'Choisissez si la page permet la modification ou non',
-    'display_mode_view'             => 'Lecture seule',
-    'display_mode_manage'           => 'Modification',
-    'display_mode_create'           => 'Création',
-  ],
-
 ];

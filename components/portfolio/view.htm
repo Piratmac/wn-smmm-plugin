@@ -64,12 +64,6 @@
         <div class="col-md-3 text-right">
           {{ portfolio.results.total_withdrawals|number_format_amount }}
         </div>
-        <div class="col-md-6">
-          {{ 'total_fees'|trans_label }}:
-        </div>
-        <div class="col-md-3 text-right">
-          {{ portfolio.results.total_fees|number_format_amount }}
-        </div>
 
         <div class="col-md-6">
           {{ 'expected_gain'|trans_label }}:
@@ -175,7 +169,6 @@
             </th>
           </tr>
         {% endif %} {# End of first loop #}
-      {% if assetType != 'cash' %} {# Details on cash are not displayed (not interesting data) #}
           <tr>
             <td>
               <a href="{{ heldAsset.url_view }}">
@@ -201,7 +194,6 @@
               {{ heldAsset.pivot.totalValue|number_format_amount }}
             </td>
           </tr>
-      {% endif %} {# End of "cash" condition #}
     {% endfor %}  {# Asset looping #}
   {% endfor %}   {# Asset type looping #}
         <tr>
@@ -256,9 +248,6 @@
               {{ 'unit_value'|trans_label }}
             </th>
             <th class="text-right">
-              {{ 'fee'|trans_label }}
-            </th>
-            <th class="text-right">
               {{ 'cash_balance'|trans_label }}
             </th>
             <th class="text-right">
@@ -290,9 +279,6 @@
             </td>
             <td class="text-right">
               {{ movement.unit_value|hide_if_zero }}
-            </td>
-            <td class="text-right">
-              {{ movement.fee|hide_if_zero }}
             </td>
             <td class="text-right">
               {{ movement.cashBalance|number_format_amount }}

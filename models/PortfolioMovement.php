@@ -27,7 +27,7 @@ class PortfolioMovement extends Model
   /**
    * @var array Fillable fields
    */
-  protected $fillable = ['date', 'type', 'asset_count', 'unit_value', 'fee', 'portfolio_id', 'asset_id', 'asset', 'portfolio'];
+  protected $fillable = ['date', 'type', 'asset_count', 'unit_value', 'portfolio_id', 'asset_id', 'asset', 'portfolio'];
 
   /**
    * @var boolean Don't use timestamps
@@ -35,21 +35,111 @@ class PortfolioMovement extends Model
   public $timestamps = false;
 
   protected $rules = [
-    'asset_id' => 'required_if:type,asset_buy|required_if:type,asset_sell|not_in:cash',
+    'asset_id' => [
+      'required_if:type,arbitrage_buy',
+      'required_if:type,arbitrage_sell',
+      'required_if:type,asset_buy',
+      'required_if:type,asset_refund',
+      'required_if:type,asset_sell',
+      'required_if:type,fee_asset',
+      'required_if:type,forex',
+      'required_if:type,profit_asset',
+      'required_if:type,split_source',
+      'required_if:type,split_target',
+      'not_in:cash',
+    ],
     'portfolio' => 'required',
     'date' => 'required|date',
     'type' => 'required',
-    'asset_count' => 'numeric|required_if:type,asset_buy|required_if:type,asset_sell',
+    'asset_count' => 'numeric',
     'unit_value' => [
       'numeric',
-      'required_if:type,asset_buy', // The only case when it's not required is "fee"
+      'required_if:type,arbitrage_buy',
+      'required_if:type,arbitrage_sell',
+      'required_if:type,asset_buy',
+      'required_if:type,asset_refund',
       'required_if:type,asset_sell',
-      'required_if:type,cash_deposit',
-      'required_if:type,cash_withdraw',
+      'required_if:type,fee_asset',
+      'required_if:type,forex',
+      'required_if:type,profit_asset',
+      'required_if:type,split_source',
+      'required_if:type,split_target',
     ],
-    'fee' => 'numeric',
 
   ];
+
+
+
+  // How the movement impacts the cash balance of the account
+  private $impactOnCash  = [
+      'arbitrage_buy'         =>  0,
+      'arbitrage_sell'        =>  0,
+      'asset_buy'             => -1,
+      'asset_refund'          =>  0,
+      'asset_sell'            => +1,
+      'cash_entry'            => +1,
+      'cash_exit'             => -1,
+      'company_funding'       => +1,
+      'dividends'             => +1,
+      'fee_asset'             =>  0,
+      'fee_cash'              => -1,
+      'forex'                 => -1,
+      'interest'              => +1,
+      'movement_fee'          => -1,
+      'profit_asset'          =>  0,
+      'profit_cash'           => +1,
+      'split_source'          =>  0,
+      'split_target'          =>  0,
+      'taxes_cash'            => -1,
+      'taxes_asset'           =>  0,
+  ];
+  // How the movement impacts the asset balance of the account
+  private $impactOnAsset = [
+      'arbitrage_buy'         => +1,
+      'arbitrage_sell'        => -1,
+      'asset_buy'             => +1,
+      'asset_refund'          => +1,
+      'asset_sell'            => -1,
+      'cash_entry'            =>  0,
+      'cash_exit'             =>  0,
+      'company_funding'       =>  0,
+      'dividends'             =>  0,
+      'fee_asset'             => -1,
+      'fee_cash'              =>  0,
+      'forex'                 => +1,
+      'interest'              =>  0,
+      'movement_fee'          =>  0,
+      'profit_asset'          => +1,
+      'profit_cash'           =>  0,
+      'split_source'          => -1,
+      'split_target'          => +1,
+      'taxes_cash'            =>  0,
+      'taxes_asset'           => -1,
+  ];
+
+  // If the impact is only on cash ==> asset count makes no sense
+  private $hasAssetCount = [
+      'arbitrage_buy'         =>  true,
+      'arbitrage_sell'        =>  true,
+      'asset_buy'             =>  true,
+      'asset_refund'          =>  true,
+      'asset_sell'            =>  true,
+      'cash_entry'            =>  false,
+      'cash_exit'             =>  false,
+      'company_funding'       =>  false,
+      'dividends'             =>  false,
+      'fee_asset'             =>  true,
+      'fee_cash'              =>  false,
+      'forex'                 =>  true,
+      'interest'              =>  false,
+      'movement_fee'          =>  false,
+      'profit_asset'          =>  true,
+      'profit_cash'           =>  false,
+      'split_source'          =>  true,
+      'split_target'          =>  true,
+      'taxes_cash'            =>  false,
+      'taxes_asset'           =>  true,
+    ];
 
 
   /**
@@ -83,40 +173,26 @@ class PortfolioMovement extends Model
 
   public function beforeSave () {
     $this->date = substr($this->date, 0, 10);
+
+    // Cash-only impact ==> add this value for calculation
+    if ($this->hasAssetCount[$this->type] == false)
+      $this->unit_value = 1;
+
+
     // Checking asset balance
-    if ($this->type == 'asset_sell') {
+    if ($this->impactOnAsset[$this->type] < 0) {
       $heldAssets = $this->portfolio->getHeldAssets($this->date, $this->asset_id)->first();
       if (is_null($heldAssets) || (int)$heldAssets->pivot->asset_count < (int)$this->asset_count)
         throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.negative_asset_count')]);
     }
 
-    // Checking cash balance when withdrawing
-    if ($this->type == 'cash_exit') {
-      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
-      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < ($this->unit_value + $this->fee))
+    // Checking cash balance
+    if ($this->impactOnCash[$this->type] < 0) {
+      $cashBalance = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
+      if (is_null($cashBalance) || $cashBalance->pivot->asset_count < $this->asset_count)
         \Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
     }
 
-    // Checking cash balance for fees and when selling assets (the fee may use all the cash)
-    if (in_array($this->type, ['fee', 'asset_sell'])) {
-      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
-      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < $this->fee)
-        \Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
-    }
-
-    // Checking cash balance for cash entry (not likely, but fee may be above what is entering the portfolio)
-    if ($this->type == 'cash_entry') {
-      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
-      if (is_null($heldAssets) || ( $heldAssets->pivot->asset_count + $this->unit_value) < $this->fee)
-        \Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
-    }
-
-    // Checking cash balance for assets buy
-    if ($this->type == 'asset_buy') {
-      $heldAssets = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
-      if (is_null($heldAssets) || $heldAssets->pivot->asset_count < ($this->asset_count * $this->unit_value + $this->fee))
-        \Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
-    }
 
     // Checking date of movement against date of portfolio
     if ( (!is_null($this->portfolio->close_date) && $this->portfolio->close_date < $this->date)
@@ -127,7 +203,6 @@ class PortfolioMovement extends Model
     // Adding the gain/loss upon selling the asset
     if ($this->type == 'asset_sell') {
       $heldAssets = $this->portfolio->getHeldAssets($this->date, $this->asset_id)->first();
-      //dd($heldAssets->pivot->average_price_tag);
       $this->unit_gain_upon_sell = $this->unit_value - $heldAssets->pivot->average_price_tag;
     }
   }
@@ -156,63 +231,15 @@ class PortfolioMovement extends Model
   public function updatePortfolioHeldAssets () {
     $portfolio = $this->portfolio;
 
-    $impactedCashBalance = $portfolio->heldAssets()
-                                     ->wherePivot('date_to', '>=', $this->date)
-                                     ->wherePivot('asset_id', 'cash');
+    // Change in the cash balance
+    $changeInCash  = $this->impactOnCash[$this->type] * $this->unit_value * $this->asset_count;
+    if ($changeInCash != 0)
+      $portfolio->updateFutureBalance($this, $changeInCash, 'cash');
 
-    switch ($this->type) {
-      case 'cash_entry':
-      case 'cash_exit':
-      case 'fee':
-        $changeInCash = ($this->type=='cash_entry'?+1:-1)*$this->unit_value - $this->fee;
-
-        if ($impactedCashBalance->count() == 0) {
-          // There is no history for that portfolio in cash ==> setting it up
-          $heldCashData = [
-            'date_from' => $this->date,
-            'date_to'   => '9999-12-31',
-            'asset_count' => $changeInCash,
-            'average_price_tag' => 1,
-          ];
-
-          $portfolio->heldAssets()->attach('cash', $heldCashData);
-        }
-        else {
-          // Update the cash balance
-          //dd('second run');
-          $portfolio->updateFutureBalance($this, $changeInCash, 'cash');
-        }
-        break;
-
-      case 'asset_buy':
-        //Update the cash balance
-        $changeInCash = -1 * $this->asset_count * $this->unit_value - $this->fee;
-        $portfolio->updateFutureBalance($this, $changeInCash, 'cash');
-
-        $changeInAsset =     $this->asset_count;
-        $portfolio->updateFutureBalance($this, $changeInAsset, $this->asset_id);
-
-
-        break;
-      case 'split_source':
-        $changeInAsset = -1 * $this->asset_count;
-        $portfolio->updateFutureBalance($this, $changeInAsset, $this->asset_id);
-
-        break;
-      case 'split_target':
-        $changeInAsset =     $this->asset_count;
-        $portfolio->updateFutureBalance($this, $changeInAsset, $this->asset_id);
-
-        break;
-      case 'asset_sell':
-        // Update the cash balance
-        $changeInCash  =   $this->asset_count * $this->unit_value - $this->fee;
-        $portfolio->updateFutureBalance($this, $changeInCash, 'cash');
-
-        $changeInAsset = - $this->asset_count;
-        $portfolio->updateFutureBalance($this, $changeInAsset, $this->asset_id);
-        break;
-    }
+    // Change in the asset balance
+    $changeInAsset = $this->impactOnAsset[$this->type] * $this->asset_count;
+    if ($changeInAsset != 0)
+      $portfolio->updateFutureBalance($this, $changeInAsset, $this->asset_id);
 
     // Clean-up of old values
     Db::table('piratmac_smmm_portfolio_contents')->where('asset_count', 0)->delete();

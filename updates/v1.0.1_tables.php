@@ -75,7 +75,7 @@ class CreateAllTables extends Migration
       $table->integer('portfolio_id')->unsigned();
       $table->foreign('portfolio_id', 'piratmac_smmm_portfolio_movements_portfolio_foreign')->references('id')->on('piratmac_smmm_portfolios');
       $table->date('date');
-      $table->enum('type', ['cash_entry', 'cash_exit', 'asset_buy', 'asset_sell', 'fee']);
+      $table->enum('type', ['arbitrage_buy', 'arbitrage_sell', 'asset_buy', 'asset_refund', 'asset_sell', 'cash_entry', 'cash_exit', 'company_funding', 'dividends', 'fee_asset', 'fee_cash', 'forex', 'interest', 'movement_fee', 'profit_asset', 'profit_cash', 'split_source', 'split_target', 'taxes_cash', 'taxes_asset']);
 
       // Link to assets
       $table->string('asset_id')->nullable();
