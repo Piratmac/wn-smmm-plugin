@@ -4,7 +4,6 @@ use Model;
 use Lang;
 use Flash;
 use October\Rain\Exception\ValidationException;
-use Barryvdh\DebugBar;
 use Db;
 
 /**
@@ -71,7 +70,7 @@ class PortfolioMovement extends Model
 
 
   // How the movement impacts the cash balance of the account
-  private $impactOnCash  = [
+  private $impactOnBaseCurrency  = [
       'arbitrage_buy'         =>  0,
       'arbitrage_sell'        =>  0,
       'asset_buy'             => -1,
@@ -117,7 +116,7 @@ class PortfolioMovement extends Model
       'taxes_asset'           => -1,
   ];
 
-  // If the impact is only on cash ==> asset count makes no sense
+  // If the impact is only on base currency ==> asset count makes no sense
   private $hasAssetCount = [
       'arbitrage_buy'         =>  true,
       'arbitrage_sell'        =>  true,
@@ -174,7 +173,7 @@ class PortfolioMovement extends Model
   public function beforeSave () {
     $this->date = substr($this->date, 0, 10);
 
-    // Cash-only impact ==> add this value for calculation
+    // Base currency (cash)-only impact ==> add this value for calculation
     if ($this->hasAssetCount[$this->type] == false)
       $this->unit_value = 1;
 
@@ -186,9 +185,9 @@ class PortfolioMovement extends Model
         throw new ValidationException (['asset_count' => trans('piratmac.smmm::lang.messages.negative_asset_count')]);
     }
 
-    // Checking cash balance
-    if ($this->impactOnCash[$this->type] < 0) {
-      $cashBalance = $this->portfolio->getHeldAssets($this->date, 'cash')->first();
+    // Checking base currency (cash) balance
+    if ($this->impactOnBaseCurrency[$this->type] < 0) {
+      $cashBalance = $this->portfolio->getHeldAssets($this->date, $this->portfolio->base_currency)->first();
       if (is_null($cashBalance) || $cashBalance->pivot->asset_count < $this->asset_count)
         \Flash::warning(trans('piratmac.smmm::lang.messages.negative_cash_balance'));
     }
@@ -212,11 +211,7 @@ class PortfolioMovement extends Model
   }
 
   public function afterDelete () {
-    if ($this->asset_id == NULL)
-      //Cash
-      $this->unit_value = - $this->unit_value;
-    else
-      $this->asset_count = - $this->asset_count;
+    $this->asset_count = - $this->asset_count;
     $this->updatePortfolioHeldAssets();
   }
 
@@ -232,9 +227,10 @@ class PortfolioMovement extends Model
     $portfolio = $this->portfolio;
 
     // Change in the cash balance
-    $changeInCash  = $this->impactOnCash[$this->type] * $this->unit_value * $this->asset_count;
+    $changeInCash  = $this->impactOnBaseCurrency[$this->type] * $this->unit_value * $this->asset_count;
+    //dd($this->portfolio->base_currency->id);
     if ($changeInCash != 0)
-      $portfolio->updateFutureBalance($this, $changeInCash, 'cash');
+      $portfolio->updateFutureBalance($this, $changeInCash, $this->portfolio->base_currency->id);
 
     // Change in the asset balance
     $changeInAsset = $this->impactOnAsset[$this->type] * $this->asset_count;

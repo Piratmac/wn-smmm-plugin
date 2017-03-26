@@ -112,6 +112,9 @@ class Graphs extends ComponentBase
     $dates['basis'] = date('Y-m-d', $dates['start_timestamp']+$date_scale*round(($dates['basis']-$dates['start_timestamp'])/$date_scale));
     $dates['basis_timestamp'] = strtotime($dates['basis']);
 
+    // Getting base currency for foreign exchange
+    $graph_forex_currency = post('display_forex_in');
+
     /****************  Get the data *************/
     // Get selected portfolios
     $portfolios = PortfolioModel::whereIn('id', post('portfolio'))->with(['heldAssets' =>
@@ -134,9 +137,9 @@ class Graphs extends ComponentBase
 
     /****************  Transform data to match target format + use basis values *************/
     $seriesData = [];
-    $assets->each (function ($asset, $key = '') use ($timeDots, &$seriesData, $dates) {
+    $assets->each (function ($asset, $key = '') use ($timeDots, &$seriesData, $dates, $graph_forex_currency) {
       $a_ID = $asset->id;
-      if ($asset->type == 'cash')
+      if ($asset->id == $graph_forex_currency)
         return;
 
       $seriesData[$a_ID] = [];
@@ -160,8 +163,9 @@ class Graphs extends ComponentBase
         $seriesData[$a_ID]['value_basis'][$day_time] = $seriesData[$a_ID]['value'][$day_time] / $seriesData[$a_ID]['basis_value'];
     });
 
-    $portfolios->each (function ($portfolio, $key = '') use (&$timeDots, $dates, &$seriesData) {
+    $portfolios->each (function ($portfolio, $key = '') use (&$timeDots, $dates, &$seriesData, $assets) {
       $p_ID = $portfolio->id;
+      $p_base_currency = $portfolio->base_currency->id;
       $seriesData[$p_ID] = [];
       $seriesData[$p_ID]['label'] = $portfolio->description;
       $seriesData[$p_ID]['value'] = [];
@@ -173,13 +177,29 @@ class Graphs extends ComponentBase
         $heldAssets = $portfolio->heldAssets->filter(function ($heldAsset) use ($day_time) {
           return (strtotime($heldAsset->pivot->date_from) <= $day_time && strtotime($heldAsset->pivot->date_to) > $day_time);
         });
-        $heldAssets->each ( function ($heldAsset) use ($day_time, &$seriesData, $p_ID) {
+        $heldAssets->each ( function ($heldAsset) use ($day_time, &$seriesData, $p_ID, $p_base_currency, $assets) {
           $hA_ID = $heldAsset->id;
-          if ($heldAsset->type == 'cash')
+          if ($hA_ID == $p_base_currency)
             $seriesData[$p_ID]['value'][$day_time] += $heldAsset->pivot->asset_count;
           else {
             $seriesData[$hA_ID]['held'][$day_time] = true;
-            $seriesData[$p_ID]['value'][$day_time] += $heldAsset->pivot->asset_count * $seriesData[$hA_ID]['value'][$day_time];
+            if ($heldAsset->baseCurrency->id == $p_base_currency)
+              $seriesData[$p_ID]['value'][$day_time] += $heldAsset->pivot->asset_count * $seriesData[$hA_ID]['value'][$day_time];
+            else {
+              $hA_base_currency_id = $heldAsset->baseCurrency->id;
+              $hA_base_currency = $assets->filter(
+                function($asset) use ($hA_base_currency_id) {
+                  return $asset->id == $hA_base_currency_id;
+                }
+              )->first();
+
+              if ($hA_base_currency->baseCurrency->id == $p_base_currency) {
+                $seriesData[$p_ID]['value'][$day_time] +=
+                  $heldAsset->pivot->asset_count
+                  * $seriesData[$hA_ID]['value'][$day_time]
+                  * $seriesData[$hA_base_currency_id]['value'][$day_time];
+              }
+            }
           }
         });
       }

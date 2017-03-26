@@ -55,6 +55,7 @@ return [
     'closed_portfolios_displayed'    => 'Closed portfolios are now displayed',
 
     'used_and_not_synced'    => 'Warning: This asset is not synced, but belongs to a portfolio',
+    'base_currency_must_be_cash'    => 'The base currency must be a currency',
 
     'existing_value_replaced'   => 'There was an existing value at that date. It has been replaced.',
 
@@ -78,12 +79,13 @@ return [
     'display_old_assets'         => 'Display old assets',
     'hide_old_assets'            => 'Hide old assets',
 
-    'asset'       => 'Asset',
-    'title'       => 'Title',
-    'code'        => 'Code',
-    'type'        => 'Type',
-    'source'      => 'Source',
-    'synced'      => 'Sync values',
+    'asset'         => 'Asset',
+    'title'         => 'Title',
+    'code'          => 'Code',
+    'type'          => 'Type',
+    'source'        => 'Source',
+    'synced'        => 'Sync values',
+    'base_currency' => 'Base currency',
 
     'value_history'    => 'Value history',
     'value'            => 'Value',
@@ -132,6 +134,7 @@ return [
 
     'yes'         => 'Yes',
     'no'          => 'No',
+    'none'        => 'None',
 
 
     'basic_information'        => 'Basic information',
@@ -164,6 +167,7 @@ return [
     'start_date'        => 'Start date',
     'end_date'          => 'End date',
     'date_basis'        => 'Basis',
+    'display_forex_in'  => 'Currency for foreign exchange',
 
 
   ],

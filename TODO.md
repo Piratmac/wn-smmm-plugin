@@ -16,7 +16,7 @@
 * Graphs
     * Evolution graph
         * Purpose: displays the value in basis 100 (as %) at the beginning.
-        * Status: Already built
+        * Status: DONE
     * Valuation graph
         * Purpose: displays the value in a given currency
         * Status: Not started

@@ -5,6 +5,8 @@ use Lang;
 use Flash;
 use \October\Rain\Database\Traits\SoftDeleting;
 use October\Rain\Exception\ApplicationException;
+use October\Rain\Exception\ValidationException;
+
 
 /**
  * Asset Model
@@ -27,11 +29,11 @@ class Asset extends Model
   /**
    * @var array Fillable fields
    */
-  protected $fillable = ['id', 'title', 'source', 'type', 'synced'];
+  protected $fillable = ['id', 'title', 'source', 'type', 'synced', 'base_currency_id'];
 
 
   protected $rules = [
-    'id' => 'required|unique:piratmac_smmm_assets|regex:#^[0-9A-Za-z.^]*$#',
+    'id' => 'required|unique:piratmac_smmm_assets|regex:#^[0-9A-Za-z.^-]*$#',
     'type' => 'required',
   ];
   /**
@@ -43,9 +45,12 @@ class Asset extends Model
   /**
    * @var array Relations
    */
-  public $hasOne = [];
+  public $hasOne = [
+  ];
   public $hasMany = ['value' => 'Piratmac\Smmm\Models\AssetValue'];
-  public $belongsTo = [];
+  public $belongsTo = [
+    'baseCurrency' => ['Piratmac\Smmm\Models\Asset', 'order' => 'title ASC', 'conditions' => 'type = \'cash\''],
+  ];
   public $belongsToMany = [
       'portfolios' => [
         'Piratmac\Smmm\Models\Portfolio',
@@ -73,7 +78,6 @@ class Asset extends Model
   {
     if (in_array($fieldName, ['type', 'source'])) {
       $dropdown = [NULL => ''] + Lang::get('piratmac.smmm::lang.dropdowns.asset.'.$fieldName);
-      if ($fieldName == 'type') unset ($dropdown['cash']);
       return $dropdown;
     }
     else
@@ -152,12 +156,23 @@ class Asset extends Model
   /**
    * Gets the latest value before the provided date
    * @param string $date A date
+   * @param string $unit The unit in which to return the value (another asset ID)
    */
-  public function getValueAsOfDate ($date)
+  public function getValueAsOfDate ($date, $unit = '')
   {
-    if ($this->type == 'cash') return new AssetValue(['date' => $date, 'value' => 1]);
-    $query = $this->value()->where('date', '<=', $date)->orderBy('date', 'DESC')->first();
-    return $query;
+    // If no unit is provided or there is no base currency
+    if ($unit == '' || $this->baseCurrency == NULL)
+      return new AssetValue(['date' => $date, 'value' => 1]);
+
+    // Get value in base currency
+    $value = $this->value()->where('date', '<=', $date)->orderBy('date', 'DESC')->first();
+
+    //  If the base currency is not the expected unit, convert it
+    if ($this->baseCurrency->id != $unit->id) {
+      $BaseValueInUnit = $this->baseCurrency->value()->where('date', '<=', $date)->orderBy('date', 'DESC')->first();
+      $value->value = $value->value * $BaseValueInUnit->value;
+    }
+    return $value;
   }
 
 
@@ -179,8 +194,9 @@ class Asset extends Model
   public function beforeSave () {
     if ($this->portfolios()->wherePivot('date_to', '>=', date('Y-m-d'))->count() > 0 && !$this->synced)
       Flash::warning(trans('piratmac.smmm::lang.messages.used_and_not_synced'));
-  }
 
+    $this->base_currency_id = post('Asset[baseCurrency]');
+  }
 
   /**
   * Adding a new value

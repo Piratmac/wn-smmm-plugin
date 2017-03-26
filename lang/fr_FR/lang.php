@@ -55,6 +55,7 @@ return [
     'closed_portfolios_displayed'    => 'Les portefeuilles clos sont affichés',
 
     'used_and_not_synced'    => 'Attention: Cette valeur n\'est pas synchronisé et apparait dans un portefeuille.',
+    'base_currency_must_be_cash'    => 'La valeur doit être cotée dans une monnaie.',
 
     'existing_value_replaced'   => 'La valeur existante à cette date a été remplacée.',
 
@@ -78,12 +79,13 @@ return [
     'display_old_assets'         => 'Afficher les anciennes valeurs',
     'hide_old_assets'            => 'Masquer les anciennes valeurs',
 
-    'asset'       => 'Actif',
-    'title'       => 'Titre',
-    'code'        => 'Code',
-    'type'        => 'Type',
-    'source'      => 'Source',
-    'synced'      => 'Télécharger les valeurs',
+    'asset'         => 'Actif',
+    'title'         => 'Titre',
+    'code'          => 'Code',
+    'type'          => 'Type',
+    'source'        => 'Source',
+    'synced'        => 'Télécharger les valeurs',
+    'base_currency' => 'Valeur en',
 
     'value_history'    => 'Historique de la valeur',
     'value'            => 'Valeur',
@@ -133,6 +135,7 @@ return [
 
     'yes'         => 'Oui',
     'no'          => 'Non',
+    'none'        => 'Aucun(e)',
 
 
     'basic_information'        => 'Informations',
@@ -165,6 +168,7 @@ return [
     'start_date'        => 'Début',
     'end_date'          => 'Fin',
     'date_basis'        => 'Base',
+    'display_forex_in'  => 'Monnaie de base pour devises',
 
   ],
   'dropdowns' => [

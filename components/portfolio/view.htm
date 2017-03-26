@@ -52,33 +52,33 @@
         </div>
 
 
-        <div class="col-md-6">
+        <div class="col-md-5">
           {{ 'total_deposits'|trans_label }}:
         </div>
-        <div class="col-md-3 text-right">
-          {{ portfolio.results.total_deposits|number_format_amount }}
+        <div class="col-md-4 text-right">
+          {{ portfolio.results.total_deposits|number_format_amount }} {{ portfolio.base_currency.title }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
           {{ 'total_withdrawals'|trans_label }}:
         </div>
-        <div class="col-md-3 text-right">
-          {{ portfolio.results.total_withdrawals|number_format_amount }}
+        <div class="col-md-4 text-right">
+          {{ portfolio.results.total_withdrawals|number_format_amount }} {{ portfolio.base_currency.title }}
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-5">
           {{ 'expected_gain'|trans_label }}:
         </div>
-        <div class="col-md-3 text-right">
-          {{ portfolio.results.expected_gain.amount|number_format_evolution('') }}
+        <div class="col-md-4 text-right">
+          {{ portfolio.results.expected_gain.amount|number_format_evolution('') }} {{ portfolio.base_currency.title }}
         </div>
         <div class="col-md-3 text-right">
           {{ portfolio.results.expected_gain.percent|number_format_evolution('%') }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
           {{ 'actual_gain'|trans_label }}:
         </div>
-        <div class="col-md-3 text-right">
-          {{ portfolio.results.actual_gain.amount|number_format_evolution('') }}
+        <div class="col-md-4 text-right">
+          {{ portfolio.results.actual_gain.amount|number_format_evolution('') }} {{ portfolio.base_currency.title }}
         </div>
         <div class="col-md-3 text-right">
           {{ portfolio.results.actual_gain.percent|number_format_evolution('%') }}
@@ -258,9 +258,7 @@
 
           <tr>
             <td>
-              {% if movement.asset.title == '' %}
-              {{ 'piratmac.smmm::lang.dropdowns.asset.type.cash'|trans }}
-              {% elseif movement.asset.url_view == '' %}
+              {% if movement.asset.url_view == '' %}
                 {{ movement.asset.title }}
               {% else %}
               <a href="{{ movement.asset.url_view }}">

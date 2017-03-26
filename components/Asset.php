@@ -123,6 +123,7 @@ class Asset extends ComponentBase
         $this->addJs('/modules/system/assets/ui/vendor/pikaday/js/pikaday.jquery.js');
         $this->addJs('/modules/system/assets/ui/js/datepicker.js');
         $this->addCss('/modules/system/assets/ui/vendor/pikaday/css/pikaday.css');
+
         break;
     }
   }

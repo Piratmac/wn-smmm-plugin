@@ -40,4 +40,8 @@
 1.0.12:
  - Added / cleaned movement types, removed fees (handled differently)
  - v1.0.12_tables.php
+
+1.0.13:
+ - Default currency for portfolios
+ - v1.0.13_tables.php
  - seed_tables.php

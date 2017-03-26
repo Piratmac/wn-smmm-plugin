@@ -16,6 +16,12 @@ fields:
         type: Backend\FormWidgets\DatePicker
         mode: date
 
+    base_currency:
+        label: piratmac.smmm::lang.labels.base_currency
+        type: Backend\FormWidgets\Relation
+        nameFrom: title
+        keyFrom: id
+
     close_date:
         label: piratmac.smmm::lang.labels.closed_on
         type: Backend\FormWidgets\DatePicker

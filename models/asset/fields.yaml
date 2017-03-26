@@ -21,6 +21,13 @@ fields:
         label: piratmac.smmm::lang.labels.type
         type: dropdown
 
+    baseCurrency:
+        label: piratmac.smmm::lang.labels.base_currency
+        type: Backend\FormWidgets\Relation
+        nameFrom: title
+        keyFrom: id
+        emptyOption: -
+
     source:
         label: piratmac.smmm::lang.labels.source
         type: dropdown
@@ -28,4 +35,3 @@ fields:
     synced:
         label: piratmac.smmm::lang.labels.synced
         type: checkbox
-

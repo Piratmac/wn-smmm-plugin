@@ -29,7 +29,7 @@ class Portfolio extends Model
   /**
    * @var array Fillable fields
    */
-  protected $fillable = ['description', 'open_date', 'close_date', 'broker', 'number'];
+  protected $fillable = ['description', 'open_date', 'close_date', 'broker', 'number', 'base_currency'];
 
 
   protected $rules = [
@@ -44,7 +44,9 @@ class Portfolio extends Model
    */
   public $hasOne = [];
   public $hasMany = ['movements' => 'Piratmac\Smmm\Models\PortfolioMovement'];
-  public $belongsTo = [];
+  public $belongsTo = [
+    'base_currency' => ['Piratmac\Smmm\Models\Asset', 'order' => 'title ASC', 'conditions' => 'type = \'cash\''],
+  ];
   public $belongsToMany = [
       'heldAssets' => [
         'Piratmac\Smmm\Models\Asset',
@@ -123,7 +125,17 @@ class Portfolio extends Model
                            ->where('date_from', '<=', $date)
                            ->where('date_to', '>=', $date)
                            ->orderBy('type', 'DESC')
-                           ->orderBy('title', 'ASC');
+                           ->orderBy('title', 'ASC')
+                           ->with([
+                              'value' => function ($query) use ($date) {
+                                $query->where('date', '<=', $date)
+                                      ->where('date', '>', date('Y-m-d', strtotime($date . ' 2 months ago')))
+                                      ->orderBy('asset_id')
+                                      ->orderBy('date', 'DESC')
+                                      ->first();
+                              }
+                            ])
+                           ;
 
     if (!is_null($asset_id))
       $this->contents->where('asset_id', $asset_id);
@@ -132,10 +144,22 @@ class Portfolio extends Model
 
     // Getting the latest value
     $heldAssetsIds = [];
-    $this->contents->each(function ($heldAsset) use (&$heldAssetsIds) {
+    $this->contents->each(function ($heldAsset) use (&$heldAssetsIds, $date) {
       $heldAssetsIds[] = $heldAsset->id;
+
+      // If we found a value, in the right currency
+      if ($heldAsset->baseCurrency == $this->base_currency && $heldAsset->value->first() !== null)
+        $heldAsset->lastValue = ['value' => $heldAsset->value->first()->value,
+                                 'date'  => $heldAsset->value->first()->date  ];
+      else {
+        $value = $heldAsset->getValueAsOfDate($date, $this->base_currency);
+        $heldAsset->lastValue = ['value' => $value->value,
+                                 'date'  => $value->date  ];
+      }
     });
 
+
+/*
     // I'm not particularly proud of this solution.
     // Basically the first query looks for the most probable case (= there is a value in the last 2 months)
     // If there is no result, a separate query is then executed.
@@ -150,14 +174,14 @@ class Portfolio extends Model
 
 
     $this->contents->each (function ($heldAsset) use ($values, $date) {
-      $value = $values->where('asset_id', $heldAsset->id)->first();
+      $value = $heldAsset->value->first();
       if (!isset($value))
         $value = $heldAsset->getValueAsOfDate($date);
       if (isset($value))
         $heldAsset->lastValue = ['value' => $value->value,
                                  'date' => $value->date ];
     });
-
+*/
     return $this->contents;
 
   }
@@ -366,7 +390,7 @@ class Portfolio extends Model
 
     // Updating the average price tag for assets: it is equal to :
     // (existing_price * existing_units + movement_price*movement_units) / (existing_units + movement_units)
-    if ($asset != 'cash') {
+    if ($asset != $this->baseCurrency) {
       $impactedAssetBalance = $this->heldAssets()
                                    ->wherePivot('date_to',   '>=', $movement->date)
                                    ->wherePivot('asset_id', $asset)
@@ -429,7 +453,7 @@ class Portfolio extends Model
 
     if (count($movementDates) > 0) {
       $cashBalance = $this->heldAssets()
-                          ->where('asset_id', 'cash')
+                          ->where('asset_id', $this->baseCurrency)
                           ->where('date_from', '<=', $maxDate)
                           ->where(function ($query) use($minDate) {
                              $query->where('date_to', '>=', $minDate)

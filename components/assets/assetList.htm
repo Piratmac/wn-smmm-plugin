@@ -20,13 +20,9 @@
           {% endif %}
           <tr>
             <td>
-              {% if asset.type != 'cash' %}
               <a href="{{ asset.url_view }}">
                 {{ asset.title }}
               </a>
-              {% else %}
-                {{ asset.title }}
-              {% endif %}
             </td>
             <td>{{ asset.id }}</td>
             <td>{{ ('piratmac.smmm::lang.dropdowns.asset.type.' ~ asset.type) |trans  }}</td>
@@ -36,14 +32,12 @@
               {% endif %}
             </td>
             <td style="padding:6px">
-              {% if asset.type != 'cash' %}
               <a href="{{ asset.url_view }}">
                 <img src="{{ (__SELF__.imageFolder ~ '/magnifyingglass.png')|app}}" alt="{{ 'details'|trans_label }}" class="image_circle" width="25px" height="25x" />
               </a>
               <a href="{{ asset.url_update }}">
                 <img src="{{ (__SELF__.imageFolder ~ '/compose.png')|app}}" alt="{{ 'manage'|trans_label }}" class="image_circle" width="25px" height="25x" />
               </a>
-              {% endif %}
             </td>
           </tr>
           {% if loop.last %}

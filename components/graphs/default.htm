@@ -33,9 +33,7 @@
               {{ 'contents'|trans_label }}
               <select multiple class="form-control" name="asset[]">
     {% endif %}
-    {% if asset.type != 'cash' %}
                 <option value="{{ asset.id }}">{{ asset.title }}</option>
-    {% endif %}
     {% if loop.last %}
               </select>
             </label>
@@ -54,7 +52,7 @@
     </div>
     <div class="panel-contents">
       <div class="row collapse col-md-offset-1" id="assets">
-{% for asset in assets if asset.type != 'cash' %}
+{% for asset in assets %}
         <div class="col-md-3">
           <label>
             <input type="checkbox"  name="asset[]" value="{{asset.id}}">
@@ -106,6 +104,17 @@
             <i class="icon icon-calendar-o"></i>
             <input type="text" name="basis_date" class="form-control pull-right" value="{{ '1 year ago'|date('Y-m-d') }}">
           </div>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="display_forex_in" style="padding:8px;">
+            {{ 'display_forex_in'|trans_label }}:
+          </label>
+          <select name='display_forex_in'>
+          {% for asset in assets if asset.type == 'cash' %}
+            <option value="{{ asset.id }}">{{ asset.title }}</option>
+          {% endfor %}
+          </select>
         </div>
 
         <button class="col-md-2 btn btn-success" type="submit">
