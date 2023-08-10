@@ -1,5 +1,5 @@
 # Show me my money
-The purpose of this [OctoberCMS](http://octobercms.com) plugin is to offer the ability to manage portfolios containing assets. Those assets can be identified as stocks, bonds or a mix of both.
+The purpose of this [WinterCMS](http://wintercms.com) plugin is to offer the ability to manage portfolios containing assets. Those assets can be identified as stocks, bonds or a mix of both.
 
 ## This is BETA software
 This plugin is under development. There are a lot of glitches, elements I wish to add or improvements to be made.
